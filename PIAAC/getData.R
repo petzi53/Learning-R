@@ -1,43 +1,26 @@
 # Learn to prepare data for analysis with real (PIAAC)-data
-# if (!dir.exists("./DATA")) {dir.create("./DATA")}
-# fileAustria.sav <- "./DATA/Extended_PUF_PIAAC_STAT_AUT.sav"
-# download.file(
-#         url = "http://www.statistik.at/web_de/downloads/piaac/extended_puf_piaac_stat_aut.zip",
-#         destfile = fileAustria.sav,
-#         method = "curl",
-#         quiet = TRUE,
-#         cacheOK = TRUE
-# )
-# dateDownloadedAustria <- date()
+if (!dir.exists("./DATA")) {dir.create("./DATA")}
+setwd(paste0(getwd(),"/DATA"))
 
-# library("foreign")
-# fileAustria.csv <- read.spss(fileAustria.sav)
-
-temp <- tempfile()
-download.file(
-        "http://www.statistik.at/web_de/downloads/piaac/extended_puf_piaac_stat_aut.zip",
-        temp,
-        method = "curl"
-)
-# data <- read.table(unz(temp, "./DATA/Extended_PUF_PIAAC_STAT_AUT.sav"))
-# unlink(temp)
-
-library("foreign")
-fileAustria.csv <- read.spss(unz(temp, "extended_puf_piaac_stat_aut.zip"))
-unlink(temp)
-
-url("http://www.statistik.at/web_de/downloads/piaac/extended_puf_piaac_stat_aut.zip",
-    method = "libcurl")
-
+### Previous versions did not work:
+### (1) download.file needs method "libcur" instead "curl"
+###     This was (wrongly?) said in the Coursera lecture
+### (2) neither package "rio" nor "foreign" worked
+###     read.spss() of "foreign" package brought up two warnings
+###     it seems that the implementation is pretty old
 
 library(memisc)
 temp <- tempfile()
 download.file(
-        "http://www.statistik.at/web_de/downloads/piaac/extended_puf_piaac_stat_aut.zip",
-        temp,
+        url = "http://www.statistik.at/web_de/downloads/piaac/extended_puf_piaac_stat_aut.zip",
+        destfile = temp,
         method = "libcurl")
-# data <- read.table(unz(temp, "Extended_PUF_PIAAC_STAT_AUT.sav"))
-# unlink(temp)
-data <- unzip(temp)
+dateDownloadedAustria <- date()
+fileName <- unzip(temp)
 unlink(temp)
-data1 <- as.data.set(spss.system.file(data))
+## next command from package "memisc" brings a huge data.set into memory
+data <- as.data.set(spss.system.file(fileName))
+write.csv(data, "piaac_austria")
+setwd("../")
+## NOTE: huge data.set is very unhandy
+## develop research question and check the codebook for relevant variables!
