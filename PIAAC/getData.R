@@ -1,4 +1,5 @@
 # Learn to prepare data for analysis with real (PIAAC)-data
+setwd("/Users/petzi/Documents/_PB-Data/Programming/R/Learning-R/PIAAC")
 if (!dir.exists("./DATA")) {dir.create("./DATA")}
 setwd(paste0(getwd(),"/DATA"))
 
@@ -20,7 +21,7 @@ fileName <- unzip(temp)
 unlink(temp)
 ## next command from package "memisc" brings a huge data.set into memory
 data <- as.data.set(spss.system.file(fileName))
-write.csv(data, "piaac_austria")
-setwd("../")
+write.csv(data, "piaacAustria.csv")
+setwd("../") # go back to PIACC directory
 ## NOTE: huge data.set is very unhandy
 ## develop research question and check the codebook for relevant variables!
