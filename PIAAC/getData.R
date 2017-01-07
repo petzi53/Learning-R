@@ -52,3 +52,40 @@ file.create(myFiles)
 lapply(paste0(oecdUrl,myFiles), function(x) download.file(x, basename(x)))
 ## reset working directory to original
 setwd(myDir)
+# ------------------------------------------------------------------------------
+
+### Download Background variales
+### Excel notebook with many sheets
+setwd("/Users/petzi/Documents/_PB-Data/Programming/R/Learning-R/PIAAC")
+myDir <- getwd()
+if (!dir.exists("./DATA")) {dir.create("./DATA")}
+setwd(paste0(getwd(),"/DATA"))
+fileUrl <-
+        "http://www.oecd.org/skills/piaac/PIAAC_Background_Compendium_Round1_15Sept2016_annotated.xlsx"
+download.file(
+        fileUrl,
+        destfile = "background_1.xlsx",
+        method = "libcurl",
+        quiet = TRUE,
+        cacheOK = FALSE
+)
+dateDownloadedBackground.1 <- date()
+# ---------------- Load Excel with different sheets  ---------------------------
+library(readxl)
+excelSheetNames <- excel_sheets("background_1.xlsx")
+# To load all sheets in a workbook, use lapply
+sheetList <- lapply(
+                excel_sheets("background_1.xlsx"),
+                read_excel,
+                path = "background_1.xlsx",
+                skip = 1,
+                col_names = TRUE
+)
+setwd("/Users/petzi/Documents/_PB-Data/Programming/R/Learning-R/PIAAC")
+myDir <- getwd()
+if (!dir.exists("./DATA/compendia")) {dir.create("./DATA/compendia")}
+setwd(paste0(getwd(),"/DATA/compendia"))
+for (i in 3:length(sheetList)) {
+        fwrite(sheetList[[i]], paste0(excelSheetNames[i], ".csv"))
+}
+setwd(myDir)
