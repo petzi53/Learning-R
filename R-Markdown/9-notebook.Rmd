@@ -1,7 +1,6 @@
-# My first acquaintance	with R Markdown
 ---
-title: "Viridis Demo"
-output: html_document
+title: "Viridis Notebook"
+output: html_notebook
 ---
 
 ```{r include = FALSE}
