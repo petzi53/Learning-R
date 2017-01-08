@@ -1,8 +1,15 @@
-# My first acquaintance	with R Markdown
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+
 ---
 title: "Viridis Demo"
 output: html_document
 ---
+
+# My first acquaintance	with R Markdown
 
 ```{r include = FALSE}
 library(viridis)
