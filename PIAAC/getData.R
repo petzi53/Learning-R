@@ -89,3 +89,7 @@ for (i in 3:length(sheetList)) {
         fwrite(sheetList[[i]], paste0(excelSheetNames[i], ".csv"))
 }
 setwd(myDir)
+
+# -----------------------------------------------------------------------------
+## After solving Java problem: I can also other packages:
+## xlsx, XLConnect, openxls and compare it to readxl
