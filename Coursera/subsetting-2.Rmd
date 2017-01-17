@@ -1,0 +1,227 @@
+---
+title: "Subsetting advanced"
+author: "Peter Baumgartner"
+date: "Jan 16, 2017"
+output:
+  html_notebook:
+    toc: yes
+  pdf_document:
+    toc: yes
+---
+```{r label = "global-options", echo=FALSE}
+knitr::opts_chunk$set(message = F, error = F, warning = F, comment = NA)
+```
+Here I am experimenting along the lines of the chapter [subsetting](http://adv-r.had.co.nz/Subsetting.html) of the book "Advanced R"" by Hadley Wickham.
+
+# Subsetting with different data types
+Wickham starts with the single bracket operator `[]` and explains for each data type what you have to watch out.
+
+## 1. Atomic vectors
+```{r label="Creating atomic vector to work with"}
+x <- c(2.1, 4.2, 3.3, 5.4)
+x
+```
+The figure behind the decimal point gives you the original position of the number within the (small) data set. According to Wickham there are 5 (actually 6) possibilities to subset atomic vectors
+
+### (1) Positive integers return elements at the specified positions
+```{r label="subsetting-with-positive-integers"}
+x[c(3, 1)]
+x[order(x)]
+x[c(1, 1)] # Duplicated indices yield duplicated values
+x[c(2.1, 2.9)] # Real numbers are silently truncated to integers
+```
+That real numbers silently are truncated may be of interest if you refer to the position after some calculation, eg. division.
+
+### (2) Negative integers omit elements at the specified positions
+```{r label="subsetting-with-negative-integers"}
+x[-c(3, 1)]
+#> x[c(-1, 2)] # you can't mix negative and positive integers in a single subset
+#> Error in x[c(-1, 2)] : only 0's may be mixed with negative subscripts
+```
+### (3) Logical vectors select elements when TRUE
+```{r label="subsetting-with-logical-vector"}
+x[c(TRUE, TRUE, FALSE, FALSE)]
+x[x > 3]
+x[c(TRUE, FALSE)] # will be recycled if logical vector is shorter
+x[c(TRUE, FALSE, TRUE, FALSE)] # equivalent to the code above
+x[c(TRUE, TRUE, NA, FALSE)] # missing value in index results to NA in output
+#> [1] 2.1 3.3
+```
+### (4) Nothing returns the original vector
+```{r label="subsetting-with-nothing"}
+x[] 
+```
+
+### (5) Zero returns a zero-length vector
+```{r label="subsetting-with-zero"}
+x[0]
+```
+**Personal comment:** (4) and (5) are special cases and not strategies for subsetting. Nothing and Zero do not subset elements. Therefore the should not be numbered as a subsetting possibility.
+
+### (6) Character vectors return elements with matching names
+```{r}
+(y <- setNames(x, letters[1:4]))
+y[c("d", "c", "a")]
+y[c("a", "a", "a")] # like integer indices, you can repeat indices
+z <- c(abc = 1, def = 2) # When subsetting with [ names have to be matched exactly
+z[c("a", "d")]
+```
+
+
+
+## 2. Lists
+Subsetting a list works in the same way as subsetting an atomic vector. Using `[` will always return a list; `[[` and `$`, as described below, let you pull out the components of the list.
+
+**Personal comment**: An interesting approach: It explains one major part of list subsetting with the standard subsetting rules for atomic vectors. This teaching strategy helps to generate special awareness for the treatment with `[[` and `$`.
+
+
+## 3. Matrices and arrays
+Wickham distinguishes three different subsetting possibilities with higher-dimensional structures.
+
+### (1) Multiple vectors
+The most common way of subsetting matrices (2d) and arrays (>2d) is a simple generalisation of 1d subsetting: you supply a 1d index for each dimension, separated by a comma. Blank subsetting is now useful because it lets you keep all rows or all columns. 
+
+**Personal comment:** The last sentence explains the importance to know and use the behavior of blank subsetting (see [Nothing returns the original vector](#nothing-returns-the-original-vector) in this document).
+
+```{r label="subsetting-matrices-with-multiple-vectors"}
+a <- matrix(1:9, nrow = 3)
+colnames(a) <- c("A", "B", "C")
+a
+a[1:2, ]
+a[c(T, F, T), c("B", "A")] # row subsetting: T means TRUE, F = FALSE
+a[0, -2] # returns a subset of column names
+```
+By default, `[` will simplify the results to the lowest possible dimensionality.
+
+### (2) Single vector
+Because matrices and arrays are implemented as vectors with special attributes, you can subset them with a single vector. In that case, they will behave like a vector. Arrays in R are stored in column-major order:
+
+```{r label="subsetting-matrices-with-single-vector"}
+(vals <- outer(1:5, 1:5, FUN = "paste", sep = ","))
+vals[c(4, 5, 15, 16)] # counting col 1 down to end and restarting top of col 2
+```
+
+### (3) Integer or character matrix
+You can also subset higher-dimensional data structures with an integer matrix (or, if named, a character matrix). Each row in the matrix specifies the location of one value, where each column corresponds to a dimension in the array being subsetted. This means that you use a 2 column matrix to subset a matrix, a 3 column matrix to subset a 3d array, and so on. The result is a vector of values:
+```{r label="subsetting-matrices-with-integer-array"}
+vals <- outer(1:5, 1:5, FUN = "paste", sep = ",")
+select <- matrix(ncol = 2, byrow = TRUE, c(
+  1, 1,
+  3, 1,
+  2, 4
+))
+vals[select]
+```
+## 4. Data frames
+Data frames possess the characteristics of both lists and matrices: if you subset with a single vector, they behave like lists; if you subset with two vectors, they behave like matrices.
+```{r}
+df <- data.frame(x = 1:3, y = 3:1, z = letters[1:3])
+df
+df[df$x == 2, ] # second row of x, all columns
+df[c(1, 3), ] # first and third row, all columns
+
+# There are two ways to select columns from a data frame
+# Like a list:
+df[c("x", "z")]
+
+# Like a matrix
+df[, c("x", "z")] # comma refers to row (= all rows), columns "x" and "z"
+
+
+# There's an important difference if you select a single column:
+# matrix subsetting simplifies by default, list subsetting does not. 
+str(df["x"])
+
+str(df[, "x"])
+```
+
+## 5. Exercises
+The following section discusses some common subsetting errors and their solutions. These tasks are presented by Hadley Wickham in his books by using `mtcars`, one of the 80+ basic datasets distributed with R and maintained by the R Core Team and many contributors wordlwide. For the exercises below it is not necessary to understand the meaning of the different column names, but I will present the complete dataset so that one can compare and understand the effects of the subsetting commands. `mtcars` is a data frame with 32 observations (rows) on 11 variables (columns).
+```{r label="displaying-mtcars-dataset"}
+mtcars
+```
+### (1) Fix common data frame subsetting errors
+
+```{r label="fixing-subsetting-errors"}
+
+#> mtcars[mtcars$cyl = 4, ] # `=` assignment is wrong, result needs logical value
+#> Error: unexpected '=' in "mtcars[mtcars$cyl ="
+mtcars[mtcars$cyl == 4, ] 
+#> mtcars[-1:4, ] # Mixing positive and negative integers is not allowed.
+#> Error in xj[i] : only 0's may be mixed with negative subscripts
+mtcars[-1:-4, ]
+#> mtcars[mtcars$cyl <= 5] # if just one value: R takes this as a column
+#> Error in `[.data.frame`(mtcars, mtcars$cyl <= 5) : undefined columns selected
+mtcars[mtcars$cyl <= 5, ]
+mtcars[mtcars$cyl == 4 | 6, ] # needs full qualification after the logical operator
+mtcars[mtcars$cyl == 4 | mtcars$cyl == 6, ] 
+mtcars[mtcars$cyl %in% c(4, 6), ] # another (better?) solution
+```
+### (2) Subsetting with `NA`
+Why does x <- 1:5; x[NA] yield five missing values? (Hint: why is it different from x[NA_real_]?)
+
+`x <- 1:5; x` results in ``r x <- 1:5; x``, meaning there are no NAs.
+
+But `x[NA]` results in ``r x[NA]`` whereas `x[NA_real_]` results just in ``r x[NA_real_]``.
+
+The description in the R manual to "NA" says:
+
+*NA is a logical constant of length 1 which contains a missing value indicator. NA can be coerced to any other vector type except raw. There are also constants NA_integer_, NA_real_, NA_complex_ and NA_character_ of the other atomic vector types which support missing values: all of these are reserved words in the R language.*
+
+**Personal Comment:** As I understand: Subsetting `NA` is similiar as subsetting x with another constant, which is not available, let us say "o": `x["o"]` results in ``r x["o"]``. This explains why one `NA` is returned. But why 5 times `NA` with `x[NA]`? --- The only explanation I can imaagine is the coercion of the general `NA` constant. But I am not sure.
+
+Ok, now for the correct solution, which can be found at:
+https://github.com/aammd/UBCadv-r/wiki/02:-Subsetting.
+
+*`NA` is a logical vector of length one. It's perfectly OK to index by a logical vector. Recycling will expand this to 5 logical NAs.)* 
+
+Ah, I see: I forgot this feature of automatic reclycling. So the solution has two components:
+
+* `NA` is logical constant whereas `NA_real_` is a numeric constant. Therefore they behave differently.
+* Subsetting the vector  with a logical constant like `NA` is --- in contrast to `NA_real_` --- a valid index operation and results in recycling through the length of the vector.
+
+### The following questions I will answer later
+
+* What does upper.tri() return? How does subsetting a matrix with it work? Do we need any additional subsetting rules to describe its behaviour?
+x <- outer(1:5, 1:5, FUN = "*")
+x[upper.tri(x)]
+* Why does mtcars[1:20] return an error? How does it differ from the similar mtcars[1:20, ]?
+* Implement your own function that extracts the diagonal entries from a matrix (it should behave like diag(x) where x is a matrix).
+* What does df[is.na(df)] <- 0 do? How does it work?
+
+# Subsetting operators
+There are two other subsetting operators: [[ and $. [[ is similar to [, except it can only return a single value and it allows you to pull pieces out of a list. $ is a useful shorthand for [[ combined with character subsetting.
+
+**You need `[[` when working with lists. This is because when `[` is applied to a list it always returns a list: it never gives you the contents of the list. To get the contents, you need `[[`**
+
+The above paragraph is very important for me: Long time I didn't understand when to use `[` or `[[`. I like also the metapher from @RLangTip quoted by Wickham. In my wording: When `x` is a train carrying objects, then `[[5]]` is the content in car 5 whereas `[5]` is a train with car 5.
+
+Because data frames are lists of columns, you can use `[[` to extract a column from data frames:
+```{r label="extract-column-from-data-frames"}
+mtcars[[1]] # results in a numeric vector of column 1
+mtcars[["cyl"]] # results in a numeric vector of column "cyl"
+```
+
+
+
+
+
+```{r}
+a <- list(a = 1, b = 2)
+a[[1]]
+
+a[["a"]]
+
+
+# If you do supply a vector it indexes recursively
+b <- list(a = list(b = list(c = list(d = 1))))
+b # display this list in the list in the list…
+b[[c("a", "b", "c", "d")]]
+
+# Same as
+b[["a"]][["b"]][["c"]][["d"]]
+
+# what happens if I do not provide all levels?
+b[[c("a", "b")]] 
+```
+

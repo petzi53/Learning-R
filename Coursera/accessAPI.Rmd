@@ -1,7 +1,18 @@
 ---
-title: "Reading Data from APIs "
-output: html_notebook
+title: 'Reading Data from APIs '
+output:
+  html_notebook: default
+  html_document: default
+  pdf_document:
+    fig_caption: yes
+    keep_tex: yes
+    number_sections: yes
+    toc: yes
+  word_document: default
 ---
+```{r label = "global-options"}
+knitr::opts_chunk$set(message = F, error = F, warning = F, echo = F, comment = NA)
+```
 
 I am using this [R Markdown](http://rmarkdown.rstudio.com) Notebook, to experiment and learn the essentials of the third Coursera course "Getting and Cleaning data" in the Data Science Specialization. It is a kind of [literal programming](https://en.wikipedia.org/wiki/Literate_programming), where I can mix code snippets and their outcomes with my comments and notes.
 
@@ -45,7 +56,19 @@ homeTL = GET("https://api.twitter.com/1.1/statuses/home_timeline.json", sig)
 
 json1 = content(homeTL)
 json2 = jsonlite::fromJSON(toJSON(json1))
-json2[[4]][1:4]
+# json2[[4]][1:4] # display first four messages
+# # get first row of all columns ( = column names)
+names(head(json2[1:length(json2)], 1)) 
+```
+
+```{r}
+l1 <- head(json2[1:length(json2)], 10)
+c1 <- as.character(l1$user$name)
+c2 <- as.character(l1$user$screen_name)
+c3 <- as.character(l1$text)
+df <- data.frame(Name = c1, Screen = c2, Text = c3, stringsAsFactors = FALSE)
+df
+
 ```
 
 3. The demo example by Hadley Wickam didn't work neither for me. I could run the original source code, but when I changed to my ConsumerKey and Tokens I got error messages. Other people got this error messages too, but evidently they could find work aorunds. 
@@ -80,8 +103,9 @@ t[[1]][1:4]
 ```
 
 ### (C) httr Demo Example (with my data and error message)
+Filling in my own data produces a run time error. I frankly do not know what's the reason for this error. I have set the callback url and did all the things that are required at the API site.
 
-```{r}
+```{r eval=FALSE}
 library(httr)
 
 # 1. Find OAuth settings for twitter:
