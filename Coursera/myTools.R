@@ -9,12 +9,13 @@ more <- function(x) {
 # ## example of usage
 # more(mtcars)
 # more(more)
-
-# t <- t(vapply(
-#         R.data.core$info[[2]],
-#         str_split_fixed,
-#         c("Name" = "", "Description" = ""),
-#         pattern = " ",
-#         n = 2,
-#         USE.NAMES = FALSE
-# ))
+# -----------------------------------------------------------------------------
+library("stringr")
+t <- t(vapply(
+        R.data.core$info[[2]],
+        str_split_fixed,
+        c("Name" = "", "Description" = ""),
+        pattern = " ",
+        n = 2,
+        USE.NAMES = FALSE
+))
