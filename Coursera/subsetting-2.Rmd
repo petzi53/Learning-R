@@ -1,10 +1,12 @@
 ---
 title: "Subsetting advanced"
 author: "Peter Baumgartner"
-date: "Jan 16, 2017"
+date: "Jan 18, 2017"
 output:
-    html_notebook: 
-        toc: yes
+  pdf_document:
+    toc: yes
+  html_notebook:
+    toc: yes
 ---
         
 ```{r label = "global-options", echo=FALSE}
@@ -405,6 +407,7 @@ y <- list(a = 1)
 y["b"] <- list(NULL)
 str(y)
 ```
+I am stopping here and will work on the last chapter at another time.
 
 
 
