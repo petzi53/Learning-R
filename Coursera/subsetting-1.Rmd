@@ -1,7 +1,7 @@
 ---
 title: "Subsetting and Sorting"
-output: 
-  html_notebook: 
+output:
+  html_notebook:
     toc: yes
 ---
 ```{r label = "global-options", echo=FALSE}
@@ -92,6 +92,7 @@ arrange(X, var1)
 ### Arrange: Sorting in descending order
 ```
 ```{r label = "order-desc-with-arrange"}
+library("dplyr")
 arrange(X, desc(var1))
 ```
 
