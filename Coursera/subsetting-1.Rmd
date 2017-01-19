@@ -1,0 +1,160 @@
+---
+title: "Subsetting and Sorting"
+output:
+  html_notebook:
+    toc: yes
+---
+```{r label = "global-options", echo=FALSE}
+knitr::opts_chunk$set(message = F, error = F, warning = F, comment = NA)
+```
+
+## Subsetting - a quick review
+### Creating a data frame to work with
+```{r label = "generate-df"}
+set.seed(13435)
+X <-
+        data.frame(
+        "var1" = sample(1:5),
+        "var2" = sample(6:10),
+        "var3" = sample(11:15)
+        )
+X <- X[sample(1:5), ]
+X$var2[c(1, 3)] = NA
+X
+```
+
+### Get the first column
+```{r label = "get-first-column"}
+X[, 1]
+```
+### Get the first row
+```{r label = "get-first-row"}
+
+X[1, ]
+```
+### Get the first variable in the first row and first column
+```{r label = get-first-var-first-row-first-col}
+X[1, 1]
+```
+### Get (row) variable by name
+```{r label = "get-var-by-name"}
+X[, "var2"]
+X[2, "var2"]
+```
+### Get for a row subset a variable by name
+```{r label = "get-row-subset-and-var-by-name"}
+X[1:2, "var2"]
+```
+### Get data with logical AND conditions
+```{r label = "get-data-with-logical-and-condition"}
+X[(X$var1 >= 3 & X$var3 >= 13), ]
+```
+### Get data with logical OR conditions
+```{r label = "get-data-with-logical-or-condition"}
+X[(X$var1 >= 3 | X$var3 >= 13), ]
+```
+
+## Dealing with missing values
+### Problem: Subsetting on NAs
+Subsetting on NAs will not produce the actual rows:
+```{r label = "na-subsetting-problem"}
+X[(X$var2 > 8),]
+```
+
+### Solution: Subsetting with `which`
+You can use the behavior of the `which` function, which takes only TRUE indices. 
+```{r label = use-which-with-na-subsetting-problem}
+X[which(X$var2 > 8),]
+```
+
+## Sorting, ordering, arrange of rows
+### Sort: Ordering of just one variable
+```{r label = "order-one-var"}
+sort(X$var1)
+sort(X$var1, decreasing = TRUE)
+sort(X$var2) # NAs are not included
+sort(X$var2, na.last = TRUE)
+
+```
+### Order: Ordering of a row in a data frame
+```{r label = "order-df"}
+X[order(X$var1),]
+```
+### Order: Ordering of multiple variables of a data frame
+The following example is not a good one, as there aren't any ties where you can see that the second variable is ordered inside the first
+```{r label = "order-multiple-vars-in-df"}
+X[order(X$var1,X$var3),] 
+```
+### Arrange: Ordering with the arrange command of `dplyr`
+```{r label = "order-with-arrange"}`
+library("dplyr")
+arrange(X, var1)
+### Arrange: Sorting in descending order
+```
+```{r label = "order-desc-with-arrange"}
+library("dplyr")
+arrange(X, desc(var1))
+```
+
+## Adding row and columns
+### Adding directly at the end of the data frame 
+```{r label = "add-col-directly"}
+X$var4 <- rnorm(5)
+X
+```
+### Add column to the right with cbind
+```{r label = "add-col-right-with-cbind"}
+Yr <- cbind(X,rnorm(5)) # it has to be the same dimension as the data frame
+Yr
+```
+### Add column to the left with cbind
+```{r label = "add-col-left-with-cbind"}
+Yl <- cbind(rnorm(5), X) # it has to be the same dimension as the data frame
+Yl
+```
+### Add row at the end with rbind
+```{r label = "add-row-below-with-rbind"}
+Xr <- rbind(X, c(0, 4, 22, NA)) # it has to be the same dimension as the data frame
+Xr
+```
+### Add row to the top with rbind
+```{r label = "add-row-above-with-rbind"}
+
+Yl <- rbind(c(0, 4, 22, NA), X) # it has to be the same dimension as the data frame
+Yl
+```
+
+## Subsetting with lists
+Lists are a very generic datatype. It can hold vectors, strings, matrices, models, list of other list. Lists can reference data using $ (if the elements are named), or using [], or [[]]. For instance, if there is a list "mylist", with a list of "myname" then:
+
+1. [], mylist["myname"]  returns a list of elements
+2. [[]], mylist$myname, mylist[["myname"]] returns the original class (vector, matrix etc.)
+
+The most important distinction between [, [[ and $ is that the [ can select more than one element whereas the other two select a single element.
+### Creating a list to work with
+```{r label = "creating-a-list"}
+mylist <-
+        list(letters = c("A", "b", "c"),
+        numbers = 1:3,
+        matrix(1:25, ncol = 5),
+        text = list(text1 = c("This", "is", "a", "test"), 
+             text2 = c("That", "is", "another", "test")))
+mylist
+```
+### There are two different forms of subsetting with lists
+#### Mode 1: Subsetting returns a list
+```{r label = "subsetting-returns-list"}
+mylist[1] # returns a list
+class(mylist[1])
+mylist["letters"] # returns a list
+class(mylist["letters"])
+```
+#### Mode 2: Subsetting returns data of the class of the subsetted datatype
+```{r label = "subsetting-returns-vector"}
+mylist[[1]] # returns the vector 'letters'
+class(mylist[[1]])
+mylist$letters # returns vector
+class(mylist$letters)
+mylist[["letters"]] # returns the vector 'letters
+class(mylist[["letters"]])
+```

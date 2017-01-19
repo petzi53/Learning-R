@@ -1,0 +1,71 @@
+---
+title: "Basic Datasets in R"
+author: "Peter Baumgartner"
+date: "Jan 18, 2017"
+output:
+  html_notebook:
+    toc: yes
+---
+        
+```{r label = "global-options", echo=FALSE}
+knitr::opts_chunk$set(message = F, error = F, warning = F, comment = NA)
+```
+***
+Here I am experimenting with "getting & cleaning data". My goal is to load the basic R datasets as tidy data (each row refers to a dataset with two variables: Name and Description).
+
+# Getting data
+
+Load the list of all datasets into a Variable
+```{r}
+ds <- library(help = "datasets")
+```
+Inspect the structure of the list
+```{r}
+str(ds)
+```
+str(ds) shows that the interesting part for me is the character vector ds$info[[2]]
+
+
+# Tidy data
+
+The interesting data are now in R. The next step is to clean it, so that it forms a tidy table. 
+```{r}
+dStr <- ds$info[[2]]
+cat("Length of character vector =", length(dStr), "\n\n")
+cat("The first five strings:\n")
+head(dStr, 5)
+cat("\n\nThe last five strings:\n")
+tail(dStr, 5)
+```
+After detailed inspecting it turned outm, that some of the exact hundert strings are continuation, as the descriptions did not fit in one line of the packageInfo format.
+
+To find these strings I try to use a regular expression:
+```{r}
+
+i <- grep("^ +", dStr) # returns a vector of the indices of the elements of dStr that yielded a match
+for (val in i) {
+        dStr[val - 1] <- paste(dStr[val - 1], str_trim(dStr[val]))
+        dStr[val] <- "" # do not remove line because that would scramble the index i 
+}
+nStr <- dStr[dStr != ""]
+```
+
+
+This procedure has several phases which I embed in the function of vapply.
+
+1. Split the vector string after two spaces to get Name & Description
+2. Name the columns. 
+3. Naming the columns tells vapply tp produce an array (and not an vector)
+4. Transpose (t) the matrix = change rows and columns
+```{r}
+library("stringr")
+df <- t(vapply(
+        nStr,
+        str_split_fixed,
+        c("Name" = "", "Description" = ""),
+        pattern = " ",
+        n = 2,
+        USE.NAMES = FALSE
+))
+```
+

@@ -1,0 +1,188 @@
+---
+title: 'Reading Data from APIs '
+output:
+  html_notebook: default
+  html_document: default
+  pdf_document:
+    fig_caption: yes
+    keep_tex: yes
+    number_sections: yes
+    toc: yes
+  word_document: default
+---
+```{r label = "global-options"}
+knitr::opts_chunk$set(message = F, error = F, warning = F, echo = F, comment = NA)
+```
+
+I am using this [R Markdown](http://rmarkdown.rstudio.com) Notebook, to experiment and learn the essentials of the third Coursera course "Getting and Cleaning data" in the Data Science Specialization. It is a kind of [literal programming](https://en.wikipedia.org/wiki/Literate_programming), where I can mix code snippets and their outcomes with my comments and notes.
+
+This document especially refers to the Lecture [Reading Data from APIs](https://www.coursera.org/learn/data-cleaning/lecture/gIaQK/reading-from-apis) by Jeffrey Leek. Another helpful document (lecture slides with active Links) can be found on [GitHub](https://github.com/DataScienceSpecialization/courses/blob/master/03_GettingData/02_04_readingFromAPIs/index.Rmd).
+
+## Twitter
+The lecture provides as an example the Twitter API. I did everything what the lecture explained:
+
+* creating an account at the [twitter site for developers](https://dev.twitter.com/apps)
+* creating an application ("MyR_Twitter_Test") to get the relevant codes and keys and
+* copied the code snippet in order to access Twitter from within R 
+
+```{r eval=FALSE}
+library("httr")
+myapp = oauth_app("twitter",
+                   key="yourConsumerKeyHere",secret="yourConsumerSecretHere")
+sig = sign_oauth1.0(myapp,
+                     token = "yourTokenHere",
+                      token_secret = "yourTokenSecretHere")
+homeTL = GET("https://api.twitter.com/1.1/statuses/home_timeline.json", sig)
+```
+
+### Questions
+From here on I struggled with several question: 
+
+1. Is it correct to use "secret"" and "token_secret"" in this form, so that everybody could see (and access) it? It seems ok for Consumer Data ([see this discussion](https://github.com/hadley/httr/issues/221)), but for Token as well>?
+2. The httr-helpfile says that function "sign_oath1.0" is deprecated. One should instead "create a config object directly using config(token = my_token)." ([see R <- how(com)](https://r-how.com/packages/httr/sign_oauth)). But I could not manage to run properly this change.
+
+### (A) Lecture Example
+
+```{r}
+library("httr")
+library("jsonlite")
+myapp = oauth_app("twitter",
+                  key = "VLP1A7YUNVoXKf9T7jZxqIyp5",
+                  secret = "ueKqhyEuRR74UtJsjhYA1rudot65VHzkX3der8DX47Bhv8yXPH")
+sig = sign_oauth1.0(myapp,
+                     token = "22907698-8470AMxuadpn1wb7zSdIq5qjEPSWwxW8PDrrThokL",
+                     token_secret = "x2IAXTerfsTUbWkQaVXt4WFAUfzzGF4823Wq03CIp6yVB")
+homeTL = GET("https://api.twitter.com/1.1/statuses/home_timeline.json", sig)
+
+json1 = content(homeTL)
+json2 = jsonlite::fromJSON(toJSON(json1))
+# json2[[4]][1:4] # display first four messages
+# # get first row of all columns ( = column names)
+names(head(json2[1:length(json2)], 1)) 
+```
+
+```{r}
+l1 <- head(json2[1:length(json2)], 10)
+c1 <- as.character(l1$user$name)
+c2 <- as.character(l1$user$screen_name)
+c3 <- as.character(l1$text)
+df <- data.frame(Name = c1, Screen = c2, Text = c3, stringsAsFactors = FALSE)
+df
+
+```
+
+3. The demo example by Hadley Wickam didn't work neither for me. I could run the original source code, but when I changed to my ConsumerKey and Tokens I got error messages. Other people got this error messages too, but evidently they could find work aorunds. 
+
+### (B) httr Demo Example (slightly changed to prevent displaying huge list)
+
+```{r}
+library(httr)
+
+# 1. Find OAuth settings for twitter:
+#    https://dev.twitter.com/docs/auth/oauth
+oauth_endpoints("twitter")
+
+# 2. Register an application at https://apps.twitter.com/
+#    Make sure to set callback url to "http://127.0.0.1:1410/"
+#
+#    Replace key and secret below
+myapp <- oauth_app("twitter",
+  key = "TYrWFPkFAkn4G5BbkWINYw",
+  secret = "qjOkmKYU9kWfUFWmekJuu5tztE9aEfLbt26WlhZL8"
+)
+
+# 3. Get OAuth credentials
+twitter_token <- oauth1.0_token(oauth_endpoints("twitter"), myapp)
+
+# 4. Use API
+req <- GET("https://api.twitter.com/1.1/statuses/home_timeline.json",
+  config(token = twitter_token))
+stop_for_status(req)
+t <- content(req)
+t[[1]][1:4]
+```
+
+### (C) httr Demo Example (with my data and error message)
+Filling in my own data produces a run time error. I frankly do not know what's the reason for this error. I have set the callback url and did all the things that are required at the API site.
+
+```{r eval=FALSE}
+library(httr)
+
+# 1. Find OAuth settings for twitter:
+#    https://dev.twitter.com/docs/auth/oauth
+oauth_endpoints("twitter")
+
+# 2. Register an application at https://apps.twitter.com/
+#    Make sure to set callback url to "http://127.0.0.1:1410/"
+#
+#    Replace key and secret below
+myapp <- oauth_app("twitter",
+  key = "VLP1A7YUNVoXKf9T7jZxqIyp5",
+  secret = "ueKqhyEuRR74UtJsjhYA1rudot65VHzkX3der8DX47Bhv8yXPH"
+)
+
+# 3. Get OAuth credentials
+twitter_token <- oauth1.0_token(oauth_endpoints("twitter"), myapp)
+
+# 4. Use API
+req <- GET("https://api.twitter.com/1.1/statuses/home_timeline.json",
+  config(token = twitter_token))
+stop_for_status(req)
+content(req)
+```
+
+## Where to go from here: Some reflections
+
+Although I read many help texts and looked video explanation, I believe that I still do not quit understand many things related with APIs. It seems to me that, besides to study the command of the httr package more in detail ([see manual](https://cran.r-project.org/web/packages/httr/httr.pdf)),  both httr vignettes --- "quickstart" and api-packages (Best practices for writing an API packages ) --- would be essential reading for me.
+
+Fortunately it looks like that httr packages is very basic, so that there exist more specialzed packages. For instance for Twitter there are **twitteR** and the new developed **rtweet** packages. These packages seem to provide much easier access as the general httr packages. See for instance the example taken from [ThinkToStart](http://thinktostart.com/twitter-authentification-with-r/):
+
+```{r eval=FALSE}
+api_key <- "YOUR API KEY"
+api_secret <- "YOUR API SECRET"
+access_token <- "YOUR ACCESS TOKEN"
+access_token_secret <- "YOUR ACCESS TOKEN SECRET"
+setup_twitter_oauth(api_key,api_secret,access_token,access_token_secret)
+searchTwitter("iphone")
+```
+
+Filling in my keys and tokens:
+```{r}
+library("twitteR")
+api_key <- "VLP1A7YUNVoXKf9T7jZxqIyp5"
+api_secret <- "ueKqhyEuRR74UtJsjhYA1rudot65VHzkX3der8DX47Bhv8yXPH"
+access_token <- "22907698-8470AMxuadpn1wb7zSdIq5qjEPSWwxW8PDrrThokL"
+access_token_secret <- "x2IAXTerfsTUbWkQaVXt4WFAUfzzGF4823Wq03CIp6yVB"
+setup_twitter_oauth(api_key,api_secret,access_token,access_token_secret)
+head(searchTwitter("education"),4)
+```
+## Another experiment
+Looking into the API from [Goodreads](http://www.goodreads.com) I noticed that there was no necessity to authenticate. One could immediately get data with curl. Again I had to create an application to get the customers key, but after that it was easy, because every method (call) was explained at the [API-site of Goodreads](https://www.goodreads.com/api/) and with an example illustrated.
+```{r}
+library("curl")
+con <-
+        curl("https://www.goodreads.com/book/isbn_to_id/9780674430006?key=COhC4aFckItiDwBxmrug")
+t <- readLines(con, warn = FALSE)
+close(con)
+
+con <-
+        curl("https://www.goodreads.com/book/isbn/9780674430006?callback=myCallback&format=json&user_id=13270093")
+review <- readLines(con, warn = FALSE)
+close(con)
+
+con <-
+        curl("https://www.goodreads.com/book/isbn/9780674430006")
+review1 <- readLines(con, warn = FALSE)
+close(con)
+
+cat("Goodreads Number of the ISBN '9780674430006' =", t, "\n")
+cat("Goodreads review for the book ISBN '9780674430006' as Json into memory", "\n")
+cat("Goodreads review for the book ISBN '9780674430006' as XML: into memory")
+```
+## Summary
+It seems that there is no insurmountable barrier to get data from APIs. Even if there are very different access conditions and comprehensive manuals to, there are also internet tutorial with step-by-step explanations abound.
+
+Having access is just one problem. To manipulate data another one. But the biggest one is to develop interesting questions and to find the right methods in order to get the data needed.
+
+
+***
