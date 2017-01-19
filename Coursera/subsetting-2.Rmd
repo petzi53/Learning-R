@@ -3,9 +3,9 @@ title: "Subsetting advanced"
 author: "Peter Baumgartner"
 date: "Jan 18, 2017"
 output:
-  pdf_document:
-    toc: yes
   html_notebook:
+    toc: yes
+  pdf_document:
     toc: yes
 ---
         
