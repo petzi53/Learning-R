@@ -18,14 +18,18 @@ knitr::opts_chunk$set(
 # 3.1 Prerequisites
 
 ```{r label="Prerequisites"}
+## load all tidyverse packages
 library(tidyverse)
-# if you need updates, run 
+## this loads the following packages:
+tidyverse_packages(include_self = TRUE)
+## for more information about the rationale behind `tidyverse` read:
+## https://cran.r-project.org/web/packages/tidyverse/vignettes/manifesto.html
+## if you need updates of all these packages, run: 
 # tidyverse_update()
-# make the folder, where this file originate to the working directory
+# --------
+## do I have to set the the working directory?
+## or is this done by chosing a project and/or a git-branch?
 setwd("~/Documents/_PB-Data/Programming/R/Learning-R/Coursera/R4ds-book")
-# this does not work, maybe the working directory is determined by the project?
-# load all tidyverse packages
-
 ```
 # 3.2 First steps
 ## 3.2.1 The `mpg` data frame
@@ -201,4 +205,6 @@ ggplot(mpg, aes(displ, hwy)) +
 ggplot(data = mpg) + 
   geom_point(mapping = aes(x = displ, y = hwy, color = displ < 5))
 ```
+# Facets
 
+This is a test.
