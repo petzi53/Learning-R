@@ -4,7 +4,7 @@ output:
   html_notebook:
     toc: yes
 ---
-```{r label = "global-options", echo=FALSE}
+```{r label = "global-options", echo=FALSE, highlight=TRUE}
 knitr::opts_chunk$set(
         message = F,
         error = F,
@@ -20,7 +20,18 @@ knitr::opts_chunk$set(
 ```{r label="Prerequisites"}
 ## load all tidyverse packages
 library(tidyverse)
-## this loads the following packages:
+## this bring the first time in my installation the following message: 
+#> Loading tidyverse: ggplot2
+#> Loading tidyverse: tibble
+#> Loading tidyverse: tidyr
+#> Loading tidyverse: readr
+#> Loading tidyverse: purrr
+#> Loading tidyverse: dplyr
+#> Conflicts with tidy packages -----------------------------------------------------------------
+#> filter(): dplyr, stats
+#> lag():    dplyr, stats
+#
+## but generally it loads the following packages:
 tidyverse_packages(include_self = TRUE)
 ## for more information about the rationale behind `tidyverse` read:
 ## https://cran.r-project.org/web/packages/tidyverse/vignettes/manifesto.html
@@ -29,7 +40,7 @@ tidyverse_packages(include_self = TRUE)
 # --------
 ## do I have to set the the working directory?
 ## or is this done by chosing a project and/or a git-branch?
-setwd("~/Documents/_PB-Data/Programming/R/Learning-R/Coursera/R4ds-book")
+setwd("~/Documents/_PB-Data/Programming/R/Learning-R/R4ds-book")
 ```
 # 3.2 First steps
 ## 3.2.1 The `mpg` data frame
@@ -206,5 +217,37 @@ ggplot(data = mpg) +
   geom_point(mapping = aes(x = displ, y = hwy, color = displ < 5))
 ```
 # Facets
+One way to add additional variables is with aesthetics. Another way, particularly useful for categorical variables, is to split your plot into facets, subplots that each display one subset of the data.
 
-This is a test.
+To facet your plot by a single variable, use `facet_wrap()`. The first argument of `facet_wrap()` should be a formula, which you create with `~` followed by a variable name (here “formula” is the name of a data structure in R, not a synonym for “equation”). The variable that you pass to `facet_wrap()` should be discrete.
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_wrap(~ class, nrow = 2)
+```
+**From the documentation:** 
+
+> `facet_wrap` wraps a 1d sequence of panels into 2d. This is generally a better use of screen space than facet_grid because most displays are roughly rectangular.
+
+To facet your plot on the combination of two variables, add `facet_grid()` to your plot call. The first argument of `facet_grid()` is also a formula. This time the formula should contain two variable names separated by a `~`.
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_grid(drv ~ cyl)
+```
+I would like to spread out the y-dimension, because thee are many points overlapping each other. But I do not know how. `space = "free_y"` does not work. There is one questions, which seems similar to mine in SO, but the (aeustion) and also the answer is still to complex for me to understand. (see: http://stackoverflow.com/questions/28111413/how-to-set-different-y-axis-scale-in-a-facet-grid-with-ggplot).
+
+**From the documentation:** 
+
+> `facet_grid` forms a matrix of panels defined by row and column facetting variables. It is most useful when you have two discrete variables, and all combinations of the variables exist in the data.
+
+If you prefer to not facet in the rows or columns dimension, use a `.` instead of a variable name, e.g. + facet_grid(. ~ cyl).
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_grid(. ~ cyl)
+```
+
+
