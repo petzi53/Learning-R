@@ -1,0 +1,22 @@
+---
+title: "OpenIntro Statistics"
+author: Peter Baumgartner
+date: 2017-02-01
+output: 
+     github_document
+        number_sections: yes
+        toc: yes
+---
+
+```{r label = "global-options", echo=FALSE, highlight=TRUE}
+knitr::opts_chunk$set(
+        message = F,
+        error = F,
+        warning = F,
+        comment = NA,
+        highlight = T,
+        prompt = T
+        )
+```
+
+
