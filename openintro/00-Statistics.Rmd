@@ -1,11 +1,12 @@
 ---
-title: "OpenIntro Statistics"
+title: "OpenIntro Statistics: Introduction to data"
 author: Peter Baumgartner
-date: 2017-02-01
+date: 2017-02-02
 output: 
-     github_document
+     html_notebook:
         number_sections: yes
         toc: yes
+        toc_depth: 6
 ---
 
 ```{r label = "global-options", echo=FALSE, highlight=TRUE}
@@ -15,8 +16,60 @@ knitr::opts_chunk$set(
         warning = F,
         comment = NA,
         highlight = T,
-        prompt = T
+        prompt = T,
+        cached = T
         )
 ```
 
+0. Introduction
+
+I am using this file to explore the first chapter "Introduction to data" of [OpenIntro Statistics](https://www.openintro.org/stat/textbook.php?stat_book=os). The textbooks comes with many additional material:
+
+* [Videos](https://www.openintro.org/stat/videos.php)
+* Many Exercises at the end of the chapters: With solution of all odd-numbered in the annex. (But one can apply as teacher to get all solutions)
+* [Interactive Labs with R](https://www.openintro.org/stat/labs.php)
+* Several R Packages:
+    + [openintro](https://cran.r-project.org/web/packages/openintro/index.html): OpenIntro data sets and supplemental functions. [PDF manual](https://cran.r-project.org/web/packages/openintro/openintro.pdf))
+    + [OIdata](https://cran.r-project.org/web/packages/OIdata/index.html): Data sets and supplements (OpenIntro). [PDF manual](https://cran.r-project.org/web/packages/OIdata/OIdata.pdf)
+    + [oilabs](https://github.com/OpenIntroOrg/oilabs) An R package that contains the data sets, custom functions, documentation, and templates for the OpenIntro Labs.
+* [Free course on datacamp.com](https://www.datacamp.com/community/open-courses/statistical-inference-and-data-analysis) Data Analysis and Statistical Inference
+* Github source files to work interactively:
+    + [OpenIntro Statistics labs with base R](https://github.com/andrewpbray/oiLabs-base-R): Contentrates on base R functions and packages
+    + [OpenIntro Statistics labs with dplyr and ggplot2](https://github.com/andrewpbray/oiLabs-base-R): OpenIntro Labs in R using the dplyr and ggplot2 syntax for data manipulation.
+                
+I plan to take the chapters in several overlapping rounds:
+
+* I will follow the text and experiment with the data on my own. Here I will give special attention in using function from the tidyverse-packages.
+* I will follow the text for the R labs
+* And I will complete the course on Datacam.com.
+
+I am not sure, if this various approaches are effective or too much of the same. But I will at least try out all of these different learning possiblities. 
+
+<!-- ## Prerequisite -->
+
+<!-- ```{r} -->
+<!-- library(tidyverse) -->
+<!-- library(devtools) -->
+<!-- library(openintro) -->
+<!-- library(OIdata) -->
+<!-- install_github("OpenIntroOrg/oilabs") -->
+<!-- library(oilabs) -->
+
+<!-- ``` -->
+
+<!-- # Data basics -->
+<!-- ```{r} -->
+<!-- data(email50) # only display <Promise> (= lazy eval), needs another command to load -->
+<!-- # some command to get a first impression of the data set  -->
+<!-- email50 <- as_tibble(email50) # convert to tibble -->
+<!-- # select only rows used in the textbook  -->
+<!-- email50 <- select(email50, spam, num_char, line_breaks, format, number) # %>% -->
+<!-- # some checking to get a first impression of the data set -->
+<!-- dim(email50) -->
+<!-- names(email50) -->
+<!-- str(email50) -->
+<!-- email50 -->
+
+
+<!-- ``` -->
 
