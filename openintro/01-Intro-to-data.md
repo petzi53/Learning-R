@@ -571,7 +571,10 @@ We can construct a box plot for a single variable. You can compare the locations
        Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
       122.0   163.0   170.0   170.6   178.0   236.0 
 
-With ggplot you need x and y, e.g. two variables: see [StackOverflow](http://stackoverflow.com/questions/25049104/why-does-a-boxplot-in-ggplot-requires-axis-x-and-y)).
+With ggplot you need x *and* y, e.g. (at least) *two* variables: see [StackOverflow](http://stackoverflow.com/questions/25049104/why-does-a-boxplot-in-ggplot-requires-axis-x-and-y)). There are two ways to circumvent this problem:
+
+-   Using a special form of `qplot()`, "… a shortcut designed to be familiar if you're used to base `plot()`. … It's great for allowing you to produce plots quickly, but I highly recommend learning ggplot() as it makes it easier to create complex graphics". (From the R Documentation)
+-   Providing one variable as an empty string. \[I am not sure of this is an offical way to solve the two-variable-problem, but it works.\]
 
 ``` r
 > qplot(y = height_cm,
@@ -596,7 +599,7 @@ With ggplot you need x and y, e.g. two variables: see [StackOverflow](http://sta
        Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
       122.0   163.0   170.0   170.6   178.0   236.0 
 
-Confirm that the median and upper and lower quartiles reported in the numerical summary match those in the graph. The purpose of a boxplot is to provide a thumbnail sketch of a variable for the purpose of comparing across several categories. So we can, for example, compare the heights of men and women with
+Confirm that the median and upper and lower quartiles reported in the numerical summary match those in the graph. The purpose of a boxplot is to provide a thumbnail sketch of a variable for the purpose of comparing across several categories. So we can, for example, compare the heights of men and women:
 
 ``` r
 > boxplot(cdc_metric$height_cm ~ cdc_metric$gender)
@@ -652,12 +655,129 @@ Confirm that the median and upper and lower quartiles reported in the numerical 
     1      m   124       173    178 178.4       183   236    10
     2      f   122       157    163 163.5       168   198    11
 
+The `table` command can be used to tabulate any number of variables that you provide.
+
+``` r
+> table(cdc_metric$gender,cdc_metric$smoke100)
+```
+
+       
+           0    1
+      m 4547 5022
+      f 6012 4419
+
+``` r
+> mosaicplot(table(cdc_metric$gender,cdc_metric$smoke100))
+```
+
+![](01-Intro-to-data_files/figure-markdown_github/unnamed-chunk-6-1.png) **Question:** What is the equivalent of a `mosaicplot` in `ggplot`? \[solved: It seems there is no ready to work equivalent, one has to write a function. See the [question and especially the answer on SO](http://stackoverflow.com/questions/19233365/how-to-create-a-marimekko-mosaic-plot-in-ggplot2). There is a more complex [refined version of the function](https://gist.github.com/docsteveharris/4e12c86ac2dd96bfa2dd5cbf13ba3e53), but it appears not so nice to me (even with the color brewer options it looks spartanic. Sure there is also some work on labelling to do with the other version, but it can stand the comparison with the base R version. --- There is also a [related article](http://vita.had.co.nz/papers/prodplots.pdf) by Hadley Wickham, and Heike Hofmann, which I haven't read yet.
+
+``` r
+> #' @title Mosaic plot using ggplot.
+> #'
+> #' @description
+> #' Creates a mosaic plot where the dimensions of the cells of a 
+> #' confusion matrix represent their marginal proportions.
+> #'
+> #' @details
+> #' Credit for initial iteration to 
+> #' [Edwin](http://stackoverflow.com/a/19258045/992999)
+> #' This version adds color brewer options and tidies the labelling
+> 
+> ggMMplot <- function(var1, var2, palette="YlOrRd"){
++   require(ggplot2)
++   
++   levVar1 <- length(levels(var1))
++   levVar2 <- length(levels(var2))
++ 
++   jointTable <- prop.table(table(var1, var2))
++   plotData <- as.data.frame(jointTable)
++   plotData$marginVar1 <- prop.table(table(var1))
++   plotData$marginVar2 <- prop.table(table(var2))
++   plotData$var2Height <- plotData$Freq / plotData$marginVar1
++   plotData$var1Center <-
++           c(0, cumsum(plotData$marginVar1)[1:levVar1 - 1]) +
++           plotData$marginVar1 / 2
++ 
++   # Define label positions on LEFT (y-axis)
++   ylabData <- plotData[plotData$var1 == levels(plotData$var1)[1], ]
++   dd <- (y = c(0, cumsum(ylabData$var2Height)))
++   ylabData$ylabCenter <-
++           sapply(1:(length(dd) - 1), function(x)
++                   dd[x] + (dd[x + 1] - dd[x]) / 2)
++   
++   # Define label positions on the BOTTOM (x-axis)
++   xlabData <- plotData[plotData$var2 == levels(plotData$var2)[1], ]
++   dd <- (x = c(0, cumsum(xlabData$marginVar1)))
++   xlabData$xlabCenter <-
++           sapply(1:(length(dd) - 1), function(x)
++                   dd[x] + (dd[x + 1] - dd[x]) / 2)
++ 
++   ggplot(plotData, aes(var1Center, var2Height)) +
++     geom_bar(stat = "identity", aes(width = marginVar1, fill = var2), col = "White") +
++           scale_fill_brewer(type = "seq",
++                             palette = palette,
++                             guide = FALSE) +
++         # xlabels
++           geom_text(data = xlabData,
++                     aes(
++                     label = as.character(var1),
++                     x = xlabCenter,
++                     y = -0.05
++                     ),
++                     vjust = "inward") +
++         # ylabels
++           geom_text(
++                   data = ylabData,
++                   aes(
++                   label = as.character(var2),
++                   y = ylabCenter,
++                   x = -0.05
++                   ),
++                   vjust = "top",
++                   angle = 90
++                   ) +
++                   xlab("") + scale_x_discrete(labels = NULL) +
++                   ylab("") + scale_y_discrete(labels = NULL) +
++                   theme_minimal() +
++                   theme(plot.margin = margin(rep(20, 4)))
++ }
+> 
+> ggMMplot1 <- function(var1, var2){
++   require(ggplot2)
++   levVar1 <- length(levels(var1))
++   levVar2 <- length(levels(var2))
++ 
++   jointTable <- prop.table(table(var1, var2))
++   plotData <- as.data.frame(jointTable)
++   plotData$marginVar1 <- prop.table(table(var1))
++   plotData$var2Height <- plotData$Freq / plotData$marginVar1
++   plotData$var1Center <-
++           c(0, cumsum(plotData$marginVar1)[1:levVar1 - 1]) +
++           plotData$marginVar1 / 2
++ 
++   ggplot(plotData, aes(var1Center, var2Height)) +
++     geom_bar(stat = "identity", aes(width = marginVar1, fill = var2), col = "Black") +
++     geom_text(aes(label = as.character(var1), x = var1Center, y = 1.05)) 
++ }
+> 
+> ggMMplot(cdc_metric$gender,cdc_metric$smoke100)
+```
+
+![](01-Intro-to-data_files/figure-markdown_github/unnamed-chunk-7-1.png)
+
+``` r
+> ggMMplot1(cdc_metric$gender, cdc_metric$smoke100)
+```
+
+![](01-Intro-to-data_files/figure-markdown_github/unnamed-chunk-7-2.png)
+
 ``` r
 > bmi <- (CDC$weight / CDC$height^2) * 703
 > boxplot(bmi ~ CDC$genhlth)
 ```
 
-![](01-Intro-to-data_files/figure-markdown_github/unnamed-chunk-6-1.png)
+![](01-Intro-to-data_files/figure-markdown_github/unnamed-chunk-8-1.png)
 
 ``` r
 > (my_bmi <- (88 / 1.79^2))
