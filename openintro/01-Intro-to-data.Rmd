@@ -26,12 +26,20 @@ knitr::opts_chunk$set(
 The Behavioral Risk Factor Surveillance System (BRFSS) is an annual telephone survey of 350,000 people in the United States. The [BRFSS Web site](http://www.cdc.gov/brfss) contains a complete description of the survey, including the research questions that motivate the study and many interesting results derived from the data.
 
 Load the data set from the [OpenIntro Website](http://www.openintro.org/stat/data/cdc.R). 
+Have a look at the data in the browser to get a feeling of the interesting structure of the raw data.
 
-* Have a look at the data in the browser to get a feeling of the raw data.
-* Load the data set into R. As it is a big file (2.1 MB) check if it is already loaded into memory:
+Load the data set into R from the external website. But just once: As it is a big file (2.1 MB) it takes quite some time to load it into memory. Therefore save it as `.RData` file, which is later much faster to load. Later check if it is already loaded into memory:
 ```{r get-cdc-data}
-if (!exists("cdc")) {source("http://www.openintro.org/stat/data/cdc.R")}
+## run the following lines just once 
+# source("http://www.openintro.org/stat/data/cdc.R")
+# dir.create("data")
+# save("cdc", file = "data/cdc.RData", compress = TRUE)
 ```
+
+```{r load-cdc-data}
+if (!exists("cdc")) {load("data/cdc.RData")}
+```
+
 The data set `cdc` that shows up in your workspace is a data matrix, with each row representing a case and each column representing a variable. R calls this data format a data frame, which is a term that will be used throughout the labs. 
 
 ## Get the data with tidyverse as tibble
@@ -155,12 +163,13 @@ But the outcome of the `table()` command is class "`r class(table(CDC$smoke100))
 ```{r generate-contingency-tables-with-dplyr-count}
 CDC %>% 
         count(smoke100) %>%
-        mutate(prop = n / nrow(CDC))
+        mutate(prop = round(n / nrow(CDC), digits = 2))
 ```
-**Questions:** 
+### Question 1 [closed]: How to limit numbers after decimal point?
+How to limit the figure of `prop` to an accuracy of two digits after the decimal point? Use `round`as in the example above.
 
-* How to limit the figure of `prop` to an accuracy of two digits after the decimal point?
-* How to use "." for big figures and "," for German localisation?
+### Question 2 [open]: German localisation for big numbers "." and decimal numbers ","
+How to use "." for big figures and "," for figurs after decimal point (comma) = German localisation for figures?
 
 ## Graphical summary with base R: `barplot()`
 
@@ -206,7 +215,7 @@ This works because every `geom` has a default `stat`; and every `stat` has a def
 ```{r generate-a-barplot-with-prop}
 ggplot(data = CDC) + 
         stat_count(mapping = aes(x = smoke100, y = ..prop..), 
-                   fill='lightblue', color = 'black')
+                   fill = 'lightblue', color = 'black')
 ```
 
 ## Exercise 2
@@ -255,11 +264,12 @@ summarise(CDC, Min. = min(age),
 #         count(gender) %>%
 #         mutate(prop = n / 20000)
 ```
-**Questions:**
 
-* How to limit Mean to two digits after the decimal point? [solved: using round, but I had in combination of subsetting I had to convert the table to a vector and then to a double.]
-* How to write a function to simulate the `summary())` function using `dplyr` commands. 
-* How to subset just one figure of the contingengy table for use in inline text. [solved: convert table to vector and subset]
+### Question 3 [open]: Function to simulate `summary()`
+How to write a function to simulate the `summary()` function using `dplyr` commands. 
+
+### Question 4 [closed]: Subset just one figure of the contingengy table 
+For use in inline text I would need to know how to subset just one figure of the contingengy table. **Solution:** Convert table to a vector and then do the subsetting
 
 There are `r as.vector(table(CDC$gender))[1]` males in the sample.
 `r round(as.double(as.vector(table(CDC$genhlth) / 20000)[1] * 100), digits = 2)`% of the sample reports being in excellent health.
@@ -271,8 +281,7 @@ table(Gender = CDC$gender, Smoke100 = CDC$smoke100)
 ```
 Here, we see column labels of 0 and 1. Recall that 1 indicates a respondent has smoked at least 100 cigarettes. [I have the table labelled.]
 
-**Question:** 
-How to provide tables more beautiful?
+### Question 5 [open]: How to design more beautiful tables?
 
 ```{r multivariable-table}
 table(Gender = CDC$gender, Smoke100 = CDC$smoke100, Exercises = CDC$exerany)
@@ -280,7 +289,7 @@ table(Gender = CDC$gender, Smoke100 = CDC$smoke100, Exercises = CDC$exerany)
 [Here I have added another varialbe to see how R presents the results.]
 
 To create a mosaic plot of this table, we would enter the following command:
-```{r}
+```{r mosaicplot}
 mosaicplot(table(Gender = CDC$gender, Smoke100 = CDC$smoke100))
 ```
 
@@ -291,7 +300,7 @@ What does the mosaic plot reveal about smoking habits and gender?
 
 A higher proportion of females said that they didn't smoke more than 100 cigarettes in their lifetime.
 
-# Subsetting
+## Subsetting
 
 Interlude (= some commands to inspect data and data structure) and subsetting is something I have already experiences. Therefore I will not go into much detail.
 
@@ -303,19 +312,19 @@ mdata1 <- filter(CDC, gender == "m")
 ```
 
 will create a new data set called mdata that contains only the men from the CDC data set. In addition to finding it in your workspace alongside its dimensions, you can take a peek at the first several rows as usual.
-```{r}
+```{r using-head}
 head(mdata1, 10)
 ```
 You can use several of these conditions together with `&` and `|`. The `&` is read “and” so that
 
-```{r}
+```{r male-and-over-30}
 m_and_over30 <- subset(CDC, gender == "m" & age > 30)
 m_and_over30_1 <- filter(CDC, gender == "m" & age > 30)
 ```
 
 will give you the data for men over the age of 30. The `|` character is read “or” so that
 
-```{r}
+```{r male-or-over-30}
 m_or_over30 <- subset(CDC, gender == "m" | age > 30)
 m_or_over30_1 <- filter(CDC, gender == "m" & age > 30)
 ```
@@ -332,19 +341,21 @@ under23_and_smoke_1 <- filter(CDC, age < 23 & smoke100 == 1)
 # Quantitative data
 With our subsetting tools in hand, we’ll now return to the task of the day: making basic summaries of the BRFSS questionnaire. We’ve already looked at categorical data such as smoke and gender so now let’s turn our attention to quantitative data. Two common ways to visualize quantitative data are with box plots and histograms. 
 
+## Conversion in metric system
+
 To get a better feeling of the data I will add three new rows: `height_cm`, `weight_kg`, `wtdesire_kg.
 
 * 1 inch = 2.54 cm
 * 1 pound = 0.453592 kg
 
-```{r}
+```{r conversion-into-metric-system}
 cdc_metric <- CDC %>%
                 mutate(height_cm = as.integer(round(height * 2.54))) %>%
                 mutate(weight_kg = as.integer(round(weight * 0.453592))) %>%
                 mutate(wtdesire_kg = as.integer(round(wtdesire * 0.453592)))
 ```
 
-
+## Boxplot
 We can construct a box plot for a single variable. You can compare the locations of the components of the box by examining the summary statistics.
 
 ```{r boxplot-single-variable}
@@ -352,7 +363,10 @@ boxplot(cdc_metric$height_cm)
 summary(cdc_metric$height_cm)
 ```
 
-With ggplot you need x and y, e.g. two variables: see [StackOverflow](http://stackoverflow.com/questions/25049104/why-does-a-boxplot-in-ggplot-requires-axis-x-and-y)).
+With `ggplot` you need x *and* y, e.g. (at least) *two* variables: see [StackOverflow](http://stackoverflow.com/questions/25049104/why-does-a-boxplot-in-ggplot-requires-axis-x-and-y)). There are two ways to circumvent this problem: 
+
+* Using a special form of `qplot()`, "… a shortcut designed to be familiar if you're used to base `plot()`. … It's great for allowing you to produce plots quickly, but I highly recommend learning ggplot() as it makes it easier to create complex graphics". (From the R Documentation)
+* Providing one variable as an empty string. [I am not sure of this is an offical way to solve the two-variable-problem, but it works.]
 ```{r qplot-with-one-variable}
 qplot(y = height_cm,
       x = 1,
@@ -365,7 +379,7 @@ ggplot(cdc_metric, aes(x = "", y = height_cm)) +
         geom_boxplot()
 summary(cdc_metric$height_cm)
 ```
-Confirm that the median and upper and lower quartiles reported in the numerical summary match those in the graph. The purpose of a boxplot is to provide a thumbnail sketch of a variable for the purpose of comparing across several categories. So we can, for example, compare the heights of men and women with
+Confirm that the median and upper and lower quartiles reported in the numerical summary match those in the graph. The purpose of a boxplot is to provide a thumbnail sketch of a variable for the purpose of comparing across several categories. So we can, for example, compare the heights of men and women:
 ```{r height-m-and-f-with-boxplot-and-base-r}
 boxplot(cdc_metric$height_cm ~ cdc_metric$gender)
 summary(subset(cdc_metric, gender == "m", select = height_cm))
@@ -383,13 +397,233 @@ summarise(group_by(cdc_metric, gender),
           IQR = IQR(height_cm)
           )
 ```
-```{r}
-bmi <- (CDC$weight / CDC$height^2) * 703
+
+## `Table`command and mosaicplot
+The `table` command can be used to tabulate any number of variables that you provide.
+
+```{r using-table}
+table(cdc_metric$gender,cdc_metric$smoke100)
+mosaicplot(table(cdc_metric$gender,cdc_metric$smoke100))
+```
+
+### Question 6 [partly closed]: `mosaicplot` in `ggplot`?
+
+What is the equivalent of a `mosaicplot` in `ggplot`? It seems there is no ready to work equivalent, one has to write a function. See the [question and especially the answer on SO](http://stackoverflow.com/questions/19233365/how-to-create-a-marimekko-mosaic-plot-in-ggplot2).  There is a more complex [refined version of the function](https://gist.github.com/docsteveharris/4e12c86ac2dd96bfa2dd5cbf13ba3e53), but it appears not so nice to me (even with the color brewer options it looks spartanic. Sure there is also some work on labelling to do with the other version, but it can stand the comparison with the base R version. --- There is also a [related article](http://vita.had.co.nz/papers/prodplots.pdf) by Hadley Wickham, and Heike Hofmann, which I haven't read yet. 
+
+```{r function-ggMMplot}
+#' @title Mosaic plot using ggplot.
+#'
+#' @description
+#' Creates a mosaic plot where the dimensions of the cells of a 
+#' confusion matrix represent their marginal proportions.
+#'
+#' @details
+#' Credit for initial iteration to 
+#' [Edwin](http://stackoverflow.com/a/19258045/992999)
+#' This version adds color brewer options and tidies the labelling
+
+ggMMplot <- function(var1, var2, palette="YlOrRd"){
+  require(ggplot2)
+  
+  levVar1 <- length(levels(var1))
+  levVar2 <- length(levels(var2))
+
+  jointTable <- prop.table(table(var1, var2))
+  plotData <- as.data.frame(jointTable)
+  plotData$marginVar1 <- prop.table(table(var1))
+  plotData$marginVar2 <- prop.table(table(var2))
+  plotData$var2Height <- plotData$Freq / plotData$marginVar1
+  plotData$var1Center <-
+          c(0, cumsum(plotData$marginVar1)[1:levVar1 - 1]) +
+          plotData$marginVar1 / 2
+
+  # Define label positions on LEFT (y-axis)
+  ylabData <- plotData[plotData$var1 == levels(plotData$var1)[1], ]
+  dd <- (y = c(0, cumsum(ylabData$var2Height)))
+  ylabData$ylabCenter <-
+          sapply(1:(length(dd) - 1), function(x)
+                  dd[x] + (dd[x + 1] - dd[x]) / 2)
+  
+  # Define label positions on the BOTTOM (x-axis)
+  xlabData <- plotData[plotData$var2 == levels(plotData$var2)[1], ]
+  dd <- (x = c(0, cumsum(xlabData$marginVar1)))
+  xlabData$xlabCenter <-
+          sapply(1:(length(dd) - 1), function(x)
+                  dd[x] + (dd[x + 1] - dd[x]) / 2)
+
+  ggplot(plotData, aes(var1Center, var2Height)) +
+    geom_bar(stat = "identity", aes(width = marginVar1, fill = var2), col = "White") +
+          scale_fill_brewer(type = "seq",
+                            palette = palette,
+                            guide = FALSE) +
+        # xlabels
+          geom_text(data = xlabData,
+                    aes(
+                    label = as.character(var1),
+                    x = xlabCenter,
+                    y = -0.05
+                    ),
+                    vjust = "inward") +
+        # ylabels
+          geom_text(
+                  data = ylabData,
+                  aes(
+                  label = as.character(var2),
+                  y = ylabCenter,
+                  x = -0.05
+                  ),
+                  vjust = "top",
+                  angle = 90
+                  ) +
+                  xlab("") + scale_x_discrete(labels = NULL) +
+                  ylab("") + scale_y_discrete(labels = NULL) +
+                  theme_minimal() +
+                  theme(plot.margin = margin(rep(20, 4)))
+}
+
+ggMMplot1 <- function(var1, var2){
+  require(ggplot2)
+  levVar1 <- length(levels(var1))
+  levVar2 <- length(levels(var2))
+
+  jointTable <- prop.table(table(var1, var2))
+  plotData <- as.data.frame(jointTable)
+  plotData$marginVar1 <- prop.table(table(var1))
+  plotData$var2Height <- plotData$Freq / plotData$marginVar1
+  plotData$var1Center <-
+          c(0, cumsum(plotData$marginVar1)[1:levVar1 - 1]) +
+          plotData$marginVar1 / 2
+
+  ggplot(plotData, aes(var1Center, var2Height)) +
+    geom_bar(stat = "identity", aes(width = marginVar1, fill = var2), col = "Black") +
+    geom_text(aes(label = as.character(var1), x = var1Center, y = 1.05)) 
+}
+
+ggMMplot(cdc_metric$gender,cdc_metric$smoke100)
+ggMMplot1(cdc_metric$gender, cdc_metric$smoke100)
+```
+
+## Body Mass Index (BMI)
+
+```{r bmi-boxplot-genhlth}
+bmi <- round((CDC$weight / CDC$height^2) * 703, digits = 2)
 boxplot(bmi ~ CDC$genhlth)
 ```
+Notice that the first line above is just some arithmetic, but it’s applied to all 20,000 numbers in the CDC data set. That is, for each of the 20,000 participants, we take their weight, divide by their height-squared and then multiply by 703. The result is 20,000 BMI values, one for each respondent. This is one reason why we like R: it lets us perform computations like this using very simple expressions.
 
-```{r my-bmi}
-(my_bmi <- (88 / 1.79^2))
+### Question 7 [closed]: Why is conversation factor 703? 
+
+* 2,54 cm = 1 in. 
+* 0.453592 kg = 1 pound
+
+Conversion factor 703 is the summary of all conversions: weight in pound * 0.453592 / (height * 2.54 / 100)^2 = `r 0.453592 / (2.54 / 100)^2`]
+
+## Exercise
+What does this box plot show? Pick another categorical variable from the data set and see how it relates to BMI. List the variable you chose, why you might think it would have a relationship to BMI, and indicate what the figure seems to suggest.
+
+**My Solution:**
+
+It shows the relation of BMI for every level of general health as stated by the respondents. One can see that with worse level of general health the BMI is (slightly) higher and the variance is higher (right skewed to the hight end).
+
+```{r bmi-boxplot-exerany}
+bmi_metric <- (cdc_metric$weight_kg / (cdc_metric$height_cm / 100) ^ 2)
+boxplot(bmi_metric ~ cdc_metric$exerany)
+
+p <- ggplot(cdc_metric, aes(factor(cdc_metric$exerany), bmi_metric))
+p + geom_boxplot()
+
+```
+There is a big difference between `boxplot` and `geom_boxplot`: The number variable (double) `exerany` needs to be converted into factor to work with `geom_boxplot` 
+
+
+
+For respondent with no exercise in the last month the BMI is higher than for people who have done workouts in the last month.
+
+```{r bmi-metric-boxplot-genhlth}
+bmi_metric <- (cdc_metric$weight_kg / (cdc_metric$height_cm / 100) ^ 2)
+boxplot(bmi_metric ~ cdc_metric$genhlth)
+```
+
+## Histograms
+
+Finally, let’s make some histograms.
+```{r histogram-age}
+hist(cdc_metric$age)
+```
+
+```{r histogram-bmi-with-breaks}
+hist(bmi)
+hist(bmi, breaks = 50)
+```
+```{r geom_histogram-with-bmi_metric}
+p <- ggplot(cdc_metric, aes(bmi_metric))
+p + geom_histogram(bins = 50)
+p + geom_freqpoly(bins = 50)
+```
+
+# On my own
+
+**Task 1:** Make a scatterplot of weight versus desired weight. Describe the relationship between these two variables.
+
+```{r scatterplot-weight_kg-versus-wtdesire_kg}
+p <- ggplot(data = cdc_metric, mapping = aes(weight_kg, wtdesire_kg), position = "jitter")
+p + geom_point()
+
+```
+
+```{r check-extreme-outliers}
+cdc_metric %>%
+        select(-height, -weight, -wtdesire) %>%
+        filter(wtdesire_kg > 250)
+```
+
+**Task 2:** Let’s consider a new variable: the difference between desired weight (wtdesire) and current weight (weight). Create this new variable by subtracting the two columns in the data frame and assigning them to a new object called wdiff.
+```{r create-wdiff_kg}
+(cdc_metric <- mutate(cdc_metric, wdiff_kg = wtdesire_kg - weight_kg))
+summary(cdc_metric$wdiff_kg)
+ggplot(cdc_metric, mapping = aes(wdiff_kg)) +
+        geom_freqpoly(bins = 150)
 ```
 
 
+**Task 3:** What type of data is wdiff? If an observation wdiff is 0, what does this mean about the person’s weight and desired weight. What if wdiff is positive or negative?
+
+* wdiff is `r typeof(cdc_metric$wdiff_kg)`
+* if wdiff is 0 then the person has its ideal weight
+* a negative wdiff means that the person wants to have less weight, a positive wdiff they want to have more weight.
+
+**Task 4:** Describe the distribution of wdiff in terms of its center, shape, and spread, including any plots you use. What does this tell us about how people feel about their current weight?
+
+```{r wdiff-distribution}
+ggplot(cdc_metric, mapping = aes(wdiff_kg)) +
+        geom_histogram(bins = 20)
+ggplot(cdc_metric, mapping = aes(wdiff_kg)) +
+        geom_histogram(bins = 20) +
+        scale_x_continuous(name = "Weight real - Weight desired", limits = c(-50, 50)) +
+        scale_y_continuous(name = "Frequency", limits = c(0, 10000))
+summary(cdc_metric$wdiff_kg)
+```
+### Question 8 [solved]: How to enlarge the x-axis?
+How to provide a better graph, where the x-axis is centered between -10 and + 10? I could find a solution at "Statistical tools for high-throughput data analysis" the [STHDA website](http://www.sthda.com/english/wiki/ggplot2-axis-scales-and-transformations#change-x-and-y-axis-limits). – The warning `Removed 146 rows containing non-finite values (stat_bin)` says that some data falls outside the provided limit.
+
+The plot shows that many people desire to have a little less weight (4-6 kg) as they have. It is a unimodal distribution There is one peak around 0 (real weight is desired weight) but there are also some strange value: A person who wants 137 kg less weight, but also another person who wants 226 kg more weight!
+
+**Task 5:** Using numerical summaries and a side-by-side box plot, determine if men tend to view their weight differently than women.
+
+```{r view-of-own-weight-by-gender}
+ggplot(cdc_metric, mapping = aes(factor(gender), wdiff_kg)) +
+        geom_boxplot() +
+        labs(title = "View of own weight by gender") + 
+        labs(x = "Gender") +
+        scale_y_continuous(name = "Weight real - weight desires", limits = c(-100.0, 100.0))
+```
+Women tend to desire a bigger reduction of weight as men.
+
+**Task 6:** Now it’s time to get creative. Find the mean and standard deviation of weight and determine what proportion of the weights are within one standard deviation of the mean.
+```{r data-proportion-within-SD}
+
+(round(SD1 <- mean(cdc_metric$weight_kg) - sd(cdc_metric$weight_kg)))
+(round(SD2 <- mean(cdc_metric$weight_kg) + sd(cdc_metric$weight_kg)))
+nrow(filter(cdc_metric, weight_kg >= 59 & weight_kg <= 95)) / nrow(cdc_metric) 
+```
+73% of the weights are within one standard deviation of the mean.
