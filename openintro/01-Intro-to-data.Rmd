@@ -627,3 +627,4 @@ Women tend to desire a bigger reduction of weight as men.
 nrow(filter(cdc_metric, weight_kg >= 59 & weight_kg <= 95)) / nrow(cdc_metric) 
 ```
 73% of the weights are within one standard deviation of the mean.
+
