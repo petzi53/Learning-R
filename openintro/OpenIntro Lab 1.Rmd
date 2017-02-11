@@ -1,0 +1,321 @@
+---
+title: "Lab 1: Intro to R"
+author: "Peter Baumgartner"
+date: "2017/02/10"
+output: oilabs::lab_report
+---
+# Loading packages and data
+
+I am using here the special template provided wiht `oilabs`. It has a non-hierarchical table of content including just first and second order.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# library(dplyr)
+# library(ggplot2)
+library(oilabs)
+```
+Instead of loading `dplyr` and `ggplot2` separatly it would be better to load [`tidyverse`](http://tidyverse.org/). The `tidyverse` is a collection of R packages that share common structure and are designed to work together. See in detail the unified philsosophy by the main developer Hadley Wickham [The tidy tools manifesto](https://github.com/tidyverse/tidyverse/blob/master/vignettes/manifesto.Rmd).
+
+Currently `tidyverse` loads the following packages:
+
+* **ggplot2**: Data Visualisations (Using the Grammar of Graphics)
+* **tibble**: Simple Data Frames
+* **tidyr**: Tidy Data with 'spread()' and 'gather()' 
+* **readr**: Read Tabular Data
+* **purrr**: Functional Programming Tools
+* **dplyr**: A Grammar of Data Manipulation 
+
+But with the same unified principles also come the following packages:
+
+* **forcats**: Tools for Working with Categorical Variables (Factors)
+* **haven**: Import and Export 'SPSS', 'Stata' and 'SAS' Files
+* **stringr**: Simple, Consistent Wrappers for Common String Operations
+
+and maybe also (I think so, but this is not confirmed):
+* **broom**: Convert Statistical Analysis Objects into Tidy Data Frames
+* **reshape** Flexibly Reshape Data: A Reboot of the Reshape Package
+
+For the special advantages of each packages see the adequate vignettes of these pacckages.
+
+**Note**:
+
+There is some conflict of `dplyr` with the `stat` package: `filer()` and `lag()`
+
+Those packages above are a set of general working tools for all data science tasks and should always have priority for the older and not with a unified structure programmed basic R packages.
+
+```{r lodaing-tidyverse}
+library(tidyverse)
+```
+
+
+
+* * *
+# [Dr. Arbuthnot's Baptism Records](https://github.com/petzi53/oiLabs-dplyr-ggplot/blob/master/01_intro_to_r/intro_to_r.Rmd#dr-arbuthnots-baptism-records)
+
+Note: there is also a [longer lab text](https://www2.stat.duke.edu/courses/Fall14/sta112.01/app/app1.html), which includes two extra exercise about finding duplicates.
+
+To get you started load the `arbuthnot`data set.
+```{r load-data-arbuthnot}
+data(arbuthnot)
+```
+The Arbuthnot data set refers to Dr. John Arbuthnot, an 18th century physician, writer, and mathematician. He was interested in the ratio of newborn boys to newborn girls, so he gathered the baptism records for children born in London for every year from 1629 to 1710. We can view the data by typing its name into the console.
+
+However printing the whole dataset in the console is not that useful. Instead use the integrated data viewer of RStudio or use also some other commands like `head`, `tail`, `str`. As the data in this case is a tibble you can also use `glimpse`, which similiar to `str`.
+
+```{r glimpse-at-the-data-set}
+glimpse(arbuthnot)
+```
+We can see that there are 82 observations and 3 variables in this dataset. The variable names are `year`, `boys`, and `girls`.
+
+# [Some Exploration](https://github.com/petzi53/oiLabs-dplyr-ggplot/blob/master/01_intro_to_r/intro_to_r.Rmd#some-exploration)
+
+We can access the data in a single column of a data frame separately.
+
+```{r display-single-column-of-a-data-frame}
+arbuthnot$boys
+```
+This command will only show the number of boys baptized each year. The dollar sign basically says "go to the data frame that comes before me, and find the variable that comes after me".
+
+### Exercise 1: 
+What command would you use to extract just the counts of girls baptized?
+
+```{r display-girls-of-arbuthnots-data}
+arbuthnot$girls
+```
+Notice that the way R has printed these data is different. When we looked at the complete data frame, we saw 82 rows, one on each line of the display. These data are no longer structured in a table with other variables, so they are displayed one right after another. Objects that print out in this way are called vectors; they represent a set of numbers. R has added numbers in [brackets] along the left side of the printout to indicate locations within the vector. For example, 5218 follows [1], indicating that 5218 is the first entry in the vector. And if [43] starts a line, then that would mean the first number on that line would represent the 43rd entry in the vector.
+
+## [Data visualisation](https://github.com/petzi53/oiLabs-dplyr-ggplot/blob/master/01_intro_to_r/intro_to_r.Rmd#data-visualization)
+R has some powerful functions for making graphics. We can create a simple plot of the number of girls baptized per year with `qplot`.
+
+```{r graph-girls-baptized-per-year}
+qplot(x = year, y = girls, data = arbuthnot)
+```
+The `qplot()` function (meaning "quick plot") considers the type of data you have provided it and makes the decision to visualize it with a scatterplot. The plot should appear under the Plots tab of the lower right panel of RStudio. Notice that the command above again looks like a function, this time with three arguments separated by commas. The first two arguments in the qplot() function specify the variables for the x-axis and the y-axis and the third provides the name of the data set where they can be found. If we wanted to connect the data points with lines, we could add a fourth argument to specify the geometry that we'd like.
+
+```{r graph-qplot-with-line}
+qplot(x = year, y = girls, data = arbuthnot, geom = "line")
+```
+You might wonder how you are supposed to know that it was possible to add that fourth argument. Thankfully, R documents all of its functions extensively. To read what a function does and learn the arguments that are available to you, just type in a question mark followed by the name of the function that you're interested in. Try the following.
+
+```{r asdking-for-qplot-help}
+?qplot
+```
+
+
+### Exercise 2:
+Is there an apparent trend in the number of girls baptized over the years? How would you describe it? (To ensure that your lab report is comprehensive, be sure to include the code needed to make the plot as well as your written interpretation.)
+
+```{r girls-baptized-per-year}
+qplot(x = year, y = girls, data = arbuthnot, geom = "line")
+```
+After a twenty year decline (1640 - approx. 1660) the number of baptized girls generally is increasing.
+
+## [R as a big calulator](https://github.com/petzi53/oiLabs-dplyr-ggplot/blob/master/01_intro_to_r/intro_to_r.Rmd#r-as-a-big-calculator)
+
+Now, suppose we want to plot the total number of baptisms. To compute this, we could use the fact that R is really just a big calculator. We can type in mathematical expressions like
+
+
+```{r add-girls-and-boys-baptism-in-1629}
+5218 + 4683
+```
+
+to see the total number of baptisms in 1629. We could repeat this once for each year, but there is a faster way. If we add the vector for baptisms for boys to that of girls, R will compute all sums simultaneously.
+
+```{r add-two-data-vectors}
+arbuthnot$boys + arbuthnot$girls
+```
+
+What you will see are 82 numbers (in that packed display, because we aren’t looking at a data frame here), each one representing the sum we’re after. Take a look at a few of them and verify that they are right.
+
+## [Adding a new variable to the data frame](https://github.com/petzi53/oiLabs-dplyr-ggplot/blob/master/01_intro_to_r/intro_to_r.Rmd#adding-a-new-variable-to-the-data-frame)
+
+We'll be using this new vector to generate some plots, so we'll want to save it as a permanent column in our data frame.
+```{r add-new-variable-to-data-frame}
+arbuthnot <- arbuthnot %>%
+  mutate(total = boys + girls)
+```
+The %>% operator is called the piping operator. It takes the output of the previous expression and pipes it into the first argument of the function in the following one. To continue our analogy with mathematical functions, x %>% f(y) is equivalent to f(x, y).
+
+**A note on piping:** Note that we can read these three lines of code as the following: *"Take the `arbuthnot` dataset and **pipe** it into the `mutate` function. Mutate the `arbuthnot` data set by creating a new variable called `total` that is the sum of the variables called `boys` and `girls`. Then assign the resulting dataset to the object called `arbuthnot`, i.e. overwrite the old `arbuthnot` dataset with the new one containing the new variable."* This is equivalent to going through each row and adding up the `boys` and `girls` counts for that year and recording that value in a new column called `total`.
+
+**Where is the new variable? ** When you make changes to variables in your dataset, click on the name of the dataset again to update it in the data viewer.
+You'll see that there is now a new column called total that has been tacked on to the data frame. The special symbol <- performs an assignment, taking the output of one line of code and saving it into an object in your workspace. In this case, you already have an object called arbuthnot, so this command updates that data set with the new mutated column.
+
+We can make a plot of the total number of baptisms per year with the command. But here is always used the `qplot` command. 
+
+
+```{r qplot-graphic}
+qplot(x = year, y = total, data = arbuthnot, geom = "line")
+```
+> `qplot` is a shortcut designed to be familiar if you're used to base `plot()`. It's a convenient wrapper for creating a number of different types of plots using a consistent calling scheme. It's great for allowing you to produce plots quickly, but I [Hadley Wickham] highly recommend learning `ggplot()` as it makes it easier to create complex graphics.
+
+What follow is a (long?) version of the `qplot` graph with `ggplot` command:
+
+```{r ggplot-graphic-long-version}
+p <- ggplot(data = arbuthnot, mapping = aes(x = year, y = total))
+p + geom_line()
+```
+I am now providing a short version of the plot graph with the `pipe`command, dropping the names of the arguments for default values but adding labels and title.
+
+```{r ggplot-graphic-short-version}
+arbuthnot %>% ggplot(aes(year, total)) +
+        geom_line() +
+        xlab("Year") + ylab("Baptized children (boys and girls)") +
+        ggtitle("Baptized children, born in London. Recorded by Dr. John Arbuthnot.")
+```
+
+Similarly to how we computed the total number of births, we can compute different kinds of ratios (boys to girls, boys to total, girls to total).
+
+Additionalley I will plot the change of the boy to girl ratio over the year. 
+```{r}
+arbuthnot <- arbuthnot %>%
+  mutate(boy_to_girl_ratio = boys / girls)
+arbuthnot <- arbuthnot %>%
+  mutate(boy_ratio = boys / total)
+arbuthnot <- arbuthnot %>%
+  mutate(girl_ratio = girls / total)
+arbuthnot %>% 
+        ggplot(aes(year, boy_to_girl_ratio)) +
+        geom_line() +
+        xlab("Year") + ylab("Baptized ratio (boys to girls)") +
+        ggtitle("Baptized children, born in London. Recorded by Dr. John Arbuthnot.")
+```
+
+### Exercise 3:
+
+```{r echo = FALSE}
+
+```
+
+In addition to simple mathematical operators like subtraction and division, you can ask R to make comparisons like greater than, `>`, less than, `<`, and equality, `==`. For example, we can ask if boys outnumber girls in each year with the expression
+
+```{r add-column-more-boys-than-girls}
+arbuthnot <- arbuthnot %>%
+  mutate(more_boys = boys > girls)
+```
+
+This command add a new variable to the arbuthnot dataframe containing the values of either `TRUE` if that year had more boys than girls, or `FALSE` if that year did not (the answer may surprise you). This variable contains a different kind of data than we have encountered so far. All other columns in the arbuthnot data frame have values that are numerical (the year, the number of boys and girls). Here, we've asked R to create logical data, data where the values are either `TRUE` or `FALSE`. In general, data analysis will involve many different kinds of data types, and one reason for using R is that it is able to represent and compute with many of them.
+
+# [More Practice](https://github.com/petzi53/oiLabs-dplyr-ggplot/blob/master/01_intro_to_r/intro_to_r.Rmd#more-practice)
+
+
+
+Until now you recreated some of the displays and preliminary analysis of Arbuthnot's baptism data. Your assignment involves repeating these steps, but for present day birth records in the United States. Load the present day data with the following command:
+```{r load-data-set-present-births}
+data(present)
+```
+## Interlude: Download and import of a real data set 
+
+### WONDER interactive website
+
+Data up to 2002 appear in Mathews TJ, and Hamilton BE. 2005. Trend analysis of the sex ratio at birth in the United States. National Vital Statistics Reports 53(20):1-17. Data for 2003 - 2013 have been collected from annual National Vital Statistics Reports published by the US Department of Health and Human Services, Centers for Disease Control and Prevention, National Center for Health Statistics.
+
+The source of the data set `present` is on the one hand a [report by the Centers for Disease Control](http://www.cdc.gov/nchs/data/nvsr/nvsr53/nvsr53_20.pdf). But for the newer data beginning with 2003-2013 the data is from the [CDC website](https://www.cdc.gov/nchs/data_access/VitalStatsOnline.htm#Births). The most recent file (until 2015) are downloadable from the CDC portal. See also the new [WONDER website](https://wonder.cdc.gov/) where data can manipulated interactively in the browser.
+
+See for more info the WONDER about file:
+
+*CDC Wide-ranging ONline Data for Epidemiologic Research (CDC
+WONDER) is a web application that makes many health-related data
+sets available to the worldwide public health community. Users include
+state and local health departments, academic researchers, healthcare
+providers, CDC surveillance programs, and the general public. The data
+found on CDC WONDER aid users in public health research, decision
+making, priority setting, program evaluation, and resource allocation.*
+
+For using the WONDER website one has to read the detailed description in the [Dataset Documentation](https://wonder.cdc.gov/wonder/help/Natality.html#).
+
+### Download and import from CDC
+
+I downloaded one data file in zip format [April 1, 2010, July 1, 2010 - July 1, 2015](ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Datasets/NVSS/bridgepop/2015/pcen_v2015_y1015_txt.zip). It is a flat text files with a size of 307 MB. The description about the columns can be found in [Documentation for bridged-race postcensal Vintage 2015 population estimates for April 1, 2010 - July 1, 2015](https://www.cdc.gov/nchs/nvss/bridged_race/documentation_bridged_postcenv2015.pdf).  
+
+In the PDF file a special file layout is explained:
+
+| Location | size | Item and code outline                              | Format  |
+|---------:|-----:|:---------------------------------------------------|:--------|
+|1-4       |4     |Series vintage (2015)                               |Numeric  |
+|5-6       |2     |State FIPS code                                     |Numeric  |
+|7-9       |3     |County FIPS code                                    |Numeric  |
+|10-11     |2     |Age (0, 1, 2,…, 85 years and over)                  |Numeric  |
+|12        |1     |Bridged-race-sex                                    |Numeric  |
+|13        |1     |Hispanic origin                                     |Numeric  |
+|14-21     |8     |April 1, 2010 base population estimate              |Numeric  |
+|22-29     |8     |July 1, 2010 postcensal resident population estimate|Numeric  |
+30-37      |8     |July 1, 2011 postcensal resident population estimate|Numeric  |
+38-45      |8     |July 1, 2012 postcensal resident population estimate|Numeric  |
+46-53      |8     |July 1, 2013 postcensal resident population estimate|Numeric  |
+54-61      |8     |July 1, 2014 postcensal resident population estimate|Numeric  |
+62-69      |8     |July 1, 2015 postcensal resident population estimate|Numeric  |
+
+I am going to use the fixed with format of the function `read_fwf()` from the `readr` package. Strange: It is much faster to use the "Import Dataset" Utility from RStudio than to laod the file programmatically.
+```{r read-file-with-fixed-text-format-into-memory, eval=FALSE}
+birth_dataset <- read_fwf("data/pcen_v2015_y1015_txt.txt", fwf_widths(c(4, 2, 3, 2, 1, 1, 8, 8, 8, 8, 8, 8, 8), c("year", "state", "county", "age", "race.sex", "hisp", "pop.est1", "pop.est2", "pop.est3", "pop.est4", "pop.est5", "pop.est6", "pop.est7")))
+```
+
+
+
+### Exercise 4:
+What years are included in this data set? What are the dimensions of the data frame? What are the variable (column) names?
+
+
+```{r explore-data-set-present}
+glimpse(present)
+head(present)
+tail(present)
+dim(present)
+names(present)
+```
+* What years are included in this data set? 1940 - 2013
+* What are the dimensions of the data frame? 3 variable (columns)
+* What are the variable (column) names? `year`, `boys` and `girls`.
+
+### Exercise 5:
+How do these counts compare to Arbuthnot's? Are they of a similar magnitude?
+```{r add-column-more-boys-than-girls-in-present-data}
+present <- present %>%
+  mutate(more_boys = boys > girls)
+```
+The preset data set has a much higher magnitude. 
+
+
+### Exercise 6:
+Make a plot that displays the proportion of boys born over time. What do you see? Does Arbuthnot's observation about boys being born in greater proportion than girls hold up in the U.S.? Include the plot in your response. Hint: You should be able to reuse your code from Ex 3 above, just replace the dataframe name.
+
+```{r boy-to-girl-ratio}
+present <- present %>%
+  mutate(boy_to_girl_ratio = boys / girls)
+present %>% 
+        ggplot(aes(year, boy_to_girl_ratio)) +
+        geom_line() +
+        xlab("Year") + ylab("Birth ratio (boys to girls)") +
+        ggtitle("Children born in US, recorded by CDC.")
+```
+
+
+
+
+### Exercise 7:
+In what year did we see the most total number of births in the U.S.? Hint: First calculate the totals and save it as a new variable. Then, sort your dataset in descending order based on the total column. You can do this interactively in the data viewer by clicking on the arrows next to the variable names. To include the sorted result in your report you will need to use two new functions: arrange (for sorting). We can arrange the data in a descending order with another function: desc (for descending order). Sample code provided below.
+
+```{r}
+present <- present %>%
+        mutate(total = boys + girls)
+present <- present %>%
+        arrange(desc(total))
+head(present, 10)
+ggplot(present, aes(year, total)) +
+        geom_line()
+```
+
+# [Further resources](https://github.com/petzi53/oiLabs-dplyr-ggplot/blob/master/01_intro_to_r/intro_to_r.Rmd#resources-for-learning-r-and-working-in-rstudio)
+
+That was a short introduction to R and RStudio, but we will provide you with more functions and a more complete sense of the language as the course progresses.
+
+In this course we will be using R packages called `dplyr` for data wrangling and `ggplot2` for data visualization. If you are googling for R code, make sure to also include these package names in your search query. For example, instead of googling "scatterplot in R", google "scatterplot in R with ggplot2".
+
+There are some other resources for learning R and working in RStudio. This list of "cheatsheets" may come in handy:
+
+* [RMarkdown cheatsheet](http://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)
+* [Data wrangling cheatsheet](http://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
+* [Data visualization cheatsheet](http://www.rstudio.com/wp-content/uploads/2015/12/ggplot2-cheatsheet-2.0.pdf)
+
+Chester Ismay has put together a [resource for new users of R, RStudio, and R Markdown](https://ismayc.github.io/rbasics-book). It includes examples showing working with R Markdown files in RStudio recorded as GIFs.
