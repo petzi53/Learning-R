@@ -1,0 +1,31 @@
+---
+title: "02 Getting started"
+author: "Peter Baumgartner"
+date: "2017/02/17"
+output: 
+  html_notebook: 
+    pandoc_args: [ 
+      "--number-offset=1,0" 
+    ]
+    fig_caption: true
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
+---
+```{r label = "global-options", echo=FALSE, highlight=TRUE}
+knitr::opts_chunk$set(
+        message = F,
+        error = F,
+        warning = F,
+        comment = NA,
+        highlight = T,
+        prompt = T
+        )
+if (!(exists("tidyverse"))) {install.packages("tidyverse")}
+        library(tidyverse)
+# if (!(exists("oiblabs"))) {install.packages("oilabs")}
+#        library(oilabs)
+```
+***
+
+Start here with new text for this lab report
