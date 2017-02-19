@@ -1,5 +1,5 @@
 ---
-title: "02 Getting started"
+title: "ggplot2: Elegant Graphics for Data Analysis"
 author: "Peter Baumgartner"
 date: "2017/02/17"
 output: 
@@ -33,7 +33,7 @@ Working on the exercises of chapter 2 of [ggplot2: Elegant Graphics for Data] An
 >**Warning:** Keep in mind that I am still learning. There is no guarantee that my solutions are correct nor do they always present the most efficient way of doing things. Please feel free to comment on anything that you may think is wrong or somehow noteworthy (by writing an issue or by sending a pull request).
 
 # Exercises of Chapter 2
-## Exercises p 12/13
+## Exercises p.12/13
 ### How to get more info about the `mpg` dataset?
 List five functions that you could use to get more information about the `mpg` dataset.
 
@@ -105,7 +105,7 @@ I do not understand the last part of the question: "Does your answer change if y
 
 What exactly is redundant? I could remove "quattro" from model "a4" from "audi" but this does not make sense with "pathfinder 4wd" from "nissan"
 
-## Exercises p 14
+## Exercises p.14
 ### Describe the relationship between cty and hwy
 How would you describe the relationship between cty and hwy? Do you have any concerns about drawing conclusions from that plot?
 
@@ -166,11 +166,80 @@ summary(ggplot(economics, aes(date, unemploy)) + geom_line())
 ```
 It seems to me that this is no desription or explanation of the resulting graphs.
 
-
-
-
 * `ggplot(mpg, aes(cty, hwy)) + geom_point()`: It shows the graph already described.
 * `ggplot(diamonds, aes(carat, price)) + geom_point()`: Relationship between weight (in carat) and price. It is interesting to observe two things: There is no linear relationship (after approximate 1 carat the prices rise extremly) and there are "vertical" lines. This second observation is the result of a cocentration of diamonds at the same rounded number of carats and the fact that diamonds with same carats have very different prices.
 * `ggplot(economics, aes(date, unemploy)) + geom_line()`: This graph shows the rate of unemployment rate between 1967-07-01 and 2015-04-01. The rate is generally risng with a somewhat regular high approximately every 10 years.
 * `ggplot(mpg, aes(cty)) + geom_histogram()`: This graph shows the fuel consumtion of the different car models. It can be seen that there the distribution is somewhat left skewed, whith a peak at 18 miles per gallon. 
 * `ggplot(mpg, aes(cty_1)) + geom_histogram()`: I have added another graph, similar to the last one, but instead of miles per galoon (fuel consumption) this one shows the european equivalent of liter per kilometer (fuel economy). There is a similar left skewed distributen, but the appearance is very  dependent of the chosen number of bins.
+
+## Exercises p.16
+### Exerpiment with color, shape and size aesthetics
+
+```{r}
+vignette("ggplot2-specs")
+ggplot(mpg, aes(displ, cty, color = class)) +
+        geom_point()
+
+ggplot(mpg, aes(displ, cty, color = "blue")) +
+        geom_point()
+
+ggplot(mpg, aes(displ, cty)) +
+        geom_point(color = "blue")
+
+ggplot(mpg, aes(displ, cty)) +
+        geom_point(color = "blue", shape = 21, fill = "red", size = 3)
+
+ggplot(mpg, aes(manufacturer, model)) +
+        geom_point(color = "blue", shape = 18, fill = "red", size = 3) +
+        geom_abline(slope = -0.0, intercept = 20, colour = "green", size = 1) +
+        geom_vline(xintercept = 8, colour = "green", size = 1)
+
+# Categorial
+ggplot(mpg, aes(cty, displ, colour = class)) + 
+  geom_point()
+
+# Continuous 
+ggplot(mpg, aes(cty, hwy, size = displ)) + 
+  geom_jitter()
+
+## Doesnt work for shape
+ggplot(mpg, aes(cty, hwy, shape = displ)) + 
+  geom_jitter()
+```
+### What happens if you map a continous variable to shape? Why?
+```{r}
+ggplot(mpg, aes(cty, hwy, shape = displ)) +
+        geom_point()
+```
+It throws an error, because a continuous variable can not be mapped to shape. All aesthetics that have a natural continuous scale can be used for both continuous and discrete variables. Shape doesn't have a continuous scale so it throws an error. 
+
+### What happens if you map trans to shape? Why?
+
+```{r}
+ggplot(mpg, aes(cty, hwy, color = trans)) +
+        geom_point()
+
+ggplot(mpg, aes(cty, hwy, shape = trans)) +
+        geom_point()
+
+```
+	
+> The shape palette can deal with a maximum of 6 discrete values because more than 6 becomes difficult to discriminate; you have 10. Consider specifying shapes manually if you must have them.
+Removed 96 rows containing missing values (geom_point).
+
+When a discrete variable has more than 6 different values its hard to discriminate hence we get a warning.
+
+### How is drive train related to fuel economy? 
+```{r}
+ggplot(mpg, aes(cty, hwy, color = drv)) +
+        geom_point()
+```
+The fuel economy of cars with front-wheel drive is generally better than of cars with 4 wd and rear wheel drive.
+
+### How is drive train related to engine size and class?
+
+```{r}
+ggplot(mpg, aes(displ, class, color = drv)) +
+        geom_point()
+```
+Cars with smaller engine size have front-wheel drive, pickup and suv have (with two exceptions in suv-clas) 4wd. 2seater and some of the subcompact cars have rear wheel drive.
