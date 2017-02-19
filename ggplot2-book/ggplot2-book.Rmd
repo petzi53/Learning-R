@@ -167,10 +167,10 @@ summary(ggplot(economics, aes(date, unemploy)) + geom_line())
 It seems to me that this is no desription or explanation of the resulting graphs.
 
 
-
-
 * `ggplot(mpg, aes(cty, hwy)) + geom_point()`: It shows the graph already described.
 * `ggplot(diamonds, aes(carat, price)) + geom_point()`: Relationship between weight (in carat) and price. It is interesting to observe two things: There is no linear relationship (after approximate 1 carat the prices rise extremly) and there are "vertical" lines. This second observation is the result of a cocentration of diamonds at the same rounded number of carats and the fact that diamonds with same carats have very different prices.
 * `ggplot(economics, aes(date, unemploy)) + geom_line()`: This graph shows the rate of unemployment rate between 1967-07-01 and 2015-04-01. The rate is generally risng with a somewhat regular high approximately every 10 years.
 * `ggplot(mpg, aes(cty)) + geom_histogram()`: This graph shows the fuel consumtion of the different car models. It can be seen that there the distribution is somewhat left skewed, whith a peak at 18 miles per gallon. 
 * `ggplot(mpg, aes(cty_1)) + geom_histogram()`: I have added another graph, similar to the last one, but instead of miles per galoon (fuel consumption) this one shows the european equivalent of liter per kilometer (fuel economy). There is a similar left skewed distributen, but the appearance is very  dependent of the chosen number of bins.
+
+## Exercises p.16
