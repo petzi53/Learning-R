@@ -173,17 +173,235 @@ $(document).ready(function () {
 
 </div>
 
+<div id="TOC">
+<ul>
+<li><a href="#exercises-of-chapter-2"><span class="toc-section-number">2</span> Exercises of Chapter 2</a><ul>
+<li><a href="#how-to-get-more-info-about-the-mpg-dataset"><span class="toc-section-number">2.1</span> How to get more info about the <code>mpg</code> dataset?</a></li>
+<li><a href="#how-can-you-find-out-what-other-datasets-are-included-with-ggplot2"><span class="toc-section-number">2.2</span> How can you find out what other datasets are included with ggplot2?</a></li>
+<li><a href="#how-to-convert-fuel-consumption-into-fuel-economy"><span class="toc-section-number">2.3</span> How to convert fuel consumption into fuel economy?</a></li>
+<li><a href="#how-to-get-number-of-models-and-variations"><span class="toc-section-number">2.4</span> How to get number of models and variations?</a></li>
+</ul></li>
+</ul>
+</div>
 
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gaW5zdGFsbC5wYWNrYWdlcyA6IFVwZGF0aW5nIGxvYWRlZCBwYWNrYWdlc1xuIn0= -->
+<pre><code>Error in install.packages : Updating loaded packages</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <hr />
-<p>Start here with new text for this lab report</p>
+<p>Working on the exercises of chapter 2 of [ggplot2: Elegant Graphics for Data] Analysis(<a href="https://www.amazon.de/ggplot2-Elegant-Graphics-Data-Analysis/dp/331924275X/ref=sr_1_1?ie=UTF8&amp;qid=1487435428&amp;sr=8-1&amp;keywords=ggplot2" class="uri">https://www.amazon.de/ggplot2-Elegant-Graphics-Data-Analysis/dp/331924275X/ref=sr_1_1?ie=UTF8&amp;qid=1487435428&amp;sr=8-1&amp;keywords=ggplot2</a>), second edition. See also the material on GitHub <a href="https://github.com/hadley/ggplot2-book">ggplot2-book</a>, here especially <a href="https://github.com/hadley/ggplot2-book/blob/master/ggplot.rmd">Chap.2</a>.</p>
+<blockquote>
+<p><strong>Warning:</strong> Keep in mind that I am still learning. There is no guarantee that my solutions are correct nor do they always present the most efficient way of doing things. Please feel free to comment on anything that you may think is wrong or somehow noteworthy (by writing an issue or by sending a pull request).</p>
+</blockquote>
+<div id="exercises-of-chapter-2" class="section level1">
+<h1><span class="header-section-number">2</span> Exercises of Chapter 2</h1>
+<div id="how-to-get-more-info-about-the-mpg-dataset" class="section level2">
+<h2><span class="header-section-number">2.1</span> How to get more info about the <code>mpg</code> dataset?</h2>
+<p>List five functions that you could use to get more information about the <code>mpg</code> dataset.</p>
+<ul>
+<li><code>class()</code> to see if it is a tibble and could be called without <code>head</code> or <code>tail</code> function</li>
+<li><code>str()</code> to look at the structure</li>
+<li><code>glimpse()</code> similiar but using the whole window width</li>
+<li><code>head()</code> first 6 record of the data set</li>
+<li><code>tail()</code> last 6 recors of the data set</li>
+<li><code>View()</code> load file into RStudio data viewer</li>
+<li><code>summary()</code> calculate summary statistics</li>
+</ul>
 <!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2xhc3MobXBnKVxuYGBgIn0= -->
+<pre class="r"><code>class(mpg)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwidGJsX2RmXCIgICAgIFwidGJsXCIgICAgICAgIFwiZGF0YS5mcmFtZVwiXG4ifQ== -->
+<pre><code>[1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RyKG1wZylcbmBgYCJ9 -->
+<pre class="r"><code>str(mpg)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiQ2xhc3NlcyDigJh0YmxfZGbigJksIOKAmHRibOKAmSBhbmQgJ2RhdGEuZnJhbWUnOlx0MjM0IG9icy4gb2YgIDEzIHZhcmlhYmxlczpcbiAkIG1hbnVmYWN0dXJlcjogY2hyICBcImF1ZGlcIiBcImF1ZGlcIiBcImF1ZGlcIiBcImF1ZGlcIiAuLi5cbiAkIG1vZGVsICAgICAgIDogY2hyICBcImE0XCIgXCJhNFwiIFwiYTRcIiBcImE0XCIgLi4uXG4gJCBkaXNwbCAgICAgICA6IG51bSAgMS44IDEuOCAyIDIgMi44IDIuOCAzLjEgMS44IDEuOCAyIC4uLlxuICQgeWVhciAgICAgICAgOiBpbnQgIDE5OTkgMTk5OSAyMDA4IDIwMDggMTk5OSAxOTk5IDIwMDggMTk5OSAxOTk5IDIwMDggLi4uXG4gJCBjeWwgICAgICAgICA6IGludCAgNCA0IDQgNCA2IDYgNiA0IDQgNCAuLi5cbiAkIHRyYW5zICAgICAgIDogY2hyICBcImF1dG8obDUpXCIgXCJtYW51YWwobTUpXCIgXCJtYW51YWwobTYpXCIgXCJhdXRvKGF2KVwiIC4uLlxuICQgZHJ2ICAgICAgICAgOiBjaHIgIFwiZlwiIFwiZlwiIFwiZlwiIFwiZlwiIC4uLlxuICQgY3R5ICAgICAgICAgOiBpbnQgIDE4IDIxIDIwIDIxIDE2IDE4IDE4IDE4IDE2IDIwIC4uLlxuICQgaHd5ICAgICAgICAgOiBpbnQgIDI5IDI5IDMxIDMwIDI2IDI2IDI3IDI2IDI1IDI4IC4uLlxuICQgZmwgICAgICAgICAgOiBjaHIgIFwicFwiIFwicFwiIFwicFwiIFwicFwiIC4uLlxuICQgY2xhc3MgICAgICAgOiBjaHIgIFwiY29tcGFjdFwiIFwiY29tcGFjdFwiIFwiY29tcGFjdFwiIFwiY29tcGFjdFwiIC4uLlxuICQgY3R5XzEgICAgICAgOiBudW0gIDEzLjEgMTEuMiAxMS44IDExLjIgMTQuNyAxMy4xIDEzLjEgMTMuMSAxNC43IDExLjggLi4uXG4gJCBod3lfMSAgICAgICA6IG51bSAgOC4xIDguMSA3LjYgNy44IDkgOSA4LjcgOSA5LjQgOC40IC4uLlxuIn0= -->
+<pre><code>Classes ‘tbl_df’, ‘tbl’ and 'data.frame':   234 obs. of  13 variables:
+ $ manufacturer: chr  &quot;audi&quot; &quot;audi&quot; &quot;audi&quot; &quot;audi&quot; ...
+ $ model       : chr  &quot;a4&quot; &quot;a4&quot; &quot;a4&quot; &quot;a4&quot; ...
+ $ displ       : num  1.8 1.8 2 2 2.8 2.8 3.1 1.8 1.8 2 ...
+ $ year        : int  1999 1999 2008 2008 1999 1999 2008 1999 1999 2008 ...
+ $ cyl         : int  4 4 4 4 6 6 6 4 4 4 ...
+ $ trans       : chr  &quot;auto(l5)&quot; &quot;manual(m5)&quot; &quot;manual(m6)&quot; &quot;auto(av)&quot; ...
+ $ drv         : chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+ $ cty         : int  18 21 20 21 16 18 18 18 16 20 ...
+ $ hwy         : int  29 29 31 30 26 26 27 26 25 28 ...
+ $ fl          : chr  &quot;p&quot; &quot;p&quot; &quot;p&quot; &quot;p&quot; ...
+ $ class       : chr  &quot;compact&quot; &quot;compact&quot; &quot;compact&quot; &quot;compact&quot; ...
+ $ cty_1       : num  13.1 11.2 11.8 11.2 14.7 13.1 13.1 13.1 14.7 11.8 ...
+ $ hwy_1       : num  8.1 8.1 7.6 7.8 9 9 8.7 9 9.4 8.4 ...</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2xpbXBzZShtcGcpXG5gYGAifQ== -->
+<pre class="r"><code>glimpse(mpg)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiT2JzZXJ2YXRpb25zOiAyMzRcblZhcmlhYmxlczogMTNcbiQgbWFudWZhY3R1cmVyIDxjaHI+IFwiYXVkaVwiLCBcImF1ZGlcIiwgXCJhdWRpXCIsIFwiYXVkaVwiLCBcImF1ZGlcIiwgXCJhdWRpXCIsIFwiYXVkaVwiLCBcImF1ZGlcIiwgXCJhdWRpLi4uXG4kIG1vZGVsICAgICAgICA8Y2hyPiBcImE0XCIsIFwiYTRcIiwgXCJhNFwiLCBcImE0XCIsIFwiYTRcIiwgXCJhNFwiLCBcImE0XCIsIFwiYTQgcXVhdHRyb1wiLCBcImE0IHF1YXR0cm9cIiwuLi5cbiQgZGlzcGwgICAgICAgIDxkYmw+IDEuOCwgMS44LCAyLjAsIDIuMCwgMi44LCAyLjgsIDMuMSwgMS44LCAxLjgsIDIuMCwgMi4wLCAyLjgsIDIuOCwgMy4xLC4uLlxuJCB5ZWFyICAgICAgICAgPGludD4gMTk5OSwgMTk5OSwgMjAwOCwgMjAwOCwgMTk5OSwgMTk5OSwgMjAwOCwgMTk5OSwgMTk5OSwgMjAwOCwgMjAwOCwgMTk5Li4uXG4kIGN5bCAgICAgICAgICA8aW50PiA0LCA0LCA0LCA0LCA2LCA2LCA2LCA0LCA0LCA0LCA0LCA2LCA2LCA2LCA2LCA2LCA2LCA4LCA4LCA4LCA4LCA4LCA4LCAuLi5cbiQgdHJhbnMgICAgICAgIDxjaHI+IFwiYXV0byhsNSlcIiwgXCJtYW51YWwobTUpXCIsIFwibWFudWFsKG02KVwiLCBcImF1dG8oYXYpXCIsIFwiYXV0byhsNSlcIiwgXCJtYW51Li4uXG4kIGRydiAgICAgICAgICA8Y2hyPiBcImZcIiwgXCJmXCIsIFwiZlwiLCBcImZcIiwgXCJmXCIsIFwiZlwiLCBcImZcIiwgXCI0XCIsIFwiNFwiLCBcIjRcIiwgXCI0XCIsIFwiNFwiLCBcIjRcIiwgXCI0XCIsLi4uXG4kIGN0eSAgICAgICAgICA8aW50PiAxOCwgMjEsIDIwLCAyMSwgMTYsIDE4LCAxOCwgMTgsIDE2LCAyMCwgMTksIDE1LCAxNywgMTcsIDE1LCAxNSwgMTcsIDEuLi5cbiQgaHd5ICAgICAgICAgIDxpbnQ+IDI5LCAyOSwgMzEsIDMwLCAyNiwgMjYsIDI3LCAyNiwgMjUsIDI4LCAyNywgMjUsIDI1LCAyNSwgMjUsIDI0LCAyNSwgMi4uLlxuJCBmbCAgICAgICAgICAgPGNocj4gXCJwXCIsIFwicFwiLCBcInBcIiwgXCJwXCIsIFwicFwiLCBcInBcIiwgXCJwXCIsIFwicFwiLCBcInBcIiwgXCJwXCIsIFwicFwiLCBcInBcIiwgXCJwXCIsIFwicFwiLC4uLlxuJCBjbGFzcyAgICAgICAgPGNocj4gXCJjb21wYWN0XCIsIFwiY29tcGFjdFwiLCBcImNvbXBhY3RcIiwgXCJjb21wYWN0XCIsIFwiY29tcGFjdFwiLCBcImNvbXBhY3RcIiwgXCJjby4uLlxuJCBjdHlfMSAgICAgICAgPGRibD4gMTMuMSwgMTEuMiwgMTEuOCwgMTEuMiwgMTQuNywgMTMuMSwgMTMuMSwgMTMuMSwgMTQuNywgMTEuOCwgMTIuNCwgMTUuLi4uXG4kIGh3eV8xICAgICAgICA8ZGJsPiA4LjEsIDguMSwgNy42LCA3LjgsIDkuMCwgOS4wLCA4LjcsIDkuMCwgOS40LCA4LjQsIDguNywgOS40LCA5LjQsIDkuNCwuLi5cbiJ9 -->
+<pre><code>Observations: 234
+Variables: 13
+$ manufacturer &lt;chr&gt; &quot;audi&quot;, &quot;audi&quot;, &quot;audi&quot;, &quot;audi&quot;, &quot;audi&quot;, &quot;audi&quot;, &quot;audi&quot;, &quot;audi&quot;, &quot;audi...
+$ model        &lt;chr&gt; &quot;a4&quot;, &quot;a4&quot;, &quot;a4&quot;, &quot;a4&quot;, &quot;a4&quot;, &quot;a4&quot;, &quot;a4&quot;, &quot;a4 quattro&quot;, &quot;a4 quattro&quot;,...
+$ displ        &lt;dbl&gt; 1.8, 1.8, 2.0, 2.0, 2.8, 2.8, 3.1, 1.8, 1.8, 2.0, 2.0, 2.8, 2.8, 3.1,...
+$ year         &lt;int&gt; 1999, 1999, 2008, 2008, 1999, 1999, 2008, 1999, 1999, 2008, 2008, 199...
+$ cyl          &lt;int&gt; 4, 4, 4, 4, 6, 6, 6, 4, 4, 4, 4, 6, 6, 6, 6, 6, 6, 8, 8, 8, 8, 8, 8, ...
+$ trans        &lt;chr&gt; &quot;auto(l5)&quot;, &quot;manual(m5)&quot;, &quot;manual(m6)&quot;, &quot;auto(av)&quot;, &quot;auto(l5)&quot;, &quot;manu...
+$ drv          &lt;chr&gt; &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;f&quot;, &quot;4&quot;, &quot;4&quot;, &quot;4&quot;, &quot;4&quot;, &quot;4&quot;, &quot;4&quot;, &quot;4&quot;,...
+$ cty          &lt;int&gt; 18, 21, 20, 21, 16, 18, 18, 18, 16, 20, 19, 15, 17, 17, 15, 15, 17, 1...
+$ hwy          &lt;int&gt; 29, 29, 31, 30, 26, 26, 27, 26, 25, 28, 27, 25, 25, 25, 25, 24, 25, 2...
+$ fl           &lt;chr&gt; &quot;p&quot;, &quot;p&quot;, &quot;p&quot;, &quot;p&quot;, &quot;p&quot;, &quot;p&quot;, &quot;p&quot;, &quot;p&quot;, &quot;p&quot;, &quot;p&quot;, &quot;p&quot;, &quot;p&quot;, &quot;p&quot;, &quot;p&quot;,...
+$ class        &lt;chr&gt; &quot;compact&quot;, &quot;compact&quot;, &quot;compact&quot;, &quot;compact&quot;, &quot;compact&quot;, &quot;compact&quot;, &quot;co...
+$ cty_1        &lt;dbl&gt; 13.1, 11.2, 11.8, 11.2, 14.7, 13.1, 13.1, 13.1, 14.7, 11.8, 12.4, 15....
+$ hwy_1        &lt;dbl&gt; 8.1, 8.1, 7.6, 7.8, 9.0, 9.0, 8.7, 9.0, 9.4, 8.4, 8.7, 9.4, 9.4, 9.4,...</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaGVhZChtcGcpXG5gYGAifQ== -->
+<pre class="r"><code>head(mpg)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibmNvbCI6MTMsIm5yb3ciOjZ9LCJyZGYiOiJINHNJQUFBQUFBQUFBNjFVeVU3RE1CQjFrelNsRVFIRWNrR0NJZzVBa1ZxSjlVb1BmQUVuYnNoa29SSFpsRGlGM1BnTitDWVFWNzRGb1paeE9oTkl1TENOOURLTG44ZCtzWk96MC9OOTQ5eGdqQ2xNVlJXbXFCQnFDandhVEdOdDZXOFpVNWNnTUFFTEFCMEhOSjdaM3AvaWFqK0ZILzRpWW14TzlqaDVlNVQyUkg3QXBsWjYzUzJNUE9yUkdXczlJMTRRbU5NNHJGV0Zqdmk4OXhtZWlXakhQK3BpYmdROHpMaS9FM3l0SEhjcmMvaW8rNDBlMWRVYTdzK0NEeTJMZ0JYQU12b0ZyTkg0R3FJRFdBZXNJaXFyeHo4THFyTmJWaFRFM0JML21lSWRHT3dlRkRiWXdyUGV2cGYyVU9ZOTlNZ3I1MjNnUFBMcnlPdGd2b2wzQ0gzdEEybGFQazlUbEVsRncrYUM5OTJFQjA2ZEhrS042Q1lXWitWWnU2QWxTNXlFaUVGa096NGx0cGZHbEdpNXc0bWxXbm5KRVFrUFU2cmJ5YWlraUp6QzRRMkZpdXRYQlZBaThvczlTb0FPU1ZWQU80bHUraVJDWGh6bERoNlR5ZVFWM0xoR2JrV3g4Q0xZRlZQa1A2UlplMDJOcEZhWXowTFoydTVad3l5ODdza3pNb3JocVprWTY1OWljN3FrT3NGV1RXeWxPK0dWRnpva3hlZVg1ZHVjQXdtRmduNmNlQ0hkSndPcWFWOUVnaFBQc0NLZktvVTJObjRIY0NpZ3JERUZBQUE9In0= -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["manufacturer"],"name":[1],"type":["chr"],"align":["left"]},{"label":["model"],"name":[2],"type":["chr"],"align":["left"]},{"label":["displ"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["year"],"name":[4],"type":["int"],"align":["right"]},{"label":["cyl"],"name":[5],"type":["int"],"align":["right"]},{"label":["trans"],"name":[6],"type":["chr"],"align":["left"]},{"label":["drv"],"name":[7],"type":["chr"],"align":["left"]},{"label":["cty"],"name":[8],"type":["int"],"align":["right"]},{"label":["hwy"],"name":[9],"type":["int"],"align":["right"]},{"label":["fl"],"name":[10],"type":["chr"],"align":["left"]},{"label":["class"],"name":[11],"type":["chr"],"align":["left"]},{"label":["cty_1"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["hwy_1"],"name":[13],"type":["dbl"],"align":["right"]}],"data":[{"1":"audi","2":"a4","3":"1.8","4":"1999","5":"4","6":"auto(l5)","7":"f","8":"18","9":"29","10":"p","11":"compact","12":"13.1","13":"8.1"},{"1":"audi","2":"a4","3":"1.8","4":"1999","5":"4","6":"manual(m5)","7":"f","8":"21","9":"29","10":"p","11":"compact","12":"11.2","13":"8.1"},{"1":"audi","2":"a4","3":"2.0","4":"2008","5":"4","6":"manual(m6)","7":"f","8":"20","9":"31","10":"p","11":"compact","12":"11.8","13":"7.6"},{"1":"audi","2":"a4","3":"2.0","4":"2008","5":"4","6":"auto(av)","7":"f","8":"21","9":"30","10":"p","11":"compact","12":"11.2","13":"7.8"},{"1":"audi","2":"a4","3":"2.8","4":"1999","5":"6","6":"auto(l5)","7":"f","8":"16","9":"26","10":"p","11":"compact","12":"14.7","13":"9.0"},{"1":"audi","2":"a4","3":"2.8","4":"1999","5":"6","6":"manual(m5)","7":"f","8":"18","9":"26","10":"p","11":"compact","12":"13.1","13":"9.0"}],"options":{"columns":{"min":{},"max":[10],"total":[13]},"rows":{"min":[10],"max":[10],"total":[6]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGFpbChtcGcpXG5gYGAifQ== -->
+<pre class="r"><code>tail(mpg)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibmNvbCI6MTMsIm5yb3ciOjZ9LCJyZGYiOiJINHNJQUFBQUFBQUFBN1ZVelU3Q1FCQmVXaWpTZ0wveFlqUWhIZ3hxSUZFaVZ6bjRCSjY0bWJVLzBOaHVtM1lyNHNuWDBHZlNjUFZaakFGbnkwNXBHejJRNENUVG1XL20yNTNPN3JTM040TkxmYUFUUWhTaXFncFJWSERMQ2p4S3BFeHF3ajRSb3U2QjB3RGRCdFZrUW4vMDNZZG9USWNXKzhkSXZxWVcwQ2lpZkUySWtFMkJyci9maFh6MHlVSlNxOW1KcExhKzRNbXowQWlwVGtFL3BVNlhHUE5RYjZsYVJyTTliZENZK3kzMzZqU0hveDVpM2FNc3BtN0w2NTMrc1NKbC9MSkh2bGJKWHMxWmRySUxLcVpnWCs0bzhFNG1md1I2S08xQlJuUFZnOVdjL09xcTU1aVI4Mnl0RThvSjZKOTFFK20zNUNTY3lCdHZTNHY1ODFjaGIrbTZwb3czNVRyRXgzS0NDcmJ3YVZVTUZ3WlJ0b2xCM2FTY2R1eVFlbGFSemlDRzlJWU0xc1hkMjlUZ2NXaUZTUFI4MDNJUm1FNFVJQ2hQTElvczFaaWtIQjVTRm1IY0RCOVRDcCtnT3hxanE5aHV2Z0VFZkhKM2dRRG9BUElOMUVKLzNNRW14T0FvTC9DWXorZGZZR1lGY3RVUHVPUERXeEZGekYybGNFeWxzQkRZaXBuWTJtd2JvNWc5dEx2aUtKUDBRaHJTMXpKK1kxRlNuY3V0S3ZoL3NOalFZVGdzRlpmZXA2ZTVDUzBrSFhTQzBHSDRROUVoR25XNHp5bnlkTU4zTVpMMFJtWS9OekJGcTJzRkFBQT0ifQ== -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["manufacturer"],"name":[1],"type":["chr"],"align":["left"]},{"label":["model"],"name":[2],"type":["chr"],"align":["left"]},{"label":["displ"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["year"],"name":[4],"type":["int"],"align":["right"]},{"label":["cyl"],"name":[5],"type":["int"],"align":["right"]},{"label":["trans"],"name":[6],"type":["chr"],"align":["left"]},{"label":["drv"],"name":[7],"type":["chr"],"align":["left"]},{"label":["cty"],"name":[8],"type":["int"],"align":["right"]},{"label":["hwy"],"name":[9],"type":["int"],"align":["right"]},{"label":["fl"],"name":[10],"type":["chr"],"align":["left"]},{"label":["class"],"name":[11],"type":["chr"],"align":["left"]},{"label":["cty_1"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["hwy_1"],"name":[13],"type":["dbl"],"align":["right"]}],"data":[{"1":"volkswagen","2":"passat","3":"1.8","4":"1999","5":"4","6":"auto(l5)","7":"f","8":"18","9":"29","10":"p","11":"midsize","12":"13.1","13":"8.1"},{"1":"volkswagen","2":"passat","3":"2.0","4":"2008","5":"4","6":"auto(s6)","7":"f","8":"19","9":"28","10":"p","11":"midsize","12":"12.4","13":"8.4"},{"1":"volkswagen","2":"passat","3":"2.0","4":"2008","5":"4","6":"manual(m6)","7":"f","8":"21","9":"29","10":"p","11":"midsize","12":"11.2","13":"8.1"},{"1":"volkswagen","2":"passat","3":"2.8","4":"1999","5":"6","6":"auto(l5)","7":"f","8":"16","9":"26","10":"p","11":"midsize","12":"14.7","13":"9.0"},{"1":"volkswagen","2":"passat","3":"2.8","4":"1999","5":"6","6":"manual(m5)","7":"f","8":"18","9":"26","10":"p","11":"midsize","12":"13.1","13":"9.0"},{"1":"volkswagen","2":"passat","3":"3.6","4":"2008","5":"6","6":"auto(s6)","7":"f","8":"17","9":"26","10":"p","11":"midsize","12":"13.8","13":"9.0"}],"options":{"columns":{"min":{},"max":[10],"total":[13]},"rows":{"min":[10],"max":[10],"total":[6]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubmFtZXMobXBnKVxuYGBgIn0= -->
+<pre class="r"><code>names(mpg)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiIFsxXSBcIm1hbnVmYWN0dXJlclwiIFwibW9kZWxcIiAgICAgICAgXCJkaXNwbFwiICAgICAgICBcInllYXJcIiAgICAgICAgIFwiY3lsXCIgICAgICAgICAgXCJ0cmFuc1wiICAgICAgIFxuIFs3XSBcImRydlwiICAgICAgICAgIFwiY3R5XCIgICAgICAgICAgXCJod3lcIiAgICAgICAgICBcImZsXCIgICAgICAgICAgIFwiY2xhc3NcIiAgICAgICAgXCJjdHlfMVwiICAgICAgIFxuWzEzXSBcImh3eV8xXCIgICAgICAgXG4ifQ== -->
+<pre><code> [1] &quot;manufacturer&quot; &quot;model&quot;        &quot;displ&quot;        &quot;year&quot;         &quot;cyl&quot;          &quot;trans&quot;       
+ [7] &quot;drv&quot;          &quot;cty&quot;          &quot;hwy&quot;          &quot;fl&quot;           &quot;class&quot;        &quot;cty_1&quot;       
+[13] &quot;hwy_1&quot;       </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeShtcGcpXG5gYGAifQ== -->
+<pre class="r"><code>summary(mpg)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiIG1hbnVmYWN0dXJlciAgICAgICAgICBtb2RlbCAgICAgICAgICAgICAgIGRpc3BsICAgICAgICAgICAgeWVhciAgICAgICAgICAgY3lsICAgICAgIFxuIExlbmd0aDoyMzQgICAgICAgICBMZW5ndGg6MjM0ICAgICAgICAgTWluLiAgIDoxLjYwMCAgIE1pbi4gICA6MTk5OSAgIE1pbi4gICA6NC4wMDAgIFxuIENsYXNzIDpjaGFyYWN0ZXIgICBDbGFzcyA6Y2hhcmFjdGVyICAgMXN0IFF1LjoyLjQwMCAgIDFzdCBRdS46MTk5OSAgIDFzdCBRdS46NC4wMDAgIFxuIE1vZGUgIDpjaGFyYWN0ZXIgICBNb2RlICA6Y2hhcmFjdGVyICAgTWVkaWFuIDozLjMwMCAgIE1lZGlhbiA6MjAwNCAgIE1lZGlhbiA6Ni4wMDAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgTWVhbiAgIDozLjQ3MiAgIE1lYW4gICA6MjAwNCAgIE1lYW4gICA6NS44ODkgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgM3JkIFF1Ljo0LjYwMCAgIDNyZCBRdS46MjAwOCAgIDNyZCBRdS46OC4wMDAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgTWF4LiAgIDo3LjAwMCAgIE1heC4gICA6MjAwOCAgIE1heC4gICA6OC4wMDAgIFxuICAgIHRyYW5zICAgICAgICAgICAgICAgZHJ2ICAgICAgICAgICAgICAgICBjdHkgICAgICAgICAgICAgaHd5ICAgICAgICAgICAgIGZsICAgICAgICAgICBcbiBMZW5ndGg6MjM0ICAgICAgICAgTGVuZ3RoOjIzNCAgICAgICAgIE1pbi4gICA6IDkuMDAgICBNaW4uICAgOjEyLjAwICAgTGVuZ3RoOjIzNCAgICAgICAgXG4gQ2xhc3MgOmNoYXJhY3RlciAgIENsYXNzIDpjaGFyYWN0ZXIgICAxc3QgUXUuOjE0LjAwICAgMXN0IFF1LjoxOC4wMCAgIENsYXNzIDpjaGFyYWN0ZXIgIFxuIE1vZGUgIDpjaGFyYWN0ZXIgICBNb2RlICA6Y2hhcmFjdGVyICAgTWVkaWFuIDoxNy4wMCAgIE1lZGlhbiA6MjQuMDAgICBNb2RlICA6Y2hhcmFjdGVyICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIE1lYW4gICA6MTYuODYgICBNZWFuICAgOjIzLjQ0ICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAzcmQgUXUuOjE5LjAwICAgM3JkIFF1LjoyNy4wMCAgICAgICAgICAgICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgTWF4LiAgIDozNS4wMCAgIE1heC4gICA6NDQuMDAgICAgICAgICAgICAgICAgICAgICBcbiAgICBjbGFzcyAgICAgICAgICAgICAgIGN0eV8xICAgICAgICAgICBod3lfMSAgICAgIFxuIExlbmd0aDoyMzQgICAgICAgICBNaW4uICAgOiA2LjcwICAgTWluLiAgIDogNS4zMCAgXG4gQ2xhc3MgOmNoYXJhY3RlciAgIDFzdCBRdS46MTIuNDAgICAxc3QgUXUuOiA4LjcwICBcbiBNb2RlICA6Y2hhcmFjdGVyICAgTWVkaWFuIDoxMy44MCAgIE1lZGlhbiA6IDkuODAgIFxuICAgICAgICAgICAgICAgICAgICBNZWFuICAgOjE0Ljg1ICAgTWVhbiAgIDoxMC43MiAgXG4gICAgICAgICAgICAgICAgICAgIDNyZCBRdS46MTYuODAgICAzcmQgUXUuOjEzLjEwICBcbiAgICAgICAgICAgICAgICAgICAgTWF4LiAgIDoyNi4xMCAgIE1heC4gICA6MTkuNjAgIFxuIn0= -->
+<pre><code> manufacturer          model               displ            year           cyl       
+ Length:234         Length:234         Min.   :1.600   Min.   :1999   Min.   :4.000  
+ Class :character   Class :character   1st Qu.:2.400   1st Qu.:1999   1st Qu.:4.000  
+ Mode  :character   Mode  :character   Median :3.300   Median :2004   Median :6.000  
+                                       Mean   :3.472   Mean   :2004   Mean   :5.889  
+                                       3rd Qu.:4.600   3rd Qu.:2008   3rd Qu.:8.000  
+                                       Max.   :7.000   Max.   :2008   Max.   :8.000  
+    trans               drv                 cty             hwy             fl           
+ Length:234         Length:234         Min.   : 9.00   Min.   :12.00   Length:234        
+ Class :character   Class :character   1st Qu.:14.00   1st Qu.:18.00   Class :character  
+ Mode  :character   Mode  :character   Median :17.00   Median :24.00   Mode  :character  
+                                       Mean   :16.86   Mean   :23.44                     
+                                       3rd Qu.:19.00   3rd Qu.:27.00                     
+                                       Max.   :35.00   Max.   :44.00                     
+    class               cty_1           hwy_1      
+ Length:234         Min.   : 6.70   Min.   : 5.30  
+ Class :character   1st Qu.:12.40   1st Qu.: 8.70  
+ Mode  :character   Median :13.80   Median : 9.80  
+                    Mean   :14.85   Mean   :10.72  
+                    3rd Qu.:16.80   3rd Qu.:13.10  
+                    Max.   :26.10   Max.   :19.60  </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuVmlldyhtcGcpXG5gYGAifQ== -->
+<pre class="r"><code>View(mpg)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="how-can-you-find-out-what-other-datasets-are-included-with-ggplot2" class="section level2">
+<h2><span class="header-section-number">2.2</span> How can you find out what other datasets are included with ggplot2?</h2>
+<p>There is a listing on the special <a href="http://docs.ggplot2.org/current/index.html">documentation page</a> for ggplot2 but there is also a general command <code>data()</code> for a listing of datasets for specific packages: More information with: <code>?data</code></p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0YShwYWNrYWdlID0gXCJnZ3Bsb3QyXCIpXG4/ZGF0YVxuYGBgIn0= -->
+<pre class="r"><code>data(package = &quot;ggplot2&quot;)
+?data</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="how-to-convert-fuel-consumption-into-fuel-economy" class="section level2">
+<h2><span class="header-section-number">2.3</span> How to convert fuel consumption into fuel economy?</h2>
+<p>Apart from the US, most countries use <em>fuel consumption</em> (fuel consumed over fixed distance) rather than <em>fuel economy</em> (distance travelled with fixed amount of fuel). How could you convert cty and hwy into the European standard of l/100km?</p>
+<p>For the calcuation see the page on <a href="http://www.metric-conversions.org">Metric Conversions</a>:</p>
+<ul>
+<li>1 US liquid gallon = 3.78541 Litre</li>
+<li>1 Mile = 1.609344 Kilometer</li>
+</ul>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubXBnVG9sMTAwa20gPC0gZnVuY3Rpb24obWlsZXNwZXJnYWxsb24pe1xuICBHYWxsb0xpdGVyIDwtIDMuNzg1NDExNzg0XG4gIE1pbGVLaWxvbWV0ZXIgPC0gMS42MDkzNDQgXG4gIGwxMDBrbSA8LSByb3VuZCgoMTAwKkdhbGxvTGl0ZXIpLyhtaWxlc3BlcmdhbGxvbipNaWxlS2lsb21ldGVyKSwgZGlnaXRzID0gMSlcbiAgbDEwMGttXG59XG5tcGcgPC0gbXBnICU+JVxuICAgICAgICBtdXRhdGUoY3R5XzEgPSBtcGdUb2wxMDBrbShjdHkpLFxuICAgICAgICAgICAgICAgICAgaHd5XzEgPSBtcGdUb2wxMDBrbShod3kpKVxuYGBgIn0= -->
+<pre class="r"><code>mpgTol100km &lt;- function(milespergallon){
+  GalloLiter &lt;- 3.785411784
+  MileKilometer &lt;- 1.609344 
+  l100km &lt;- round((100*GalloLiter)/(milespergallon*MileKilometer), digits = 1)
+  l100km
+}
+mpg &lt;- mpg %&gt;%
+        mutate(cty_1 = mpgTol100km(cty),
+                  hwy_1 = mpgTol100km(hwy))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="how-to-get-number-of-models-and-variations" class="section level2">
+<h2><span class="header-section-number">2.4</span> How to get number of models and variations?</h2>
+<p>Which manufacturer has the most the models in this dataset? Which model has the most variations? Does your answer change if you remove the redundant specification of drive train (e.g. “pathfinder 4wd”, “a4 quattro”) from the model name?</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYnlfbWFudWZhY3R1cmVyIDwtIGdyb3VwX2J5KG1wZywgbWFudWZhY3R1cmVyLCBzb3J0ID0gVFJVRSlcbihtb2RlbHMgPC0gY291bnQobXBnLCBtYW51ZmFjdHVyZXIsIHNvcnQgPSBUUlVFKSlcbmBgYCJ9 -->
+<pre class="r"><code>by_manufacturer &lt;- group_by(mpg, manufacturer, sort = TRUE)
+(models &lt;- count(mpg, manufacturer, sort = TRUE))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibmNvbCI6MiwibnJvdyI6MTV9LCJyZGYiOiJINHNJQUFBQUFBQUFBMTFTUVc3Q01CQTBEb0VTRmFqS3FlcWxxdFFqT1ZUcUQvcUNucmlhMkpBVXM0NGNHOHF0WCs0SFNOZkJpMUFpVGJ3N0hxOTNiSDk5cnQ2elZjWVk0eXhKT09NSmhrT092d0Vic2trWWZ4aExGcDJBc1FmRVBFNmswc2l0aXNuSW1aTnhJbWJad2VoZGN4UmJCWkVaYm95Vk1aNFVwVHBZbzVXalNlRmxGZU54ZWZJZ0JhV2p4cStGOVpSQjFUU0NhcWFsUVNYVitGYXFwaHExQVZlSmdyclJBdVNMTlFkbFNiQlh0dkQyUkttdW9EQWFNSngyQmhsN1E3d2luaEZQaUhBQWo0aFpSTkNGcFhlaGo3QjlSTkk3dmJUUW9tbml5UkdaU2VGRXZyRmlyL3B5UUk3a1BKTDNld0YrSXdybjdkWEJBSG9ySjlZY2Mxb2R1dU8vK0d2YjlnK0hjMDg4TnJXckRLQ1VMNktCMi80R3RrZk1QWVRTY2xtVUhuYkxqK0NobTc1ODB4alBiMkorMlRKcFk2bVVybERCdGdKNk5xa1dhNlZqTWtNTG5ZTzh0aFhRNDhpUWJYS0hqNHQwR2Q0Vk1aMDNkdjRIMXl5VXVNY0NBQUE9In0= -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["manufacturer"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"dodge","2":"37"},{"1":"toyota","2":"34"},{"1":"volkswagen","2":"27"},{"1":"ford","2":"25"},{"1":"chevrolet","2":"19"},{"1":"audi","2":"18"},{"1":"hyundai","2":"14"},{"1":"subaru","2":"14"},{"1":"nissan","2":"13"},{"1":"honda","2":"9"},{"1":"jeep","2":"8"},{"1":"pontiac","2":"5"},{"1":"land rover","2":"4"},{"1":"mercury","2":"4"},{"1":"lincoln","2":"3"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[15]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYnlfbW9kZWxzIDwtIGdyb3VwX2J5KG1wZywgbWFudWZhY3R1cmVyLCBtb2RlbClcbnBlcl9tb2RlbCAgIDwtIHN1bW1hcmlzZShieV9tb2RlbHMsIG5yID0gbigpKVxuKGFycmFuZ2UocGVyX21vZGVsLCBkZXNjKG5yKSkpXG5gYGAifQ== -->
+<pre class="r"><code>by_models &lt;- group_by(mpg, manufacturer, model)
+per_model   &lt;- summarise(by_models, nr = n())
+(arrange(per_model, desc(nr)))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImdyb3VwZWRfZGYiLCJ0YmxfZGYiLCJ0YmwiLCJkYXRhLmZyYW1lIl0sIm5jb2wiOjMsIm5yb3ciOjM4fSwicmRmIjoiSDRzSUFBQUFBQUFBQTUxVXpYS2JNQkFtNEorRS9MaE5abnJtbEZzOGFjYnBFL1FKZXNwMUxXU3NXR2lwa0xEVFU1K3pEeE5ud1lnQUlaTk1tVm1RVnN2dWZ0L3U2dGZQaDd2d0lmUTh6L2VDd1BmOGdKWWpuMTVIM3NnN0tiODd6d3V1YUZHZWZDRzVyZy9HTWNZSi8zQXpXcUdPM2NFYVZRejFKaXhRYnZJdEpGdzVVN0N4Y090SHpyTjZQY250RXJRZHNIbzMwblQ5WkNtVUdONU9ERDZoZ1Uvc0JwSnNSWmtva2VlZ0J0UDh5TThKVy9OQ28rVG0wNHBwaHNvSVlQOGJJWlNnNGtoandiWHptSExOckg0YXhOTXBSNXRiS1JSRHFZWkpxSlBxOXNvcEF3MEZxT2h1Njd4Y2FVaWo3L2UzdDFFbTJNWm0wYUk1K2hyRGhueThQWmltTmplZ0VsZDlKZ3JoMkJnL2N2TktCaXlpM3hhTTBWaHJMaE5kZ2lkS05HNDRiems5RldtbStSK0lvRkg1c0hDSHNhWC9FbXpaejFhVTlkdmNKamtxYUJLWUdyRzBHbFdUS2FRTnkyZlZKc3BSRWlrTzhvRzJ5QURERk5wdU15QjJYUVhQK0M2VHFMbHVXNEEwSW5XT3pxaFFQRGRrOFFybmRLR3RVcDJmUXNXMzBaSnpJOTMwWExLcUdOVERWaTg3bFRwbXFBc2kxMWxPVXBDRXpuazZFSnRwc1hQWXlSNmxkQmtGaVhGZE5OdFVNUXlzc1ZPQmttTGVhY3haaWxZWkVJcDMwcjdJd0t4WFFzVmRNUENqViswTDRvbkh3Z2hzQXpsWFVJZ0VET3FXa3REc1h1bjdWbzBJMDFia0ZJS21pUnlVZ2VqbnFwMHAyVEpnT1YwOU9XN0o5Qk15R1pEeE96THFTZEFUdjNkbmo1bWtycWxuMENuRG1OcHp2cUt4NDMxelJUcG5IcmhHU2tIWkZUQmpkVk9WY1lveGwyNUlsTzc1T2RHNG5UdGZKVi8rWDNydDkvdC85SG51R1U4eEs4dERwdjVWRGJPZDdaSHVLV2JVd3VRNnZtRnJxelkzOTNVWmpyekRjMTZ2cjF2cjRCQXkyTmV1eHE3a1hDWFVXUTZVaEdVRDZvSWdWQWptMU5DcXVUaEptODhORGFpekMra0NkSm9LbS9mOEFvaWpDK1ZMQndBQSJ9 -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["manufacturer"],"name":[1],"type":["chr"],"align":["left"]},{"label":["model"],"name":[2],"type":["chr"],"align":["left"]},{"label":["nr"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"dodge","2":"caravan 2wd","3":"11"},{"1":"dodge","2":"ram 1500 pickup 4wd","3":"10"},{"1":"dodge","2":"dakota pickup 4wd","3":"9"},{"1":"ford","2":"mustang","3":"9"},{"1":"honda","2":"civic","3":"9"},{"1":"volkswagen","2":"jetta","3":"9"},{"1":"audi","2":"a4 quattro","3":"8"},{"1":"jeep","2":"grand cherokee 4wd","3":"8"},{"1":"subaru","2":"impreza awd","3":"8"},{"1":"audi","2":"a4","3":"7"},{"1":"dodge","2":"durango 4wd","3":"7"},{"1":"ford","2":"f150 pickup 4wd","3":"7"},{"1":"hyundai","2":"sonata","3":"7"},{"1":"hyundai","2":"tiburon","3":"7"},{"1":"toyota","2":"camry","3":"7"},{"1":"toyota","2":"camry solara","3":"7"},{"1":"toyota","2":"toyota tacoma 4wd","3":"7"},{"1":"volkswagen","2":"passat","3":"7"},{"1":"ford","2":"explorer 4wd","3":"6"},{"1":"nissan","2":"altima","3":"6"},{"1":"subaru","2":"forester awd","3":"6"},{"1":"toyota","2":"4runner 4wd","3":"6"},{"1":"volkswagen","2":"new beetle","3":"6"},{"1":"chevrolet","2":"c1500 suburban 2wd","3":"5"},{"1":"chevrolet","2":"corvette","3":"5"},{"1":"chevrolet","2":"malibu","3":"5"},{"1":"pontiac","2":"grand prix","3":"5"},{"1":"toyota","2":"corolla","3":"5"},{"1":"volkswagen","2":"gti","3":"5"},{"1":"chevrolet","2":"k1500 tahoe 4wd","3":"4"},{"1":"land rover","2":"range rover","3":"4"},{"1":"mercury","2":"mountaineer 4wd","3":"4"},{"1":"nissan","2":"pathfinder 4wd","3":"4"},{"1":"audi","2":"a6 quattro","3":"3"},{"1":"ford","2":"expedition 2wd","3":"3"},{"1":"lincoln","2":"navigator 2wd","3":"3"},{"1":"nissan","2":"maxima","3":"3"},{"1":"toyota","2":"land cruiser wagon 4wd","3":"2"}],"options":{"columns":{"min":{},"max":[10],"total":[3]},"rows":{"min":[10],"max":[10],"total":[38]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGVyX21hbnVmYWN0dXJlciA8LSBzdW1tYXJpc2UocGVyX21vZGVsLCBcIm1vZGVsc1wiID0gbigpKVxuKGFycmFuZ2UocGVyX21hbnVmYWN0dXJlciwgZGVzYyhtb2RlbHMpKSlcbmBgYCJ9 -->
+<pre class="r"><code>per_manufacturer &lt;- summarise(per_model, &quot;models&quot; = n())
+(arrange(per_manufacturer, desc(models)))</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibmNvbCI6MiwibnJvdyI6MTV9LCJyZGYiOiJINHNJQUFBQUFBQUFBMjFTWFU3RE1BeE8wM1ZUSzJCSVhJQUxyQTlJM0lBVDhMUlhyOG5Xc05TcDhyT3hONjdNQlZiU0VrK2k0c0dKL2RuNW5DL3grOXYycGRwV2pESE84cHd6bmtkM3dlT1NzUVVyeC8yVHNmeHBLbURzTWRvNkpaYmVYSXlIRkpWTkswL1dhT2tUVUFnakRqSUZpNzJ4SXZuVnllaWpPOE5CSW1VaENFV3NxSndEeXF6YVMwQUJ0NlFMTzdDQk9yUW01b2pqUThxZU9taEE4V3pOU1ZyaTBRb2JvMiswbmJSTnNCY0tlNE5lUVJQZCswbGc3RFJTeml4UHhwTmwvOXVmMXlzYURjNmxseU93RXVDaDNsdm81THdjSTBibFBJRjNIV0RZUStPRHZRbGFka1pJN1diSFMydk9OVkdNVXZoWFhJWmgrSTdiZFZhOE1yMVhCbU1wSDcrM21GMHlzek5nSFhDa0ZwdW1EWGpjdkk1Q2ttcVcybVhwOWNqbnZ5M3pJVkVWZEh1SkI0VTBISVdHbmRRcGVJZ1NKZ1YxYnhYU01GVVJkYldQNDBaMVZmeE9RaVp0N1BvRFp0VDlRc3dDQUFBPSJ9 -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["manufacturer"],"name":[1],"type":["chr"],"align":["left"]},{"label":["models"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"toyota","2":"6"},{"1":"chevrolet","2":"4"},{"1":"dodge","2":"4"},{"1":"ford","2":"4"},{"1":"volkswagen","2":"4"},{"1":"audi","2":"3"},{"1":"nissan","2":"3"},{"1":"hyundai","2":"2"},{"1":"subaru","2":"2"},{"1":"honda","2":"1"},{"1":"jeep","2":"1"},{"1":"land rover","2":"1"},{"1":"lincoln","2":"1"},{"1":"mercury","2":"1"},{"1":"pontiac","2":"1"}],"options":{"columns":{"min":{},"max":[10],"total":[2]},"rows":{"min":[10],"max":[10],"total":[15]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Dodge has the model variants and Toyota the most models. Model Dodge Caravan 2wd has the most variation.</p>
+<p>I do not understand the last part of the question: “Does your answer change if you remove the redundant specification of drive train (e.g.”pathfinder 4wd“,”a4 quattro“) from the model name?” What exactly is redundant? I could remove “quattro” from model “a4” from “audi” but this does not make sense with “pathfinder 4wd” from “nissan”</p>
+<!-- rnb-text-end -->
+</div>
+</div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiMDIgR2V0dGluZyBzdGFydGVkIgphdXRob3I6ICJQZXRlciBCYXVtZ2FydG5lciIKZGF0ZTogIjIwMTcvMDIvMTciCm91dHB1dDogCiAgaHRtbF9ub3RlYm9vazogCiAgICBwYW5kb2NfYXJnczogWyAKICAgICAgIi0tbnVtYmVyLW9mZnNldD0xLDAiIAogICAgXQogICAgZmlnX2NhcHRpb246IHRydWUKICAgIG51bWJlcl9zZWN0aW9uczogeWVzCiAgICB0b2M6IHllcwogICAgdG9jX2RlcHRoOiAzCi0tLQpgYGB7ciBsYWJlbCA9ICJnbG9iYWwtb3B0aW9ucyIsIGVjaG89RkFMU0UsIGhpZ2hsaWdodD1UUlVFfQprbml0cjo6b3B0c19jaHVuayRzZXQoCiAgICAgICAgbWVzc2FnZSA9IEYsCiAgICAgICAgZXJyb3IgPSBGLAogICAgICAgIHdhcm5pbmcgPSBGLAogICAgICAgIGNvbW1lbnQgPSBOQSwKICAgICAgICBoaWdobGlnaHQgPSBULAogICAgICAgIHByb21wdCA9IFQKICAgICAgICApCmlmICghKGV4aXN0cygidGlkeXZlcnNlIikpKSB7aW5zdGFsbC5wYWNrYWdlcygidGlkeXZlcnNlIil9CiAgICAgICAgbGlicmFyeSh0aWR5dmVyc2UpCiMgaWYgKCEoZXhpc3RzKCJvaWJsYWJzIikpKSB7aW5zdGFsbC5wYWNrYWdlcygib2lsYWJzIil9CiMgICAgICAgIGxpYnJhcnkob2lsYWJzKQpgYGAKKioqCgpTdGFydCBoZXJlIHdpdGggbmV3IHRleHQgZm9yIHRoaXMgbGFiIHJlcG9ydAo=</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiMDIgR2V0dGluZyBzdGFydGVkIgphdXRob3I6ICJQZXRlciBCYXVtZ2FydG5lciIKZGF0ZTogIjIwMTcvMDIvMTciCm91dHB1dDogCiAgaHRtbF9ub3RlYm9vazogCiAgICBwYW5kb2NfYXJnczogWyAKICAgICAgIi0tbnVtYmVyLW9mZnNldD0xLDAiIAogICAgXQogICAgZmlnX2NhcHRpb246IHRydWUKICAgIG51bWJlcl9zZWN0aW9uczogeWVzCiAgICB0b2M6IHllcwogICAgdG9jX2RlcHRoOiAzCi0tLQpgYGB7ciBsYWJlbCA9ICJnbG9iYWwtb3B0aW9ucyIsIGVjaG89RkFMU0UsIGhpZ2hsaWdodD1UUlVFfQprbml0cjo6b3B0c19jaHVuayRzZXQoCiAgICAgICAgbWVzc2FnZSA9IEYsCiAgICAgICAgZXJyb3IgPSBGLAogICAgICAgIHdhcm5pbmcgPSBGLAogICAgICAgIGNvbW1lbnQgPSBOQSwKICAgICAgICBoaWdobGlnaHQgPSBULAogICAgICAgIHByb21wdCA9IFQKICAgICAgICApCmlmICghKGV4aXN0cygidGlkeXZlcnNlIikpKSB7aW5zdGFsbC5wYWNrYWdlcygidGlkeXZlcnNlIil9CiAgICAgICAgbGlicmFyeSh0aWR5dmVyc2UpCiMgaWYgKCEoZXhpc3RzKCJvaWJsYWJzIikpKSB7aW5zdGFsbC5wYWNrYWdlcygib2lsYWJzIil9CiMgICAgICAgIGxpYnJhcnkob2lsYWJzKQpgYGAKKioqCgpXb3JraW5nIG9uIHRoZSBleGVyY2lzZXMgb2YgY2hhcHRlciAyIG9mIFtnZ3Bsb3QyOiBFbGVnYW50IEdyYXBoaWNzIGZvciBEYXRhXSBBbmFseXNpcyhodHRwczovL3d3dy5hbWF6b24uZGUvZ2dwbG90Mi1FbGVnYW50LUdyYXBoaWNzLURhdGEtQW5hbHlzaXMvZHAvMzMxOTI0Mjc1WC9yZWY9c3JfMV8xP2llPVVURjgmcWlkPTE0ODc0MzU0Mjgmc3I9OC0xJmtleXdvcmRzPWdncGxvdDIpLCBzZWNvbmQgZWRpdGlvbi4gU2VlIGFsc28gdGhlIG1hdGVyaWFsIG9uIEdpdEh1YiBbZ2dwbG90Mi1ib29rXShodHRwczovL2dpdGh1Yi5jb20vaGFkbGV5L2dncGxvdDItYm9vayksIGhlcmUgZXNwZWNpYWxseSBbQ2hhcC4yXShodHRwczovL2dpdGh1Yi5jb20vaGFkbGV5L2dncGxvdDItYm9vay9ibG9iL21hc3Rlci9nZ3Bsb3Qucm1kKS4KCj4qKldhcm5pbmc6KiogS2VlcCBpbiBtaW5kIHRoYXQgSSBhbSBzdGlsbCBsZWFybmluZy4gVGhlcmUgaXMgbm8gZ3VhcmFudGVlIHRoYXQgbXkgc29sdXRpb25zIGFyZSBjb3JyZWN0IG5vciBkbyB0aGV5IGFsd2F5cyBwcmVzZW50IHRoZSBtb3N0IGVmZmljaWVudCB3YXkgb2YgZG9pbmcgdGhpbmdzLiBQbGVhc2UgZmVlbCBmcmVlIHRvIGNvbW1lbnQgb24gYW55dGhpbmcgdGhhdCB5b3UgbWF5IHRoaW5rIGlzIHdyb25nIG9yIHNvbWVob3cgbm90ZXdvcnRoeSAoYnkgd3JpdGluZyBhbiBpc3N1ZSBvciBieSBzZW5kaW5nIGEgcHVsbCByZXF1ZXN0KS4KCiNFeGVyY2lzZXMgb2YgQ2hhcHRlciAyCgojIyBIb3cgdG8gZ2V0IG1vcmUgaW5mbyBhYm91dCB0aGUgYG1wZ2AgZGF0YXNldD8KTGlzdCBmaXZlIGZ1bmN0aW9ucyB0aGF0IHlvdSBjb3VsZCB1c2UgdG8gZ2V0IG1vcmUgaW5mb3JtYXRpb24gYWJvdXQgdGhlIGBtcGdgIGRhdGFzZXQuCgoqIGBjbGFzcygpYCAgICAgdG8gc2VlIGlmIGl0IGlzIGEgdGliYmxlIGFuZCBjb3VsZCBiZSBjYWxsZWQgd2l0aG91dCBgaGVhZGAgb3IgYHRhaWxgIGZ1bmN0aW9uCiogYHN0cigpYCAgICAgICB0byBsb29rIGF0IHRoZSBzdHJ1Y3R1cmUKKiBgZ2xpbXBzZSgpYCAgIHNpbWlsaWFyIGJ1dCB1c2luZyB0aGUgd2hvbGUgd2luZG93IHdpZHRoCiogYGhlYWQoKWAgICAgICBmaXJzdCA2IHJlY29yZCBvZiB0aGUgZGF0YSBzZXQKKiBgdGFpbCgpYCAgICAgIGxhc3QgNiByZWNvcnMgb2YgdGhlIGRhdGEgc2V0CiogYFZpZXcoKWAgICAgICBsb2FkIGZpbGUgaW50byBSU3R1ZGlvIGRhdGEgdmlld2VyCiogYHN1bW1hcnkoKWAgICBjYWxjdWxhdGUgc3VtbWFyeSBzdGF0aXN0aWNzCmBgYHtyfQpjbGFzcyhtcGcpCnN0cihtcGcpCmdsaW1wc2UobXBnKQpoZWFkKG1wZykKdGFpbChtcGcpCm5hbWVzKG1wZykKc3VtbWFyeShtcGcpClZpZXcobXBnKQoKYGBgCgoKIyMgSG93IGNhbiB5b3UgZmluZCBvdXQgd2hhdCBvdGhlciBkYXRhc2V0cyBhcmUgaW5jbHVkZWQgd2l0aCBnZ3Bsb3QyPwpUaGVyZSBpcyBhIGxpc3Rpbmcgb24gdGhlIHNwZWNpYWwgW2RvY3VtZW50YXRpb24gcGFnZV0oaHR0cDovL2RvY3MuZ2dwbG90Mi5vcmcvY3VycmVudC9pbmRleC5odG1sKSBmb3IgZ2dwbG90MiBidXQgdGhlcmUgaXMgYWxzbyBhIGdlbmVyYWwgY29tbWFuZCBgZGF0YSgpYCBmb3IgYSBsaXN0aW5nIG9mIGRhdGFzZXRzIGZvciBzcGVjaWZpYyBwYWNrYWdlczogTW9yZSBpbmZvcm1hdGlvbiB3aXRoOiBgP2RhdGFgCmBgYHtyIGxpc3QtYXZhaWxhYmxlLWRhdGEtc2V0c30KZGF0YShwYWNrYWdlID0gImdncGxvdDIiKQo/ZGF0YQpgYGAKCiMjIEhvdyB0byBjb252ZXJ0IGZ1ZWwgY29uc3VtcHRpb24gaW50byBmdWVsIGVjb25vbXk/CkFwYXJ0IGZyb20gdGhlIFVTLCBtb3N0IGNvdW50cmllcyB1c2UgX2Z1ZWwgY29uc3VtcHRpb25fIChmdWVsIGNvbnN1bWVkIG92ZXIgZml4ZWQgZGlzdGFuY2UpIHJhdGhlciB0aGFuIF9mdWVsIGVjb25vbXlfIChkaXN0YW5jZSB0cmF2ZWxsZWQgd2l0aCBmaXhlZCBhbW91bnQgb2YgZnVlbCkuIEhvdyBjb3VsZCB5b3UgY29udmVydCBjdHkgYW5kIGh3eSBpbnRvIHRoZSBFdXJvcGVhbiBzdGFuZGFyZCBvZiBsLzEwMGttPwoKRm9yIHRoZSBjYWxjdWF0aW9uIHNlZSB0aGUgcGFnZSBvbiBbTWV0cmljIENvbnZlcnNpb25zXShodHRwOi8vd3d3Lm1ldHJpYy1jb252ZXJzaW9ucy5vcmcpOiAKCiogMSBVUyBsaXF1aWQgZ2FsbG9uID0gMy43ODU0MSBMaXRyZQoqIDEgTWlsZSA9IDEuNjA5MzQ0IEtpbG9tZXRlcgoKYGBge3J9Cm1wZ1RvbDEwMGttIDwtIGZ1bmN0aW9uKG1pbGVzcGVyZ2FsbG9uKXsKICBHYWxsb0xpdGVyIDwtIDMuNzg1NDExNzg0CiAgTWlsZUtpbG9tZXRlciA8LSAxLjYwOTM0NCAKCiAgbDEwMGttIDwtIHJvdW5kKCgxMDAqR2FsbG9MaXRlcikvKG1pbGVzcGVyZ2FsbG9uKk1pbGVLaWxvbWV0ZXIpLCBkaWdpdHMgPSAxKQogIGwxMDBrbQp9CgptcGcgPC0gbXBnICU+JQogICAgICAgIG11dGF0ZShjdHlfMSA9IG1wZ1RvbDEwMGttKGN0eSksCiAgICAgICAgICAgICAgICAgIGh3eV8xID0gbXBnVG9sMTAwa20oaHd5KSkKYGBgCgojIyBIb3cgdG8gZ2V0IG51bWJlciBvZiBtb2RlbHMgYW5kIHZhcmlhdGlvbnM/CldoaWNoIG1hbnVmYWN0dXJlciBoYXMgdGhlIG1vc3QgdGhlIG1vZGVscyBpbiB0aGlzIGRhdGFzZXQ/IFdoaWNoIG1vZGVsIGhhcyB0aGUgbW9zdCB2YXJpYXRpb25zPyBEb2VzIHlvdXIgYW5zd2VyIGNoYW5nZSBpZiB5b3UgcmVtb3ZlIHRoZSByZWR1bmRhbnQgc3BlY2lmaWNhdGlvbiBvZiBkcml2ZSB0cmFpbiAoZS5nLiAicGF0aGZpbmRlciA0d2QiLCAiYTQgcXVhdHRybyIpIGZyb20gdGhlIG1vZGVsIG5hbWU/CmBgYHtyfQpieV9tYW51ZmFjdHVyZXIgPC0gZ3JvdXBfYnkobXBnLCBtYW51ZmFjdHVyZXIsIHNvcnQgPSBUUlVFKQoobW9kZWxzIDwtIGNvdW50KG1wZywgbWFudWZhY3R1cmVyLCBzb3J0ID0gVFJVRSkpCmJ5X21vZGVscyA8LSBncm91cF9ieShtcGcsIG1hbnVmYWN0dXJlciwgbW9kZWwpCnBlcl9tb2RlbCAgIDwtIHN1bW1hcmlzZShieV9tb2RlbHMsIG5yID0gbigpKQooYXJyYW5nZShwZXJfbW9kZWwsIGRlc2MobnIpKSkKcGVyX21hbnVmYWN0dXJlciA8LSBzdW1tYXJpc2UocGVyX21vZGVsLCAibW9kZWxzIiA9IG4oKSkKKGFycmFuZ2UocGVyX21hbnVmYWN0dXJlciwgZGVzYyhtb2RlbHMpKSkKYGBgCkRvZGdlIGhhcyB0aGUgbW9kZWwgdmFyaWFudHMgYW5kIFRveW90YSB0aGUgbW9zdCBtb2RlbHMuIE1vZGVsIERvZGdlIENhcmF2YW4gMndkIGhhcyB0aGUgbW9zdCB2YXJpYXRpb24uCgpJIGRvIG5vdCB1bmRlcnN0YW5kIHRoZSBsYXN0IHBhcnQgb2YgdGhlIHF1ZXN0aW9uOiAiRG9lcyB5b3VyIGFuc3dlciBjaGFuZ2UgaWYgeW91IHJlbW92ZSB0aGUgcmVkdW5kYW50IHNwZWNpZmljYXRpb24gb2YgZHJpdmUgdHJhaW4gKGUuZy4gInBhdGhmaW5kZXIgNHdkIiwgImE0IHF1YXR0cm8iKSBmcm9tIHRoZSBtb2RlbCBuYW1lPyIgV2hhdCBleGFjdGx5IGlzIHJlZHVuZGFudD8gSSBjb3VsZCByZW1vdmUgInF1YXR0cm8iIGZyb20gbW9kZWwgImE0IiBmcm9tICJhdWRpIiBidXQgdGhpcyBkb2VzIG5vdCBtYWtlIHNlbnNlIHdpdGggInBhdGhmaW5kZXIgNHdkIiBmcm9tICJuaXNzYW4iCg==</div>
 
 
 
