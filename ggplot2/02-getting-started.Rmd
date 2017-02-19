@@ -99,4 +99,6 @@ per_manufacturer <- summarise(per_model, "models" = n())
 ```
 Dodge has the model variants and Toyota the most models. Model Dodge Caravan 2wd has the most variation.
 
-I do not understand the last part of the question: "Does your answer change if you remove the redundant specification of drive train (e.g. "pathfinder 4wd", "a4 quattro") from the model name?" What exactly is redundant? I could remove "quattro" from model "a4" from "audi" but this does not make sense with "pathfinder 4wd" from "nissan"
+I do not understand the last part of the question: "Does your answer change if you remove the redundant specification of drive train (e.g. "pathfinder 4wd", "a4 quattro") from the model name?" 
+
+What exactly is redundant? I could remove "quattro" from model "a4" from "audi" but this does not make sense with "pathfinder 4wd" from "nissan"
