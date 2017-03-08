@@ -122,18 +122,18 @@ The x-axis values correspond to the quantiles of a theoretically normal curve wi
 
 [The plot shows approximately a diagonal line, which is for me a surprising result!]
 
-With the next plot I will replicate the graph above Instead of using qplot I am going -- as always -- to use ggplot. I will make some variants: 
+With the next plot I will replicate the graph above Instead of using `qplot` I am going -- as always -- to use `ggplot`. I will make some variants: 
 
 * I will use male and female heights in one graph. 
-* I will change geom_point tp geom_line
+* I will change geom_point to geom_line
 * I will experimenting with different types of titles (see [Graph cookbook](http://www.cookbook-r.com/Graphs/Titles_(ggplot2)/))
-* An I will try `geom_qq` as well as `stat_qq`.
+* And I will try `geom_qq` as well as `stat_qq`.
 
 ```{r qq-plot-with-ggplot}
 # ggplot(mdims) +
 #         stat_qq(aes(sample = hgt))
-
-# equivalent to the ggplot command with `stat_qq` above
+# 
+# # equivalent to the ggplot command with `stat_qq` above
 # ggplot(mdims, aes(sample = hgt)) +
 #         geom_point(stat = "qq")
 
