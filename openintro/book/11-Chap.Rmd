@@ -1,0 +1,43 @@
+---
+title: "OpenIntro: Chapter 1"
+author: Peter Baumgartner
+date: 2017-02-28
+output: 
+  html_notebook: 
+    fig_caption: true
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
+bibliography: "pb.bib"
+---
+```{r label = "global-options", echo=FALSE, highlight=TRUE}
+knitr::opts_chunk$set(
+        message = F,
+        error = F,
+        warning = F,
+        comment = NA,
+        highlight = T,
+        prompt = T
+        )
+        library(tidyverse)
+        # library(oilabs)
+```
+***
+# Case study: using stents to prevent strokes
+
+[VIDEO](https://www.youtube.com/watch?list=PLkIselvEzpM6pZ76FD3NoCvvgkj_p-dE8&v=nEHFF1ADpWE)
+
+Blah blah [@doi:10.1056/NEJMoa1105335].
+
+
+
+```{r}
+myTable <- matrix(c(33, 191, 45, 179, 13, 214, 28, 199), byrow = TRUE, ncol = 4)
+colnames(myTable) <- c("stroke.30", "no.event.30", "stroke.365", "no.event.365")
+rownames(myTable) <- c("treatment", "control")
+# myTable <- as_tibble(myTable)
+# row.names(myTable) <- c("treatment", "control")
+myTable
+chisq.test(myTable)
+```
+# Literatur
