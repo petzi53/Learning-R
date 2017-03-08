@@ -145,3 +145,12 @@ old = options(digits = 3)
 cbind(comp.rel.prop * 100)
 ```
 
+# Bar Graph
+
+## Find the bar graph of the painter schools in the data set `painters
+```{r drawing-bar-graph}
+school <- painters$School
+school.freq <- table(school)
+barplot(school.freq)
+```
+

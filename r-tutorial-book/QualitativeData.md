@@ -11,6 +11,8 @@ Peter Baumgartner
 -   [Relative frequencey distribution](#relative-frequencey-distribution)
     -   [Find the proportion of painters distributed among the schools](#find-the-proportion-of-painters-distributed-among-the-schools)
     -   [Find the relative frequency distribution of the composition scores](#find-the-relative-frequency-distribution-of-the-composition-scores)
+-   [Bar Graph](#bar-graph)
+    -   [Find the bar graph of the painter schools in the data set \`painters](#find-the-bar-graph-of-the-painter-schools-in-the-data-set-painters)
 
 ------------------------------------------------------------------------
 
@@ -284,3 +286,17 @@ Find the relative frequency distribution of the composition scores in painters.
     16  3.70
     17  1.85
     18  3.70
+
+Bar Graph
+=========
+
+Find the bar graph of the painter schools in the data set \`painters
+--------------------------------------------------------------------
+
+``` r
+> school <- painters$School
+> school.freq <- table(school)
+> barplot(school.freq)
+```
+
+![](QualitativeData_files/figure-markdown_github/drawing-bar-graph-1.png)
