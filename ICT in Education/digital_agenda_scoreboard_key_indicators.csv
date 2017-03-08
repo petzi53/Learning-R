@@ -1,0 +1,414 @@
+Chart title:,Individuals who are frequent internet users (every day or almost every day)
+Source dataset:,"European Commission, Digital Scoreboard"
+Extraction-Date:,13 Feb 2017
+Link to the chart/table:,"http://digital-agenda-data.eu/charts/analyse-one-indicator-and-compare-countries#chart={""indicator-group"":""internet-usage"",""indicator"":""i_iday"",""breakdown"":""IND_TOTAL"",""unit-measure"":""pc_ind"",""ref-area"":[""BE"",""BG"",""CZ"",""DK"",""DE"",""EE"",""IE"",""EL"",""ES"",""FR"",""IT"",""CY"",""LV"",""LT"",""LU"",""HU"",""HR"",""MT"",""NL"",""AT"",""PL"",""PT"",""RO"",""SI"",""SK"",""FI"",""SE"",""UK"",""EU27""]}"
+Selection of filters applied
+indicator-group,internet-usage
+indicator,i_iday
+breakdown-group,"[u'any', u'total', u'byage3classes', u'byage6classes', u'byedu', u'byemp', u'bygender', u'bycbirth', u'byccitizen', u'byrisk', u'hhbyiq', u'bydensity', u'labour_force', u'others']"
+breakdown,IND_TOTAL
+unit-measure,pc_ind
+ref-area,"[u'BE', u'BG', u'CZ', u'DK', u'DE', u'EE', u'IE', u'EL', u'ES', u'FR', u'IT', u'CY', u'LV', u'LT', u'LU', u'HU', u'HR', u'MT', u'NL', u'AT', u'PL', u'PT', u'RO', u'SI', u'SK', u'FI', u'SE', u'UK', u'EU27']"
+time-period,"[u'2016', u'2015', u'2014', u'2013', u'2012', u'2011', u'2010', u'2009', u'2008', u'2007', u'2006', u'2005', u'2004', u'2003']"
+Data extracted:
+series,name,code,y
+2003,Denmark,DK,42.3293
+2003,Sweden,SE,41.301
+2003,Finland,FI,39.9767
+2003,United Kingdom,UK,26.6785
+2003,Luxembourg,LU,26.5591
+2003,Germany,DE,25.6816
+2003,Austria,AT,19.1997
+2003,Spain,ES,16.0722
+2003,Portugal,PT,12.9243
+2003,Ireland,IE,11.6667
+2003,Italy,IT,10.5264
+2003,Lithuania,LT,9.6077
+2003,Greece,EL,7.4692
+2003,Czech Republic,CZ,6.964
+2003,Belgium,BE,
+2003,Poland,PL,
+2003,Latvia,LV,
+2003,France,FR,
+2003,Croatia,HR,
+2003,Hungary,HU,
+2003,Malta,MT,
+2003,Netherlands,NL,
+2003,Romania,RO,
+2003,Slovenia,SI,
+2003,Slovakia,SK,
+2003,Bulgaria,BG,
+2003,Cyprus,CY,
+2003,Estonia,EE,
+2004,Denmark,DK,52.7453
+2004,Sweden,SE,51.6905
+2004,Finland,FI,45.9891
+2004,Luxembourg,LU,35.8767
+2004,Germany,DE,30.2498
+2004,United Kingdom,UK,29.2592
+2004,Austria,AT,27.7655
+2004,Estonia,EE,27.2423
+2004,Italy,IT,24.1477
+2004,Slovenia,SI,22.1329
+2004,Slovakia,SK,19.9398
+2004,Spain,ES,18.4588
+2004,Cyprus,CY,18.1329
+2004,Hungary,HU,17.661
+2004,Latvia,LV,16.2768
+2004,Portugal,PT,15.6796
+2004,Lithuania,LT,12.9337
+2004,Ireland,IE,12.4313
+2004,Poland,PL,11.7528
+2004,Czech Republic,CZ,9.9925
+2004,Greece,EL,8.5774
+2004,Bulgaria,BG,7.4095
+2004,Romania,RO,3.6011
+2004,Belgium,BE,
+2004,France,FR,
+2004,Croatia,HR,
+2004,Malta,MT,
+2004,Netherlands,NL,
+2005,Denmark,DK,57.0408
+2005,Sweden,SE,56.5912
+2005,Netherlands,NL,53.2911
+2005,Finland,FI,49.0449
+2005,Luxembourg,LU,43.5528
+2005,Estonia,EE,38.9396
+2005,Belgium,BE,38.2087
+2005,United Kingdom,UK,34.0525
+2005,Germany,DE,33.9948
+2005,Austria,AT,31.8579
+2005,Slovenia,SI,27.2
+2005,Italy,IT,26.6111
+2005,Malta,MT,24.8735
+2005,Slovakia,SK,22.8292
+2005,Latvia,LV,22.6921
+2005,Spain,ES,20.5809
+2005,Hungary,HU,19.9451
+2005,Portugal,PT,18.8375
+2005,Ireland,IE,17.1975
+2005,Poland,PL,17.0489
+2005,Lithuania,LT,16.1838
+2005,Cyprus,CY,15.9871
+2005,Greece,EL,10.8932
+2005,Czech Republic,CZ,9.5374
+2005,France,FR,
+2005,Croatia,HR,
+2005,Romania,RO,
+2005,Bulgaria,BG,
+2006,Denmark,DK,65.2747
+2006,Netherlands,NL,61.0636
+2006,Sweden,SE,60.9926
+2006,Finland,FI,56.3311
+2006,Luxembourg,LU,46.8089
+2006,Belgium,BE,44.5953
+2006,Estonia,EE,39.8835
+2006,Germany,DE,39.6141
+2006,Austria,AT,39.1447
+2006,United Kingdom,UK,38.9348
+2006,Slovenia,SI,36.4078
+2006,Latvia,LV,31.2395
+2006,Italy,IT,29.182
+2006,Hungary,HU,28.4479
+2006,Slovakia,SK,26.3783
+2006,France,FR,26.0369
+2006,Malta,MT,25.863
+2006,Ireland,IE,25.3426
+2006,Spain,ES,24.0391
+2006,Lithuania,LT,23.3309
+2006,Portugal,PT,22.2098
+2006,Poland,PL,21.9515
+2006,Cyprus,CY,18.7823
+2006,Czech Republic,CZ,18.0783
+2006,Bulgaria,BG,14.1778
+2006,Greece,EL,12.7611
+2006,Romania,RO,8.7594
+2006,Croatia,HR,
+2007,Netherlands,NL,66.2876
+2007,Denmark,DK,66.2317
+2007,Finland,FI,61.7043
+2007,Sweden,SE,58.219
+2007,Luxembourg,LU,56.3206
+2007,Belgium,BE,48.9814
+2007,United Kingdom,UK,48.052
+2007,Germany,DE,45.5913
+2007,Austria,AT,44.5154
+2007,Estonia,EE,42.5185
+2007,France,FR,39.6143
+2007,Slovenia,SI,38.262
+2007,Latvia,LV,37.1807
+2007,Hungary,HU,36.6087
+2007,Malta,MT,33.8615
+2007,Slovakia,SK,32.8131
+2007,Ireland,IE,32.4145
+2007,Italy,IT,31.417
+2007,Lithuania,LT,29.5723
+2007,Spain,ES,29.142
+2007,Poland,PL,26.8741
+2007,Portugal,PT,26.5378
+2007,Czech Republic,CZ,24.3363
+2007,Cyprus,CY,23.2669
+2007,Croatia,HR,20.9854
+2007,Bulgaria,BG,19.8439
+2007,Greece,EL,18.6922
+2007,Romania,RO,11.9799
+2008,Denmark,DK,70.9547
+2008,Sweden,SE,68.6505
+2008,Netherlands,NL,66.6188
+2008,Finland,FI,66.3751
+2008,Luxembourg,LU,65.193
+2008,United Kingdom,UK,53.2752
+2008,Belgium,BE,51.1888
+2008,Germany,DE,50.94
+2008,Austria,AT,48.1883
+2008,France,FR,47.453
+2008,Estonia,EE,44.722
+2008,Slovakia,SK,44.344
+2008,Latvia,LV,42.3502
+2008,Hungary,HU,41.9872
+2008,Slovenia,SI,40.132
+2008,Ireland,IE,38.8038
+2008,Lithuania,LT,38.1219
+2008,Malta,MT,36.398
+2008,Italy,IT,35.3718
+2008,Spain,ES,33.5498
+2008,Poland,PL,32.1048
+2008,Czech Republic,CZ,30.3206
+2008,Portugal,PT,29.4722
+2008,Croatia,HR,26.6724
+2008,Cyprus,CY,24.1469
+2008,Greece,EL,23.0542
+2008,Bulgaria,BG,22.9369
+2008,Romania,RO,15.3713
+2009,Sweden,SE,73.041
+2009,Netherlands,NL,72.7939
+2009,Denmark,DK,72.1234
+2009,Luxembourg,LU,70.9181
+2009,Finland,FI,67.644
+2009,United Kingdom,UK,60.1148
+2009,Belgium,BE,55.9664
+2009,Germany,DE,55.3821
+2009,Estonia,EE,53.853
+2009,France,FR,51.528
+2009,Slovakia,SK,49.3711
+2009,Austria,AT,48.3837
+2009,Slovenia,SI,46.9731
+2009,Latvia,LV,46.9545
+2009,Malta,MT,45.3495
+2009,Hungary,HU,44.9124
+2009,Lithuania,LT,42.5045
+2009,Ireland,IE,40.4364
+2009,Italy,IT,40.4093
+2009,Poland,PL,39.0033
+2009,Spain,ES,38.1349
+2009,Croatia,HR,36.7088
+2009,Cyprus,CY,34.1708
+2009,Czech Republic,CZ,34.0696
+2009,Portugal,PT,33.3166
+2009,Bulgaria,BG,30.5991
+2009,Greece,EL,27.3022
+2009,Romania,RO,18.6718
+2010,Sweden,SE,76.4228
+2010,Netherlands,NL,76.3312
+2010,Denmark,DK,76.1634
+2010,Luxembourg,LU,73.844
+2010,Finland,FI,72.3202
+2010,United Kingdom,UK,65.625
+2010,France,FR,60.2582
+2010,Germany,DE,60.2186
+2010,Belgium,BE,59.4785
+2010,Slovakia,SK,57.6078
+2010,Estonia,EE,56.9247
+2010,Slovenia,SI,54.4565
+2010,Austria,AT,53.0137
+2010,Latvia,LV,49.4426
+2010,Malta,MT,49.314
+2010,Hungary,HU,48.1623
+2010,Ireland,IE,47.0481
+2010,Italy,IT,45.7383
+2010,Lithuania,LT,44.9085
+2010,Spain,ES,43.6123
+2010,Poland,PL,42.1055
+2010,Croatia,HR,40.3753
+2010,Cyprus,CY,40.339
+2010,Portugal,PT,38.1614
+2010,Czech Republic,CZ,37.5814
+2010,Bulgaria,BG,32.5859
+2010,Greece,EL,31.1653
+2010,Romania,RO,20.7076
+2011,Sweden,SE,80.3922
+2011,Netherlands,NL,78.7471
+2011,Denmark,DK,78.044
+2011,Finland,FI,76.1936
+2011,Luxembourg,LU,75.9566
+2011,United Kingdom,UK,69.6517
+2011,Belgium,BE,64.7679
+2011,Germany,DE,62.9736
+2011,France,FR,61.7361
+2011,Austria,AT,58.8691
+2011,Estonia,EE,58.841
+2011,Slovakia,SK,56.3795
+2011,Ireland,IE,55.1244
+2011,Hungary,HU,55.0427
+2011,Malta,MT,54.9455
+2011,Slovenia,SI,54.0906
+2011,Latvia,LV,53.3121
+2011,Italy,IT,48.8696
+2011,Spain,ES,46.9785
+2011,Lithuania,LT,46.6947
+2011,Poland,PL,45.4901
+2011,Cyprus,CY,44.6284
+2011,Croatia,HR,44.2564
+2011,Portugal,PT,41.5642
+2011,Czech Republic,CZ,40.8404
+2011,Bulgaria,BG,37.4359
+2011,Greece,EL,37.2032
+2011,Romania,RO,23.7687
+2012,Luxembourg,LU,80.8605
+2012,Netherlands,NL,80.8
+2012,Denmark,DK,80.5115
+2012,Sweden,SE,79.7179
+2012,Finland,FI,78.4844
+2012,United Kingdom,UK,73.2561
+2012,France,FR,65.0011
+2012,Germany,DE,64.5917
+2012,Belgium,BE,64.5426
+2012,Austria,AT,60.1465
+2012,Slovakia,SK,59.7773
+2012,Estonia,EE,59.4381
+2012,Ireland,IE,58.2362
+2012,Hungary,HU,57.6296
+2012,Latvia,LV,57.4105
+2012,Malta,MT,57.1313
+2012,Slovenia,SI,52.8097
+2012,Italy,IT,50.9067
+2012,Spain,ES,49.7791
+2012,Lithuania,LT,48.8029
+2012,Croatia,HR,47.6768
+2012,Cyprus,CY,46.6406
+2012,Poland,PL,46.4179
+2012,Portugal,PT,44.8682
+2012,Czech Republic,CZ,43.0948
+2012,Greece,EL,40.6434
+2012,Bulgaria,BG,40.3808
+2012,Romania,RO,28.7045
+2013,Denmark,DK,84.3312
+2013,Netherlands,NL,82.981
+2013,Luxembourg,LU,81.6024
+2013,Sweden,SE,81.0307
+2013,Finland,FI,79.7606
+2013,United Kingdom,UK,77.9554
+2013,Germany,DE,68.5502
+2013,Belgium,BE,68.3201
+2013,France,FR,66.2825
+2013,Austria,AT,63.0077
+2013,Estonia,EE,62.666
+2013,Hungary,HU,61.7035
+2013,Ireland,IE,61.2724
+2013,Slovakia,SK,61.1725
+2013,Latvia,LV,60.1795
+2013,Malta,MT,58.9359
+2013,Slovenia,SI,57.9771
+2013,Italy,IT,54.4356
+2013,Czech Republic,CZ,54.3373
+2013,Spain,ES,53.8506
+2013,Croatia,HR,53.4122
+2013,Cyprus,CY,53.1405
+2013,Lithuania,LT,53.0607
+2013,Portugal,PT,47.5867
+2013,Poland,PL,47.2342
+2013,Greece,EL,46.6895
+2013,Bulgaria,BG,42.5054
+2013,Romania,RO,32.195
+2014,Luxembourg,LU,87.0862
+2014,Denmark,DK,85.0023
+2014,Netherlands,NL,83.9913
+2014,Sweden,SE,82.5848
+2014,United Kingdom,UK,81.4737
+2014,Finland,FI,81.2639
+2014,Estonia,EE,72.5966
+2014,Germany,DE,72.0937
+2014,Belgium,BE,71.1466
+2014,France,FR,67.7883
+2014,Hungary,HU,65.6087
+2014,Ireland,IE,64.6449
+2014,Austria,AT,64.1869
+2014,Malta,MT,62.8571
+2014,Slovakia,SK,62.4439
+2014,Latvia,LV,61.4408
+2014,Czech Republic,CZ,60.3536
+2014,Spain,ES,59.9599
+2014,Italy,IT,58.11
+2014,Slovenia,SI,57.8258
+2014,Lithuania,LT,56.5526
+2014,Cyprus,CY,55.9078
+2014,Croatia,HR,55.7389
+2014,Portugal,PT,50.9891
+2014,Poland,PL,50.7343
+2014,Greece,EL,48.8463
+2014,Bulgaria,BG,45.5203
+2014,Romania,RO,32.4618
+2015,Luxembourg,LU,91.8838
+2015,Denmark,DK,87.2886
+2015,Netherlands,NL,85.1374
+2015,Finland,FI,84.0467
+2015,United Kingdom,UK,82.527
+2015,Sweden,SE,81.9829
+2015,Estonia,EE,77.3771
+2015,Germany,DE,75.4277
+2015,Belgium,BE,73.3247
+2015,Malta,MT,69.2159
+2015,Austria,AT,68.4401
+2015,France,FR,67.8386
+2015,Ireland,IE,66.9659
+2015,Latvia,LV,66.1727
+2015,Spain,ES,64.2514
+2015,Hungary,HU,63.1365
+2015,Cyprus,CY,62.7698
+2015,Czech Republic,CZ,62.7234
+2015,Italy,IT,62.1444
+2015,Slovenia,SI,60.7861
+2015,Slovakia,SK,60.4161
+2015,Croatia,HR,59.5104
+2015,Lithuania,LT,55.9122
+2015,Portugal,PT,55.4658
+2015,Greece,EL,54.5904
+2015,Poland,PL,52.3078
+2015,Bulgaria,BG,46.4785
+2015,Romania,RO,36.6343
+2016,Luxembourg,LU,92.7232
+2016,Denmark,DK,89.3437
+2016,United Kingdom,UK,87.7284
+2016,Netherlands,NL,86.4896
+2016,Finland,FI,85.2116
+2016,Sweden,SE,85.06
+2016,Germany,DE,77.7867
+2016,Estonia,EE,77.0825
+2016,Belgium,BE,74.141
+2016,Austria,AT,71.9543
+2016,Hungary,HU,70.6828
+2016,France,FR,70.4031
+2016,Malta,MT,70.2303
+2016,Ireland,IE,69.5652
+2016,Cyprus,CY,68.5224
+2016,Latvia,LV,68.1682
+2016,Slovakia,SK,67.5247
+2016,Spain,ES,66.791
+2016,Italy,IT,65.8665
+2016,Czech Republic,CZ,65.13
+2016,Slovenia,SI,64.4241
+2016,Croatia,HR,63.4098
+2016,Lithuania,LT,60.4045
+2016,Portugal,PT,59.5276
+2016,Poland,PL,57.1561
+2016,Greece,EL,56.6743
+2016,Bulgaria,BG,48.589
+2016,Romania,RO,42.4069
+Definition and scopes:
+Indicator:,Individuals who are frequent internet users (every day or almost every day)
+Definition:,"Individuals using the internet every day or almost every day, in the last 3 months."
+Source:,"Eurostat, Table isoc_bde15cua: Internet use and activities"
+Breakdown:,All Individuals (aged 16-74)
+Unit of measure:,Percentage of individuals
+Definition:,Individuals aged 16-74
+List of available indicators:,http://digital-agenda-data.eu/datasets/digital_agenda_scoreboard_key_indicators/indicators
