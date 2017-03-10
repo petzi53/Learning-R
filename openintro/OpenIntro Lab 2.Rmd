@@ -13,10 +13,9 @@ library(oilabs)
 ```
 
 * * *
+# Getting started
 
 Some define statistics as the field that focuses on turning information into knowledge. The first step in that process is to summarize and describe the raw information -- the data. In this lab we explore flights, specifically a random sample of domestic flights that departed from the three major New York City airport in 2013. We will generate simple graphical and numerical summaries of data on these flights and explore delay times. As this is a large data set, along the way you'll also learn the indispensable skills of data processing and subsetting.
-
-# Getting started
 
 The [Bureau of Transportation Statistics](http://www.rita.dot.gov/bts/about/) (BTS) is a statistical agency that is a part of the Research and Innovative Technology Administration (RITA). As its name implies, BTS collects and makes available transportation data, such as the flights data we will be working with in this lab.
 
@@ -86,7 +85,7 @@ glimpse(nycflights)
 
 ***
 
-# Examples of research questions
+## Examples of research questions
 
 The nycflights data frame is a massive trove of information. Let's think about some questions we might want to answer with these data:
 

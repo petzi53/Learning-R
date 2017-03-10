@@ -1,11 +1,16 @@
 ---
-title: "OpenIntro Statistics: Introduction to data"
-author: Peter Baumgartner
-date: 2017-02-05
-output: 
-     github_document:
-        toc: yes
-        toc_depth: 3
+title: "Lab 0: OpenIntro Statistics"
+author: "Peter Baumgartner"
+date: "2017-03-10"
+# output:
+#         oilabs::lab_report
+output:
+        html_document:
+                toc: true
+                toc_depth: 3
+                toc_float:
+                        collapsed: false
+                        smooth_scroll: false
 ---
 
 ```{r label = "global-options", echo=FALSE, highlight=TRUE}
@@ -18,7 +23,67 @@ knitr::opts_chunk$set(
         prompt = T,
         cached = T
         )
+        library(oilabs)
 ```
+
+# Material and my learning strategies
+I am going to use the free material of the [OpenIntro Statistics](https://www.openintro.org/stat/textbook.php?stat_book=os) course to repeat the basics of statistics but by using R as programming language.
+
+The textbooks comes with many additional resources:
+
+* [Videos](https://www.openintro.org/stat/videos.php)
+* Many Exercises at the end of the chapters: With solution of all odd-numbered in the annex. (But one can apply as teacher to get all solutions)
+* [Interactive Labs with R](https://www.openintro.org/stat/labs.php)
+* Several R Packages:
+    + [openintro](https://cran.r-project.org/web/packages/openintro/index.html): OpenIntro data sets and supplemental functions. [PDF manual](https://cran.r-project.org/web/packages/openintro/openintro.pdf))
+    + [OIdata](https://cran.r-project.org/web/packages/OIdata/index.html): Data sets and supplements (OpenIntro). [PDF manual](https://cran.r-project.org/web/packages/OIdata/OIdata.pdf)
+    + [oilabs](https://github.com/OpenIntroOrg/oilabs) An R package that contains the data sets, custom functions, documentation, and templates for the OpenIntro Labs.
+* [Free course on datacamp.com](https://www.datacamp.com/community/open-courses/statistical-inference-and-data-analysis) Data Analysis and Statistical Inference
+* Github source files to work interactively:
+    + [OpenIntro Statistics labs with base R](https://github.com/andrewpbray/oiLabs-base-R): Contentrates on base R functions and packages
+    + [OpenIntro Statistics labs with dplyr and ggplot2](https://github.com/andrewpbray/oiLabs-dplyr-ggplot): OpenIntro Labs in R using the `dplyr` and `ggplot` syntax for data manipulation.
+* [Coursera](https://www.coursera.org/specializations/statistics#courses): And last not least there is also a Coursera course specialisation (5 courses).
+
+# My learning strategy               
+I plan to take the chapters in several overlapping rounds:
+
+* I will follow the text and experiment with the data on my own. Here I will give special attention in using function from the tidyverse-packages.
+* I will follow the text for the R labs
+* And I will complete the course on Datacamp.com.
+
+I am not sure, if this various approaches are effective or too much of the same. But I will at least try out all of these different learning possiblities. 
+
+I will start with the [github labs tutorial](http://htmlpreview.github.io/?https://github.com/andrewpbray/oiLabs-base-R/blob/master/intro_to_data/intro_to_data.html).
+
+> **Attention**: I will provide "My Solutions" of the assignments, but please keep in mind: I am learning and therefore my solutions could be inadequat or wrong. 
+
+# Introduction to R
+I am using the for this introduction my forked file of the `dplyr`and `ggplot` lab version: [Intro to R](https://github.com/petzi53/oiLabs-dplyr-ggplot/blob/master/01_intro_to_r/intro_to_r.Rmd).
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(oilabs)
+```
+As the labs progress, you are encouraged to explore beyond what the labs dictate; a willingness to experiment will make you a much better programmer. [Exactly this is was I am trying to do with my Rmarkdown files.] Before we get to that stage, however, you need to build some basic fluency in R. Today we begin with the fundamental building blocks of R and RStudio: the interface, reading in data, and basic commands.
+
+For this lab, and many others in the future, we will use the following R packages:
+
+* `dplyr`: for data wrangling
+* `ggplot2`: for data visualization
+* `oilabs`: for data and custom functions with the OpenIntro labs
+
+# Reproducibility with R Markdown
+
+It is vital that every report is reproducible. This can't be done with two separate approaches (e.g. Word document on the one hand and a programming language like R on the other hand). Instead one should use R Markdown for labs report. See for this argument also the video on YouTube [Why use R Markdown for Lab Reports?](https://www.youtube.com/watch?v=lNWVQ2oxNho&feature=youtu.be).
+
+How to use R Markdown document especially for the OpenIntro labs is explained in another video [Using R Markdown for Lab Reports in RStudio](https://www.youtube.com/watch?v=o0h-eVABe9M&feature=youtu.be). There is also a special template provided for the OpenIntro exercises. 
+
+### Task [open]: Investige template
+The special template provided by the oilabs package is a good opportunity to investigate the details how this template is produced and called from the oilabs package.
+
+I am now going to change to the `oilabs` template and to continue with the [Dr. Arbuthnot's Baptism Records](https://github.com/petzi53/oiLabs-dplyr-ggplot/blob/master/01_intro_to_r/intro_to_r.Rmd#dr-arbuthnots-baptism-records).
+
 
 # Data basics
 ## Get the data with base R as data frame
@@ -37,7 +102,10 @@ Load the data set into R from the external website. But just once: As it is a bi
 ```
 
 ```{r load-cdc-data}
-if (!exists("cdc")) {load("data/cdc.RData")}
+oldwd <- getwd()
+setwd("~/Documents/_PB-Data/Programming/R/Learning-R/openintro/data")
+if (!exists("cdc")) {load("cdc.RData")}
+setwd(oldwd)
 ```
 
 The data set `cdc` that shows up in your workspace is a data matrix, with each row representing a case and each column representing a variable. R calls this data format a data frame, which is a term that will be used throughout the labs. 
@@ -67,7 +135,7 @@ class(CDC)
 ```
 "cdc" (with small letters) has class "`r class(cdc)`", whereas "CDC" (with capital letters) now have "`r class(CDC)`" e.g. three classes at the same time to secure full compatiblity with data frames. 
 
-## Explore the data
+# Explore the data
 After loading the data and converting it into a tibble, one should inspect the data to get some understanding about the structure and content. Common funtions for these tasks are:
 
 * `<name-of-data-tibble>`: Display the first 10 rows and all columns that fit on one screen. It also prints an abbreviated description of the column type.
@@ -119,13 +187,12 @@ How many cases are there in this data set? How many variables? For each variable
 8. `age` in years = discrete
 9. `gender`: "m" or "f" = categorial
 
-# Summaries and tables
-## Summaries of numerical data with base R: `summary()`
+# Summaries of numerical data with base R: `summary()`
 A good first step in any analysis is to distill all of that information into a few summary statistics and graphics. As a simple example, the function summary returns a numerical summary: minimum, first quartile, median, mean, second quartile, and maximum. For weight this is:
 ```{r summary-of-weight}
 summary(CDC$weight)
 ```
-## Summaries of numerical data with `dplyr`: `summarise()`
+# Summaries of numerical data with `dplyr`: `summarise()`
 
 `dplyr` does not have its own special methods for R summary function (see last sentence of vignette [Introduction to dplyr](https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html). But you can use the R base functions with `dplyr` and some other extra functions supplied by `dplyr`. Besides functions in base R like `min()`, `max()`, `mean()`, `sum()`, `sd()`, `median()`, and `IQR()`. dplyr provides a handful of others:
 
@@ -148,7 +215,7 @@ summarise(CDC, Min. = min(weight),
 ```
 But the great advantage for `summarise()` lies int the combination with the `group_by()` function of `dplyr` (see the examples in the [Introduction to dplyr](https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html) vignette.)
 
-## Summaries of categorical data with base R: `table()`
+# Summaries of categorical data with base R: `table()`
 
 While it makes sense to describe a quantitative variable like `weight` in terms of these statistics, what about categorical data? We would instead consider the sample frequency or relative frequency distribution. The function table does this for you by counting the number of times each kind of response was given. For example, to see the number of people who have smoked 100 cigarettes in their lifetime or instead look at the relative frequency distribution.
 ```{r generate-contingency-tables-with-base-r-table}
@@ -157,7 +224,7 @@ table(CDC$smoke100) / 20000
 ```
 Notice how R automatically divides all entries in the table by 20,000 in the command above. This is similar to something we observed in the Introduction to R; when we multiplied or divided a vector with a number, R applied that action across entries in the vectors. As we see above, this also works for tables.
 
-## Summaries of categorical data with `dplyr`: `count()`
+# Summaries of categorical data with `dplyr`: `count()`
 But the outcome of the `table()` command is class "`r class(table(CDC$smoke100))`" which is not so easy to work with as a data frame or a tibble. (See the article on [R-bloggers](https://www.r-bloggers.com/how-to-get-the-frequency-table-of-a-categorical-variable-as-a-data-frame-in-r/).) It is better to use the `count()` function of `dplyr`, because it adds the column names and returns – as all dply-functions — a tibble. Furthermore the relative frequency distribution (the propoartion) can be added as a new column in one command.
 
 ```{r generate-contingency-tables-with-dplyr-count}
@@ -171,7 +238,7 @@ How to limit the figure of `prop` to an accuracy of two digits after the decimal
 ### Question 2 [open]: German localisation for big numbers "." and decimal numbers ","
 How to use "." for big figures and "," for figurs after decimal point (comma) = German localisation for figures?
 
-## Graphical summary with base R: `barplot()`
+# Graphical summary with base R: `barplot()`
 
 Next, we make a bar plot of the entries in the table by putting the table inside the `barplot()` command.
 ```{r generate-a-barplot}
@@ -186,7 +253,7 @@ barplot(smoke)
 
 Here, we’ve made a new object, a table, called `smoke` (the contents of which we can see by typing `smoke` into the console) and then used it in as the input for barplot. The special symbol `<-` performs an assignment, taking the output of one line of code and saving it into an object in your workspace.
 
-## Graphical summary with `ggplot2`: `ggplot()`
+# Graphical summary with `ggplot2`: `ggplot()`
 
 A basic bar chart is drawn with `geom_bar()`. The following chart displays the total number of poeple in the CDC dataset, grouped by `smoke100`.The chart shows that slightly more people of the sample haven`t even smoked 100 ciragettes during their lifetime.
 
@@ -300,7 +367,7 @@ What does the mosaic plot reveal about smoking habits and gender?
 
 A higher proportion of females said that they didn't smoke more than 100 cigarettes in their lifetime.
 
-## Subsetting
+# Subsetting
 
 Interlude (= some commands to inspect data and data structure) and subsetting is something I have already experiences. Therefore I will not go into much detail.
 
@@ -341,7 +408,6 @@ under23_and_smoke_1 <- filter(CDC, age < 23 & smoke100 == 1)
 # Quantitative data
 With our subsetting tools in hand, we’ll now return to the task of the day: making basic summaries of the BRFSS questionnaire. We’ve already looked at categorical data such as smoke and gender so now let’s turn our attention to quantitative data. Two common ways to visualize quantitative data are with box plots and histograms. 
 
-## Conversion in metric system
 
 To get a better feeling of the data I will add three new rows: `height_cm`, `weight_kg`, `wtdesire_kg.
 
@@ -503,7 +569,7 @@ ggMMplot(cdc_metric$gender,cdc_metric$smoke100)
 ggMMplot1(cdc_metric$gender, cdc_metric$smoke100)
 ```
 
-## Body Mass Index (BMI)
+### Body Mass Index (BMI)
 
 ```{r bmi-boxplot-genhlth}
 bmi <- round((CDC$weight / CDC$height^2) * 703, digits = 2)
@@ -518,7 +584,7 @@ Notice that the first line above is just some arithmetic, but it’s applied to 
 
 Conversion factor 703 is the summary of all conversions: weight in pound * 0.453592 / (height * 2.54 / 100)^2 = `r 0.453592 / (2.54 / 100)^2`]
 
-## Exercise
+## Exercise 4
 What does this box plot show? Pick another categorical variable from the data set and see how it relates to BMI. List the variable you chose, why you might think it would have a relationship to BMI, and indicate what the figure seems to suggest.
 
 **My Solution:**
@@ -544,7 +610,7 @@ bmi_metric <- (cdc_metric$weight_kg / (cdc_metric$height_cm / 100) ^ 2)
 boxplot(bmi_metric ~ cdc_metric$genhlth)
 ```
 
-## Histograms
+# Histograms
 
 Finally, let’s make some histograms.
 ```{r histogram-age}
