@@ -1,16 +1,8 @@
 ---
 title: "Lab 5: Sampling distribution"
-author: "Jack Praker"
-date: "2017/02/13"
-output: 
-  html_notebook: 
-    pandoc_args: [ 
-      "--number-offset=5,0" 
-    ]
-    fig_caption: true
-    number_sections: yes
-    toc: yes
-    toc_depth: 3
+author: "Peter Baumgartner"
+date: "2017-03-10"
+output: oilabs::lab_report
 ---
 ```{r label = "global-options", echo=FALSE, highlight=TRUE}
 knitr::opts_chunk$set(
@@ -25,9 +17,8 @@ knitr::opts_chunk$set(
         library(oilabs)
 ```
 ***
-## Getting started
 
-### [The data](https://github.com/petzi53/oiLabs-dplyr-ggplot/blob/master/05_sampling_distributions/sampling_distributions.Rmd#the-data)
+# The data
 In this lab, we investigate the ways in which the statistics from a random sample of data can serve as point estimates for population parameters. We're interested in formulating a sampling distribution of our estimate in order to learn about the properties of the estimate, such as its distribution.
 
 **Setting a seed:** We will take some random samples and build sampling distributions in this lab, which means you should set a seed on top of your lab. If this concept is new to you, review the lab concerning probability.
@@ -69,7 +60,7 @@ ames %>%
             pop_q3 = quantile(area, 0.75))  # third quartile, 75th percentile
 ```
 
-### Exercise (1)
+## Exercise (1)
 Describe this population distribution using a visualization and these summary statistics. You don't have to use all of the summary statistics in your description, you will need to decide which ones are relevant based on the shape of the distribution. Make sure to include the plot and the summary statistics output in your report along with your narrative.
 
 ```{r inspecting-living-area-from-population}
@@ -86,7 +77,7 @@ big_houses <- filter(ames, area > 4000)
 ```
 The living area distribution of Ames is a left skewed distribution, e.g. most of the living areas are small: Half of the houses have less than 1450 sq.feet, but there are also some houses with more than 4000 square feet living space. The middle 50 percent of the homes have areas between 1126 and 1742 sq.ft.
 
-## [The unknown sampling distribution](https://github.com/petzi53/oiLabs-dplyr-ggplot/blob/master/05_sampling_distributions/sampling_distributions.Rmd#the-unknown-sampling-distribution)
+# The unknown sampling distribution
 
 In this lab we have access to the entire population, but this is rarely the case in real life. Gathering information on an entire population is often extremely costly or impossible. Because of this, we often take a sample of the population and use that to understand the properties of the population.
 
@@ -99,7 +90,7 @@ samp1 <- ames %>%
 
 This command collects a simple random sample of size 50 from the `ames` dataset, and assigns the result to `samp1. This is like going into the City Assessor's database and pulling up the files on 50 random home sales. Working with these 50 files would be considerably simpler than working with all 2930 home sales.
 
-### Exercise (2)
+## Exercise (2)
 
 Describe the distribution of area in this sample. How does it compare to the distribution of the population? Hint: the `sample_n` function takes a random sample of observations (i.e. rows) from the dataset, you can still refer to the variables in the dataset with the same names. Code you used in the previous exercise will also be helpful for visualizing and summarizing the sample, however be careful to not label values `mu` and `sigma` anymore since these are sample statistics, not population parameters. You can customize the labels of any of the statistics to indicate that these come from the sample.
 
