@@ -1,0 +1,150 @@
+---
+title: "Confidence intervals"
+author: "Peter Baumgartner"
+date: "2017-03-11"
+output: oilabs::lab_report
+bibliography: "~/Documents/Meine\ Bibliographien/baumgartner.bib"
+---
+
+```{r label = "global-options", echo=FALSE, highlight=TRUE}
+knitr::opts_chunk$set(
+        message = F,
+        error = F,
+        warning = F,
+        comment = NA,
+        highlight = T,
+        prompt = T
+        )
+library(tidyverse)
+library(oilabs)
+
+my.wd <- "~/Documents/_PB-Data/Programming/R/Learning-R/openintro"
+setwd(my.wd)
+```
+
+* * *
+
+# Preliminary note
+
+>NOTE: Please keep in mind that this is a learning exercise and I do not know if my considerations and solutions for the exercises are correct. 
+
+Material of this lab can be found at
+
+* https://www.openintro.org/ and https://github.com/OpenIntroOrg
+
+* https://github.com/andrewpbray/oiLabs-dplyr-ggplot This is a newer version of the OpenIntro Statistics lab,  using the packages `ggplot` and `dplyr`.
+
+# Getting started
+
+We consider real estate data from the city of Ames, Iowa. This is the same dataset used in the previous lab. The details of every real estate transaction in Ames is recorded by the City Assessor’s office. Our particular focus for this lab will be all residential home sales in Ames between 2006 and 2010. This collection represents our population of interest. In this lab we would like to learn about these home sales by taking smaller samples from the full population. Let’s load the data.
+
+
+The process of laoding data is made as easy as possible. The suggestion is to use the following program code:
+
+```{r sample-code-for-downloading-data}
+# download.file("http://www.openintro.org/stat/data/ames.RData",
+#               destfile = "ames.RData")
+# load("ames.RData")
+```
+
+The main focus of this tutorial is to get some statistical knowledge. But for real applications it is to get more into detail. The above code has two limitations:
+
+* The data is stored with `.RData` Format at the same level as this file. For bigger project one would need a more detailed and ordered file structure.
+* The downloaded file also loads two functions `contains()`and `plot_ci()` into the memory. I don't like this hidden addition as it destroys reproducibilty in bigger and real life projects.
+
+## Exercise 1: Setting up an appropriate file structure
+
+For the first question (file structure) exists with [ProjectTemplate](http://projecttemplate.net/getting_started.html) a public and free support for a sophisticated but at the same time standardised file structure. During the installation process it generates the following file structure automatically. 
+
+<p style="text-align:center;">![Directories installed by ProjectTemplate](data/directories.png)</br>
+Directories installed by ProjectTemplate</p>
+
+To install the package one could use `install.packages('ProjectTemplate')`, but I prefer `require('ProjectTemplate')` because it looks if the packages is already installed and attaches it at the same time, saving the `library(ProjectTemplate)` command. (At least that is my understanding of the difference between these two commands.)
+
+After you have loaded `ProjectTemplate` you need to call `create.project('<your-directory-name>')` to generate the above directory structure. Now you can change into this folder and inspect all the provided utilities. Every folder contains a `README.md` explaining the intended purpose of the folder. You have to do this as the very first step, even before you open a markdown file. It is best done from the console. 
+
+
+```{r sample-code-for-installing-ProjectTemplate}
+# require('ProjectTemplate')
+# create.project('OpenIntro')
+```
+
+Some of the folders have advanced purposes and generally the structure is intended for users who have already some experiences and work on bigger project. But it is good to know that a somewhat differentiated folder structure is helpful for the project organisation. As I am still not have advanced skills it is the best and easiest way to separate my reports, data and generated material (plots). Because I am using `git` respectively `GitHub` as a version control system the separation between my own work and files generated automatically during the analysis is helpful as the later should not BE pushed into the GitHub repo.
+
+So I use the recommended program code with some changes:
+
+1. I (re)store the path to the working directory in order to get a standardises situation. I noticed already some problems with the path to the working directory, especially if I change change it via the console and then to recompile the script.
+
+2. I check if the file is already there. I start the download only if the file is missing.
+
+3. I store the file in my `data` folder, which I have created in an earlier occasion.
+
+```{r download-data}
+oldwd <- getwd()
+setwd(my.wd)
+if (!(file.exists("data/ames.RData"))) 
+        {
+        download.file("http://www.openintro.org/stat/data/ames.RData",
+              destfile = "data/ames.RData")
+        }
+load("data/ames.RData")
+setwd(oldwd)
+```
+
+# Exercise 2: Using cites and bibliography manager in RMarkdown
+
+Another problem I noticed is the usage of standardised bibliography for reports. The description for the `ames` data set is available at the website of the [American Stastical Association (ASA)](https://ww2.amstat.org/publications/jse/v19n3/decock/DataDocumentation.txt). The offical published reference is: De Cock D. 2011. Ames, Iowa: Alternative to the Boston Housing Data as an End of Semester Regression Project. Journal of Statistics Education; 19(3). You can also [download the full paper](http://ww2.amstat.org/publications/jse/v19n3/decock.pdf). BTW: To apply real data sets to learn statistics is one of the reasons I am very excited about the use of R. When I learned statistics at the university back in the 70ties, it was a very boring exercise with small and artificial data. Even today some modern books on statistics present their exercises without statistical software (e.g. [Statistics for Dummies](https://www.amazon.de/Statistics-Dummies-Deborah-J-Rumsey/dp/1119293529/ref=sr_1_1?ie=UTF8&qid=1489255953&sr=8-1&keywords=dummy+statistics)). More material with beautiful graphs can be found at [SemanticScolar](https://www.semanticscholar.org/paper/Ames-Iowa-Alternative-to-the-Boston-Housing-Data-Cock/2d7dbbe0e1a5606203a065175c1415a3dda9dcc4).
+
+To use citations and bibliographies in RMarkdown one has to apply certain rules published in [document by RStudio](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html). 
+
+I am generally using Zotero for my bibliographies. Unfortunately this is not supported by RMarkdown. For me the easiest installation is done with a .bib file. Especially as I have used for the preparation of my last books LyX and had therefore to install BibTeX respectively BibLaTeX. I am using  the platform independent bibliography manager JabRef but also BibDesk (just for mac OS).
+
+To cite an author one has to use the unique reference code from the bibliography manager. 
+
+> Citations go inside square brackets and are separated by semicolons. Each citation must have a key, composed of ‘@’ + the citation identifier from the database, and may optionally have a prefix, a locator, and a suffix.
+
+For instance I have referenced to my biblbiography database in the YAML metadata section with the following line:
+
+`bibliography: "~/Documents/Meine\ Bibliographien/baumgartner.bib"`
+
+Now I can for example cite my own article about taxonomies of electronic portfolios as `@Baumgartner_2009a` in square brackets [@Baumgartner_2009a]. RMarkdown adds the complete bibliography at the end of the document. The header "References" is added by me manually. And here is the reference to the ames dataset [@de_cock_ames_2011].
+
+# Starting the lab
+
+Finally we can now start the lab with a simple random sample of size 60 from the population. Specifically, this is a simple random sample of size 60. Note that the data set has information on `r ncol(ames)` housing variables, but for the first portion of the lab we’ll focus on the size of the house, represented by the variable `Gr.Liv.Area`.
+
+**Note:** For reproducibility in generating random data I have learned that one has always to use `set.seed`. So I will use it in the next program snippet. 
+
+```{r}
+population <- ames$Gr.Liv.Area
+set.seed(12345)
+samp <- sample(population, 60)
+samp
+```
+
+The function `sample()` takes a sample of the specified size from the elements of x (`population` in this case) using either with or without replacement. 
+
+> usage: `sample(x, size, replace = FALSE, prob = NULL)`
+
+## Exercise 3: Describing the distribution of the sample
+Describe the distribution of house area in your sample. What would you say is the "typical" size within your sample? Also state precisely what you interpreted "typical" to mean.
+
+```{r}
+p <- ggplot(data = ames, aes(ames$Gr.Liv.Area)) 
+p <- p + geom_histogram()
+s <- ggplot(data.frame(samp), aes(samp)) 
+s <- s + geom_histogram()
+p
+s
+ 
+
+```
+
+## Exercise 4:
+Would you expect another student's distribution to be identical to yours? Would you expect it to be similar? Why or why not?
+
+Not identical but similiar. In order to get exactly the same data to work with another student would have to use `set.seed` with the same value as I have used. 
+
+# References
+
+
