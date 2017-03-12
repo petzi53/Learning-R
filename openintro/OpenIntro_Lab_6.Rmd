@@ -24,7 +24,7 @@ setwd(my.wd)
 
 * * *
 
-# Preliminary note
+## Preliminary note
 
 >NOTE: Please keep in mind that this is a learning exercise and I do not know if my considerations and solutions for the exercises are correct. 
 
@@ -40,7 +40,7 @@ It seems to me that the second version is the newer one using `dplyr` and `ggplo
 
 * https://github.com/andrewpbray/oiLabs-dplyr-ggplot This is a newer version of the OpenIntro Statistics lab,  using the packages `ggplot` and `dplyr`.
 
-# Getting started
+## Getting started
 
 We consider real estate data from the city of Ames, Iowa. This is the same dataset used in the previous lab. The details of every real estate transaction in Ames is recorded by the City Assessor’s office. Our particular focus for this lab will be all residential home sales in Ames between 2006 and 2010. This collection represents our population of interest. In this lab we would like to learn about these home sales by taking smaller samples from the full population. Let’s load the data.
 
@@ -97,7 +97,7 @@ load("data/ames.RData")
 setwd(oldwd)
 ```
 
-# Exercise 2: Using cites and bibliography manager in RMarkdown
+## Exercise 2: Using cites and bibliography manager in RMarkdown
 
 Another problem I noticed is the usage of standardised bibliography for reports. The description for the `ames` data set is available at the website of the [American Stastical Association (ASA)](https://ww2.amstat.org/publications/jse/v19n3/decock/DataDocumentation.txt). The offical published reference is: De Cock D. 2011. Ames, Iowa: Alternative to the Boston Housing Data as an End of Semester Regression Project. Journal of Statistics Education; 19(3). You can also [download the full paper](http://ww2.amstat.org/publications/jse/v19n3/decock.pdf). BTW: To apply real data sets to learn statistics is one of the reasons I am very excited about the use of R. When I learned statistics at the university back in the 70ties, it was a very boring exercise with small and artificial data. Even today some modern books on statistics present their exercises without statistical software (e.g. [Statistics for Dummies](https://www.amazon.de/Statistics-Dummies-Deborah-J-Rumsey/dp/1119293529/ref=sr_1_1?ie=UTF8&qid=1489255953&sr=8-1&keywords=dummy+statistics)). More material with beautiful graphs can be found at [SemanticScolar](https://www.semanticscholar.org/paper/Ames-Iowa-Alternative-to-the-Boston-Housing-Data-Cock/2d7dbbe0e1a5606203a065175c1415a3dda9dcc4).
 
@@ -115,7 +115,7 @@ For instance I have referenced to my biblbiography database in the YAML metadata
 
 Now I can for example cite my own article about taxonomies of electronic portfolios as `@Baumgartner_2009a` in square brackets [@Baumgartner_2009a]. RMarkdown adds the complete bibliography at the end of the document. The header "References" is added by me manually. And here is the reference to the ames dataset [@de_cock_ames_2011].
 
-# Starting the lab
+## Starting the lab
 
 Finally we can now start the lab with a simple random sample of size 60 from the population. Specifically, this is a simple random sample of size 60. Note that the data set has information on `r ncol(ames)` housing variables, but for the first portion of the lab we’ll focus on the size of the house, represented by the variable `Gr.Liv.Area`.
 
@@ -202,7 +202,7 @@ Note: Very important for the appearance of the histogramm is also the number of 
 
 I will simulate the difference appearances of the distribution in the next program snippet using the same code for drawing the histogramm but with different seeds. 
 
-```{r}
+```{r samples-with-different-seeds}
 n <- 60
 set.seed(12345) # for each sample drawn one has to use the `set.seed` function
 samp1 <- sample_n(ames, n)
@@ -227,7 +227,7 @@ p3
 
 ```
 
-# Calulating the confidence intervals
+## Calulating the confidence intervals
 
 Lets return for a moment to the question that first motivated this lab: based on this sample, what can we infer about the population? Based only on this single sample, the best estimate of the average living area of houses sold in Ames would be the sample mean, usually denoted as $\bar{x}$ (here we're calling it `x_bar`). That serves as a good **point estimate** but it would be useful to also communicate how uncertain we are of that estimate. This uncertainty can be quantified using a **confidence interval**.
 
@@ -282,7 +282,7 @@ To recap: even though we don’t know what the full population looks like, we’
 ## Exercise 5:
 For the confidence interval to be valid, the sample mean must be normally distributed and have standard error $s / \sqrt{n}$. What conditions must be met for this to be true?
 
-# Confidence levels
+## Confidence levels
 
 In the case of our data set we have the rare luxury of knowing the true population mean since we have data on the entire population. Let’s calculate this value so that we can determine if our confidence intervals actually capture it. We’ll store it in a data frame called `params` (short for population parameters), and name it `mu`.
 
@@ -296,6 +296,6 @@ sprintf("Is the sample mean between lower and upper interval? Result = %d", (par
 ```
 
 
-# References
+## References
 
 
