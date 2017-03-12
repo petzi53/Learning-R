@@ -1,0 +1,253 @@
+---
+title: "03-Data-Visualisation"
+output:
+  html_notebook:
+    toc: yes
+---
+```{r label = "global-options", echo=FALSE, highlight=TRUE}
+knitr::opts_chunk$set(
+        message = F,
+        error = F,
+        warning = F,
+        comment = NA,
+        highlight = T,
+        prompt = T
+        )
+```
+
+# 3.1 Prerequisites
+
+```{r label="Prerequisites"}
+## load all tidyverse packages
+library(tidyverse)
+## this bring the first time in my installation the following message: 
+#> Loading tidyverse: ggplot2
+#> Loading tidyverse: tibble
+#> Loading tidyverse: tidyr
+#> Loading tidyverse: readr
+#> Loading tidyverse: purrr
+#> Loading tidyverse: dplyr
+#> Conflicts with tidy packages -----------------------------------------------------------------
+#> filter(): dplyr, stats
+#> lag():    dplyr, stats
+#
+## but generally it loads the following packages:
+tidyverse_packages(include_self = TRUE)
+## for more information about the rationale behind `tidyverse` read:
+## https://cran.r-project.org/web/packages/tidyverse/vignettes/manifesto.html
+## if you need updates of all these packages, run: 
+# tidyverse_update()
+# --------
+## do I have to set the the working directory?
+## or is this done by chosing a project and/or a git-branch?
+setwd("~/Documents/_PB-Data/Programming/R/Learning-R/R4ds-book")
+```
+# 3.2 First steps
+## 3.2.1 The `mpg` data frame
+```{r label="inspect-mpg-data-frame"}
+# inspect the `mpg`data frame
+mpg # show the complete data frame
+my.mpg <- mpg # copy to a local variable (to inspect in RStudio)
+class(mpg)
+head(mpg)
+tail(mpg)
+str(mpg)
+head(as.factor(my.mpg$class))
+```
+## 3.2.2 Creating a ggplot
+```{r label="creating-a-ggplot"}
+ggplot(data = mpg) + 
+        geom_point(mapping = aes(x = displ, y = hwy))
+```
+You can make a template, where you just have to substitute the expressions with brackets with your data.
+
+## 3.2.3 A graphic template
+```{r label="a-graphic-template"}
+# ggplot(data = <DATA>) + 
+#         <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>))
+```
+## 3.2.4 Exercises
+
+(1) Run `ggplot(data = mpg)` -- what do you see?
+```{r}
+ggplot(data = mpg) # an empty graphic frame
+```
+
+
+(2) How many rows are in mtcars? How many columns? `r nrow(mpg)` rows and `r ncol(mpg)` columns.
+
+(3) What does the drv variable describe? Read the help for ?mpg to find out.
+f = front-wheel drive, r = rear wheel drive, 4 = 4wd
+
+(4) Make a scatterplot of hwy vs cyl.
+```{r label="scatterplot-of-hwy-vs-cyl"}
+ggplot(data = mpg) + 
+         geom_point(mapping = aes(x = hwy, y = cyl))
+```
+
+(5) What happens if you make a scatterplot of class vs drv. Why is the plot not useful?
+```{r}
+ggplot(data = mpg) + 
+          geom_point(mapping = aes(x = class, y = drv))
+```
+This plot is not very useful, because both axis are discrete variable. One cannot see how many occurences one data point represent, e.g. for instance there are `r nrow(filter(mpg, class == "compact" & drv == "f"))`  compact cars with f (front wheel drive)
+```{r label="compact-cars-with-f-drv"}
+nrow(filter(mpg, class == "compact", drv == "f"))
+```
+# 3.3 Aesthetic mappings
+The graph in section [3.2.2 Creating a ggplot] display some points which do not confirm the general (negative) linear trend. I am refering to the red points in the following graph:
+```{r}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+        geom_point() +
+        geom_point(data = dplyr::filter(mpg, displ > 5, hwy > 20), 
+                   colour = "red", size = 2.2)
+```
+You can display a point (like the one below) in different ways by changing the values of its aesthetic properties.
+
+```{r}
+ggplot() +
+  geom_point(aes(1, 1), size = 20) +
+  geom_point(aes(2, 1), size = 10) + 
+  geom_point(aes(3, 1), size = 20, shape = 17) + 
+  geom_point(aes(4, 1), size = 20, colour = "blue") + 
+  scale_x_continuous(NULL, limits = c(0.5, 4.5), labels = NULL) + 
+  scale_y_continuous(NULL, limits = c(0.9, 1.1), labels = NULL) + 
+  theme(aspect.ratio = 1/3)
+```
+```{r label="ggplot-using-third-variable-class"}
+ggplot(data = mpg) +
+        geom_point(mapping = aes(x = displ, y = hwy, color = class))
+```
+
+```{r label="ggplot-using-third-variable"}
+# Left
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, alpha = class))
+
+# Right
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, shape = class))
+# Warning:
+# The shape palette can deal with a maximum of 6 discrete values 
+# because more than 6 becomes difficult to discriminate; you have 7. 
+# Consider specifying shapes manually if you must have them.
+# Removed 62 rows containing missing values (geom_point)
+```
+Setting the color manually, plotting the graph with blue points
+```{r}
+ggplot(data = mpg) +
+        geom_point(mapping = aes(x = displ, y = hwy), color = "blue")
+```
+You can choose of many different forms to plot the aesthetic:
+```{r}
+shapes <- tibble(
+  shape = c(0, 1, 2, 5, 3, 4, 6:19, 22, 21, 24, 23, 20),
+  x = (0:24 %/% 5) / 2,
+  y = (-(0:24 %% 5)) / 4
+)
+ggplot(shapes, aes(x, y)) + 
+  geom_point(aes(shape = shape), size = 5, fill = "red") +
+  geom_text(aes(label = shape), hjust = 0, nudge_x = 0.15) +
+  scale_shape_identity() +
+  expand_limits(x = 4.1) +
+  scale_x_continuous(NULL, breaks = NULL) + 
+  scale_y_continuous(NULL, breaks = NULL, limits = c(-1.2, 0.2)) + 
+  theme_minimal() +
+  theme(aspect.ratio = 1/2.75)
+```
+## 3.3.1 Exercises
+(1) What's gone wrong with this code? Why are the points not blue?
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = "blue"))
+```
+**Solution**: The points aren't blue because the command to set aestethics manually has to be outside of the `aes()` function
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy), color = "blue")
+```
+(2) Which variables in `mpg` are categorical? Which variables are continuous? (Hint: type `?mpg` to read the documentation for the dataset). How can you see this information when you run `mpg`?
+
+**Solution:** All character variables are categorial. Integer and Numeric are continuous.
+You can see this information by calling the str() function: `str(mpg)`
+```{r}
+str(mpg)
+```
+
+(3) Map a continuous variable to color, size, and shape. How do these aesthetics behave differently for categorical vs. continuous variables?
+
+**Solution:**  For discrete variables aesthetics do not make much sense. 
+Color behaves as a continiuos aesthetic, as different shades of one color (= blue) are taken.
+Detto size. But shape generates an error as it behaves as a discrete aesthetic.
+Summary: Use color or size for continuous and shape for discrete variables.
+```{r label="mapping-variables-to-color-size-shape"}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = hwy))
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, size = hwy))
+ggplot(data = mpg) + 
+# ggplot(data = mpg) + 
+#        geom_point(mapping = aes(x = displ, y = hwy, shape = hwy))
+# Error: A continuous variable can not be mapped to shape
+  geom_point(mapping = aes(x = displ, y = class, color = class))
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = class, size = class))
+# Warning:
+# Using size for a discrete variable is not advised.
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = class, shape = class))
+```
+(4) What happens if you map the same variable to multiple aesthetics?
+**Solution:** ggplot displays both aesthetics in the same graph.
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = hwy, size = hwy))
+```
+(5) What does the stroke aesthetic do? What shapes does it work with? (Hint: use ?geom_point)
+**Solution:** Stroke aesthetic is useful with shapes number 21,22,23,24,25 aesthetics which have a stroke and fill color. The size of the filled part is controlled by size, the size of the stroke is controlled by stroke. Each is measured in mm, and the total size of the point is the sum of the two. 
+```{r label="using-stroke"}
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point(shape = 21, color = "black", fill = "white", size = 5, stroke = 1)
+```
+(6) What happens if you map an aesthetic to something other than a variable name, like aes(color = displ < 5)?
+**Solution:** ggplot evalaute the condition and uses the aesthetic to present the outcome. 
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = displ < 5))
+```
+# Facets
+One way to add additional variables is with aesthetics. Another way, particularly useful for categorical variables, is to split your plot into facets, subplots that each display one subset of the data.
+
+To facet your plot by a single variable, use `facet_wrap()`. The first argument of `facet_wrap()` should be a formula, which you create with `~` followed by a variable name (here “formula” is the name of a data structure in R, not a synonym for “equation”). The variable that you pass to `facet_wrap()` should be discrete.
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_wrap(~ class, nrow = 2)
+```
+**From the documentation:** 
+
+> `facet_wrap` wraps a 1d sequence of panels into 2d. This is generally a better use of screen space than facet_grid because most displays are roughly rectangular.
+
+To facet your plot on the combination of two variables, add `facet_grid()` to your plot call. The first argument of `facet_grid()` is also a formula. This time the formula should contain two variable names separated by a `~`.
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_grid(drv ~ cyl)
+```
+I would like to spread out the y-dimension, because thee are many points overlapping each other. But I do not know how. `space = "free_y"` does not work. There is one questions, which seems similar to mine in SO, but the (aeustion) and also the answer is still to complex for me to understand. (see: http://stackoverflow.com/questions/28111413/how-to-set-different-y-axis-scale-in-a-facet-grid-with-ggplot).
+
+**From the documentation:** 
+
+> `facet_grid` forms a matrix of panels defined by row and column facetting variables. It is most useful when you have two discrete variables, and all combinations of the variables exist in the data.
+
+If you prefer to not facet in the rows or columns dimension, use a `.` instead of a variable name, e.g. + facet_grid(. ~ cyl).
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_grid(. ~ cyl)
+```
+
+
