@@ -275,6 +275,8 @@ samp.new.df %>%
             upper = mean(samp.new) + z_star_95 * (sd(samp.new) / sqrt(n)))
 ```
 
+You see that the result is the same in both variants.
+
 To recap: even though we don’t know what the full population looks like, we’re 95% confident that the true average size of houses in Ames lies between the values lower and upper. There are a few conditions that must be met for this interval to be valid.
 
 ## Exercise 5:
@@ -288,8 +290,9 @@ In the case of our data set we have the rare luxury of knowing the true populati
 params <- ames %>%
   summarise(mu = mean(Gr.Liv.Area))
 sprintf("mu = %f; sample mean = %f, lower = %f, upper = %f", params$mu, sample_mean, lower, upper)
-sprintf("Is the sample mean between lower and upper interval? <b>%d</b>", (params$mu > lower & params$mu < upper) )
-print("1 = TRUE, 0 = FALSE")
+
+print("Calculation if the sample mean is between my confidence intervals: 1 = TRUE, 0 = FALSE")
+sprintf("Is the sample mean between lower and upper interval? Result = %d", (params$mu > lower & params$mu < upper) )
 ```
 
 
