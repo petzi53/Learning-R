@@ -13,10 +13,9 @@ library(oilabs)
 ```
 
 * * *
+# Getting started
 
 Some define statistics as the field that focuses on turning information into knowledge. The first step in that process is to summarize and describe the raw information -- the data. In this lab we explore flights, specifically a random sample of domestic flights that departed from the three major New York City airport in 2013. We will generate simple graphical and numerical summaries of data on these flights and explore delay times. As this is a large data set, along the way you'll also learn the indispensable skills of data processing and subsetting.
-
-# Getting started
 
 The [Bureau of Transportation Statistics](http://www.rita.dot.gov/bts/about/) (BTS) is a statistical agency that is a part of the Research and Innovative Technology Administration (RITA). As its name implies, BTS collects and makes available transportation data, such as the flights data we will be working with in this lab.
 
@@ -87,13 +86,13 @@ glimpse(nycflights)
 ***
 
 ## Examples of research questions
+
 The nycflights data frame is a massive trove of information. Let's think about some questions we might want to answer with these data:
 
 * How delayed were flights that were headed to Los Angeles?
 * How do departure delays vary over months?
 * Which of the three major NYC airports has a better on time percentage for departing flights?
 
-***
 
 # Analysis of Departure Delays
 
@@ -134,7 +133,7 @@ p + geom_histogram(aes(y = ..density..),
         geom_density(alpha = .2, fill = "#FF6666") 
 ```
 
-### Exercise 1: 
+## Exercise 1: 
 Look carefully at these three histograms. How do they compare? Are features revealed in one that are obscured in another?
 
 
@@ -143,7 +142,7 @@ Look carefully at these three histograms. How do they compare? Are features reve
 
 >**NOTE**: It is very crucial to experiment with (a) the number of bins in combination with (b) the scale of the axis, as these parameters change dramatically the histogram.
 
-## My own exerpiment
+# My own exerpiment
 
 I want to look into the difference of departure delays of the three different NY airports. My thinking goes about the follwing lines:
 
@@ -190,7 +189,7 @@ p + geom_histogram(bins = 150,
         facet_wrap(~ origin, nrow = 1)
 ```
 
-## Result of my experiment
+# Result of my experiment
 
 * The airport with the biggest mean departure delay time is Newark (EWR: 15 minutes), followed by JFK (12 minutes) and LaGuardia (10 minutes). 
 * The highest maximum departure delay is observed in JFK with over `r round(as.list(summarise(by_origin, max(dep_delay)))[[2]][[2]] / 60)` hours of delay. In contrast: The maximum value of EWR = `r round(as.list(summarise(by_origin, max(dep_delay)))[[2]][[1]] / 60)` and of LGA = `r round(as.list(summarise(by_origin, max(dep_delay)))[[2]][[3]] / 60)` hours.
@@ -205,7 +204,7 @@ Working with the data set created other interesting research questions as well:
 
 The number and variety of these generated research question show how important it is to inspect the data set thoroughly.
 
-## Departure delay continued
+# Departure delay continued
 
 If we want to focus only on departure delays of flights headed to Los Angeles, we need to first filter the data for flights with that destination (`dest == "LAX"`) and then make a histogram of the departure delays of only those flights.
 
@@ -257,13 +256,13 @@ sfo_feb_flights2 <- nycflights %>%
 
 Note that we can separate the conditions using commas if we want flights that are both headed to SFO and in February. [But `&` results in the same outcome.] If we are interested in either flights headed to SFO or in February we can use the `|` instead of the comma.
 
-### Exercise 2
+## Exercise 2
 
 Create a new data frame that includes flights headed to SFO in February, and save this data frame as sfo_feb_flights. How many flights meet these criteria?
 
 `r nrow(sfo_feb_flights)` flights meet these criteria.
 
-### Exercise 3
+## Exercise 3
 
 Describe the distribution of the arrival delays of these flights using a histogram and appropriate summary statistics. Hint: The summary statistics you use should depend on the shape of the distribution.
 

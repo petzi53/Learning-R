@@ -203,6 +203,7 @@ ggplot(mpg, aes(cty, hwy, size = displ)) +
   geom_jitter()
 
 ## Doesnt work for shape
+
 # ggplot(mpg, aes(cty, hwy, shape = displ)) + 
 #   geom_jitter()
 ```
@@ -210,6 +211,7 @@ ggplot(mpg, aes(cty, hwy, size = displ)) +
 ```{r}
 # ggplot(mpg, aes(cty, hwy, shape = displ)) +
 #         geom_point()
+
 ```
 It throws an error, because a continuous variable can not be mapped to shape. All aesthetics that have a natural continuous scale can be used for both continuous and discrete variables. Shape doesn't have a continuous scale so it throws an error. 
 

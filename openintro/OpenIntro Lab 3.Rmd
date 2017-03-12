@@ -1,7 +1,7 @@
 ---
 title: "Lab 3: Normal distribution"
-author: "Jack Praker"
-date: "2017/02/12"
+author: "Peter Baumgartner"
+date: "2017-02-20"
 output: oilabs::lab_report
 ---
 
@@ -13,11 +13,11 @@ library(oilabs)
 
 * * *
 
-[There is something wrong with the hierarchy of the table of content. It seems to me that I have to change the template or better I should use my own template. So I would have better control of the layout.]
+# The data
 
 In this lab we'll investigate the probability distribution that is most central to statistics: the normal distribution. If we are confident that our data are nearly normal, that opens the door to many powerful statistical methods. Here we'll use the graphical tools of R to assess the normality of our data and also learn how to generate random numbers from a normal distribution.
 
-# The data
+
 This week we'll be working with measurements of body dimensions. This [data set](https://ww2.amstat.org/publications/jse/v11n2/datasets.heinz.html) contains measurements from 247 men and 260 women, most of whom were considered healthy young adults. Let's take a quick peek at the first few rows of the data.
 
 ```{r the-data}
@@ -105,7 +105,7 @@ ggplot(fdims, aes(hgt)) +
 ### Question
 I don't understand the difference with `binwidth` and `bins`: Using `bins = 5`or `binwidht = 9` should result to the same histgramm, But this is not the case. The best match -- but still not perfect -- is `bins = 8` with `binwidht = 5`
 
-### Exercise 2
+## Exercise 2
 Based on the this plot, does it appear that the data follow a nearly normal distribution?
 
 Yes, but not exactly. The distribution is somewhat skewed to the left, e.g. to the lower end. I do not know at the moment if the distribution with this irrgeluarity can still be seen as a normal distribution. I am lacking on tools to measure and evaluate this question.
@@ -122,18 +122,18 @@ The x-axis values correspond to the quantiles of a theoretically normal curve wi
 
 [The plot shows approximately a diagonal line, which is for me a surprising result!]
 
-With the next plot I will replicate the graph above Instead of using qplot I am going -- as always -- to use ggplot. I will make some variants: 
+With the next plot I will replicate the graph above Instead of using `qplot` I am going -- as always -- to use `ggplot`. I will make some variants: 
 
 * I will use male and female heights in one graph. 
-* I will change geom_point tp geom_line
+* I will change geom_point to geom_line
 * I will experimenting with different types of titles (see [Graph cookbook](http://www.cookbook-r.com/Graphs/Titles_(ggplot2)/))
-* An I will try `geom_qq` as well as `stat_qq`.
+* And I will try `geom_qq` as well as `stat_qq`.
 
 ```{r qq-plot-with-ggplot}
 # ggplot(mdims) +
 #         stat_qq(aes(sample = hgt))
-
-# equivalent to the ggplot command with `stat_qq` above
+# 
+# # equivalent to the ggplot command with `stat_qq` above
 # ggplot(mdims, aes(sample = hgt)) +
 #         geom_point(stat = "qq")
 
@@ -173,7 +173,7 @@ qqnorm(fdims$hgt)
 qqnormsim(sample = hgt, data = fdims)
 ```
 
-### Exercise 4
+## Exercise 4
 Does the normal probability plot for female heights look similar to the plots created for the simulated data? That is, do the plots provide evidence that the female heights are nearly normal?
 
 Yes,it seem so for me, because some of the simulated data are even worse as the original female heights data.
@@ -197,7 +197,7 @@ There is a warning coming from the `oilabs` function `qqnormsim`: "`stat` is dep
 ```
 
 
-### Exercise 5
+## Exercise 5
 Using the same technique, determine whether or not female weights appear to come from a normal distribution.
 
 ```{r comparing-with-qq-normal-distribution}
@@ -228,7 +228,7 @@ fdims %>%
 ```
 Although the probabilities are not exactly the same, they are reasonably close. The closer that your distribution is to being normal, the more accurate the theoretical probabilities will be.
 
-### Exercise 6
+## Exercise 6
 Write out two probability questions that you would like to answer; one regarding female heights and one regarding female weights. Calculate those probabilities using both the theoretical normal distribution as well as the empirical distribution (four probabilities in all). Which variable, height or weight, had a closer agreement between the two methods?
 
 ```{r exercise-6-calculating-probabilities}
@@ -328,7 +328,7 @@ multiplot(p1, p2, p3, p4, p5, p6, p7, p8,
           layout = matrix(1:8, ncol = 2, byrow = TRUE))
 dev.off()
 ```
-### Exercise 7
+## Exercise 7
 
 ```{r solution-for-exercise-7}
 qqnorm(fdims$bii.di, main = "Normal Q-Q Plot for bii.di")
@@ -342,7 +342,7 @@ b) The histogram for female elbow diameter (elb.di) belongs to normal probabilit
 c) The histogram for general age (age) belongs to normal probability plot letter **`D`**.
 d) The histogram for female chest depth (che.de) belongs to normal probability plot letter **`A`**.
 
-### Exercise 8
+## Exercise 8
 Note that normal probability plots C and D have a slight stepwise pattern.
 Why do you think this is the case?
 
@@ -354,7 +354,7 @@ summarise(fdims, IQR_bii.di = IQR(fdims$bii.di), IQR_elb.di = IQR(fdims$elb.di),
 ```
 To evade these steps one would have to change the scale of the x-axis. But I am not sure as the data are normalised. 
 
-### Exercise 9
+## Exercise 9
 As you can see, normal probability plots can be used both to assess normality and visualize skewness. Make a normal probability plot for female knee diameter (kne.di). Based on this normal probability plot, is this variable left skewed, symmetric, or right skewed? Use a histogram to confirm your findings.
 
 ```{r exercise-9}

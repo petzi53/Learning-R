@@ -1,0 +1,114 @@
+---
+title: "Lab 5: Sampling distribution"
+author: "Peter Baumgartner"
+date: "2017-03-10"
+output: oilabs::lab_report
+---
+```{r label = "global-options", echo=FALSE, highlight=TRUE}
+knitr::opts_chunk$set(
+        message = F,
+        error = F,
+        warning = F,
+        comment = NA,
+        highlight = T,
+        prompt = T
+        )
+        library(tidyverse)
+        library(oilabs)
+```
+***
+
+# The data
+In this lab, we investigate the ways in which the statistics from a random sample of data can serve as point estimates for population parameters. We're interested in formulating a sampling distribution of our estimate in order to learn about the properties of the estimate, such as its distribution.
+
+**Setting a seed:** We will take some random samples and build sampling distributions in this lab, which means you should set a seed on top of your lab. If this concept is new to you, review the lab concerning probability.
+
+```{r setting-a-seed}
+set.seed(232323)
+```
+
+We consider real estate data from the city of Ames, Iowa. Data set contains information from the Ames Assessor's Office used in computing assessed values for individual residential properties sold in Ames, IA from 2006 to 2010. See for [detailed variable descriptions](http://www.amstat.org/publications/jse/v19n3/decock/datadocumentation.txt).
+
+The details of every real estate transaction in Ames is recorded by the City Assessor's office. Our particular focus for this lab will be all residential home sales in Ames between 2006 and 2010. This collection represents our population of interest. In this lab we would like to learn about these home sales by taking smaller samples from the full population. Let's load the data.
+
+```{r load-data}
+data(ames)
+?ames
+```
+
+We see that there are quite a few variables in the data set, enough to do a very in-depth analysis. For this lab, we'll restrict our attention to just two of the variables: the above ground living area of the house in square feet (`area`) and the sale price (`price`).
+
+We can explore the distribution of areas of homes in the population of home sales visually and with summary statistics. Let's first create a visualization, a histogram:
+
+```{r living-areas-in-ames}
+# qplot(data = ames, x = area, binwidth = 250, geom = "histogram")
+ggplot(ames) +
+        ggtitle("Living area of houses in Ames (in square feet)") +
+        geom_histogram(aes(x = area), binwidth = 250)
+```
+
+Let's also obtain some summary statistics. Note that we can do this using the `summarise function. We can calculate as many statistics as we want using this function, and just combine the results. Some of the functions below should be self explanatory (like `mean`, `median`, `sd`, `IQR`, `min`, and `max`). 
+
+A new function here is the `quantile` function which we can use to calculate values corresponding to specific percentile cutoffs in the distribution. For example `quantile(x, 0.25)` will yield the cutoff value for the 25th percentile (Q1) in the distribution of `x`. Finding these values is useful for describing the distribution, as we can use them for descriptions like _"the middle 50% of the homes have areas between such and such square feet"_.
+
+```{r summarise-some-values-of-ames-data}
+ames %>%
+  summarise(mu = mean(area), pop_med = median(area), 
+            sigma = sd(area), pop_iqr = IQR(area),
+            pop_min = min(area), pop_max = max(area),
+            pop_q1 = quantile(area, 0.25),  # first quartile, 25th percentile
+            pop_q3 = quantile(area, 0.75))  # third quartile, 75th percentile
+```
+
+## Exercise (1)
+Describe this population distribution using a visualization and these summary statistics. You don't have to use all of the summary statistics in your description, you will need to decide which ones are relevant based on the shape of the distribution. Make sure to include the plot and the summary statistics output in your report along with your narrative.
+
+```{r inspecting-living-area-from-population}
+ggplot(ames) +
+        ggtitle("Living area of houses in Ames (in square feet)") +
+        geom_histogram(aes(x = area), binwidth = 250)
+qqnorm(ames$area)
+
+ggplot(ames, aes(area)) +
+        geom_blank() +
+        geom_histogram(aes(y = ..density..), alpha = 0.25, fill = "blue", binwidth = 250) +
+        stat_function(fun = dnorm, args = c(mean = mean(ames$area), sd = sd(ames$area)), col = "tomato")
+big_houses <- filter(ames, area > 4000)
+```
+The living area distribution of Ames is a left skewed distribution, e.g. most of the living areas are small: Half of the houses have less than 1450 sq.feet, but there are also some houses with more than 4000 square feet living space. The middle 50 percent of the homes have areas between 1126 and 1742 sq.ft.
+
+# The unknown sampling distribution
+
+In this lab we have access to the entire population, but this is rarely the case in real life. Gathering information on an entire population is often extremely costly or impossible. Because of this, we often take a sample of the population and use that to understand the properties of the population.
+
+If we were interested in estimating the mean living area in Ames based on a sample, we can use the `sample_n` command to survey the population. It selects a specified number of random rows from a table. It currently only works for local tibbles.
+
+```{r}
+samp1 <- ames %>%
+  sample_n(50)
+```
+
+This command collects a simple random sample of size 50 from the `ames` dataset, and assigns the result to `samp1. This is like going into the City Assessor's database and pulling up the files on 50 random home sales. Working with these 50 files would be considerably simpler than working with all 2930 home sales.
+
+## Exercise (2)
+
+Describe the distribution of area in this sample. How does it compare to the distribution of the population? Hint: the `sample_n` function takes a random sample of observations (i.e. rows) from the dataset, you can still refer to the variables in the dataset with the same names. Code you used in the previous exercise will also be helpful for visualizing and summarizing the sample, however be careful to not label values `mu` and `sigma` anymore since these are sample statistics, not population parameters. You can customize the labels of any of the statistics to indicate that these come from the sample.
+
+```{r inspecting-living-area-from-sample}
+ggplot(samp1) +
+        ggtitle("Sample of living areas of houses in Ames (in square feet)") +
+        geom_histogram(aes(x = area), binwidth = 250)
+qqnorm(ames$area)
+
+ggplot(samp1, aes(area)) +
+        geom_blank() +
+        geom_histogram(aes(y = ..density..), alpha = 0.25, fill = "green", binwidth = 250) +
+        stat_function(fun = dnorm, args = c(mean = mean(ames$area), sd = sd(ames$area)), col = "tomato")
+
+samp1 %>%
+  summarise(mean = mean(area), samp_med = median(area), 
+            sd = sd(area), samp_iqr = IQR(area),
+            samp_min = min(area), samp_max = max(area),
+            samp_q1 = quantile(area, 0.25),  # first quartile, 25th percentile
+            samp_q3 = quantile(area, 0.75))  # third quartile, 75th percentile
+```

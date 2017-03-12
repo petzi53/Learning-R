@@ -1,0 +1,116 @@
+---
+title: "ProjectTemplate Tutorial"
+author: "Peter Baumgartner"
+date: "2017/02/26"
+output: 
+  html_notebook: 
+    fig_caption: true
+    number_sections: yes
+    toc: yes
+    toc_depth: 3
+---
+```{r label = "global-options", echo=FALSE, highlight=TRUE}
+source("~/Documents/_PB-Data/Programming/R/functions/my_functions.R")
+knitr::opts_chunk$set(
+        message = F,
+        error = F,
+        warning = F,
+        comment = NA,
+        highlight = T,
+        prompt = T
+        )
+        load_or_install("tidyverse")
+```
+***
+# Welcome to ProjectTemplate!
+
+This file introduces you to ProjectTemplate, but you should eventually replace
+the contents of this file with an introduction to your project. People who
+work with your data in the future will thank you for it, including your future
+self.
+
+ProjectTemplate is an R package that helps you organize your statistical
+analysis projects. Since you're reading this file, we'll assume that you've
+already called `create.project()` to set up this project and all of its
+contents.
+
+To load your new project, you'll first need to `setwd()` into the directory
+where this README file is located. Then you need to run the following two
+lines of R code:
+
+	library('ProjectTemplate')
+	load.project()
+
+After you enter the second line of code, you'll see a series of automated
+messages as ProjectTemplate goes about doing its work. This work involves:
+* Reading in the global configuration file contained in `config`.
+* Loading any R packages you listed in the configuration file.
+* Reading in any datasets stored in `data` or `cache`.
+* Preprocessing your data using the files in the `munge` directory.
+
+Once that's done, you can execute any code you'd like. For every analysis
+you create, we'd recommend putting a separate file in the `src` directory.
+If the files start with the two lines mentioned above:
+
+	library('ProjectTemplate')
+	load.project()
+
+You'll have access to all of your data, already fully preprocessed, and
+all of the libraries you want to use.
+
+For more details about ProjectTemplate, see http://projecttemplate.net
+
+# My own adpations
+
+## Advantages in contrast to using just RMarkdown
+There is an advantage over the integrated RMarkdown code: Oone can store some work already done in the folder structure `ProjectTemplate` come with. This is escpeically helpful with work which is time consuming and has to be done only once:
+
+* Loading data: Folder `cache`
+* Developing R Functions: Folder `src` 
+* Writing helpoer functions: Folder `lib`
+* Benchmarking: Folder `profiling`
+* Munching (preparing) data: Folder `munge`
+* Plotting complex graphs: Folder `graphs`
+* Writing reports: Folder `reports`
+* Storing related documents: Folder `doc`
+and so on.
+
+## Some additional ToDos
+After starting with the two lines mentioned above:
+
+	library('ProjectTemplate')
+	load.project()
+
+one has to change the directory name "letters" to the project name.
+
+After finishing some work, one has to save the result in the appropiate folder, eg.:
+
+       ggsave(file.path('graphs', 'plot1.pdf'))
+
+The `ggsave` command has to come immediately after the ggplot command.
+
+# Some work with the ProjectTemplate data
+## Installation
+But see here also the the `global chunk options`at the beginning of this file.
+```{r istall}
+library('ProjectTemplate')
+my_path <- "~/Documents/_PB-Data/Programming/R/Learning-R/project-template/letters"
+setwd(my_path)
+knitr::opts_knit$set(root.dir = my_path)
+load.project()
+cache('first.letter.counts')
+cache('second.letter.counts')
+```
+
+
+## Example benchmarking
+
+When this profiling test will not published then it has to be written into the 1.R file in the folder `profiling`. Or at least the results have to be stored there. (But better to write in the special folder as this often time consuming is then out of "way" and does not consume calculation time when ever the data analysis in the R Markdown file is updated.)
+
+```{r microbenchmark-plyr-dplyr}
+microbenchmark(
+        first.letter.counts <- ddply(letters, c('FirstLetter'), nrow),
+        anzahl.erster.buchstabe <- dplyr::count(letters, FirstLetter)
+)
+```
+The `dplyr` packages with the `count` function is 8 times faster than the `plyr` packages with the `ddply` function.
