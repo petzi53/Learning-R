@@ -1,0 +1,257 @@
+---
+title: "5 Data transformation"
+author: Peter Baumgartner
+date: January 25, 2017
+output: 
+  html_notebook: 
+    pandoc_args: [ 
+      "--number-offset=5,0" 
+    ]
+    number_sections: yes
+    toc: yes
+---
+```{r label = "global-options", echo=FALSE, highlight=TRUE}
+knitr::opts_chunk$set(
+        message = F,
+        error = F,
+        warning = F,
+        comment = NA,
+        highlight = T,
+        prompt = T
+        )
+```
+## Introduction
+### Prerequisites
+In this chapter we’re going to focus on how to use the dplyr package, another core member of the tidyverse. We’ll illustrate the key ideas using data from the nycflights13 package, and use ggplot2 to help us understand the data.
+
+```{r label="prerequisites"}
+library(nycflights13)
+library(tidyverse)
+```
+
+Take careful note of the conflicts message that’s printed when you load the tidyverse. It tells you that dplyr overwrites some functions in base R. If you want to use the base version of these functions after loading dplyr, you’ll need to use their full names: `stats::filter()` and `stats::lag()`.
+
+### nycflights13
+To explore the basic data manipulation verbs of dplyr, we’ll use `nycflights13::flights`. This data frame contains all 336,776 flights that departed from New York City in 2013. The data comes from the US Bureau of Transportation Statistics, and is documented in `?flights`.
+
+* **flight:** http://www.transtats.bts.gov/DL_SelectFields.asp?Table_ID=236
+* **airports** and other (worldwide) flight data: http://openflights.org/data.html
+* **plane metadata:** Plane metadata for all plane tailnumbers found in the FAA aircraft registry. American Airways (AA) and Envoy Air (MQ) report fleet numbers rather than tail numbers (e.g. http://www.flyerguide.com/Tail_Numbers_(AA)) so can't be matched.
+* **FAA Aircraft registry:** http://www.faa.gov/licenses_certificates/aircraft_certification/aircraft_registry/releasable_aircraft_download/
+
+```{r}
+flights
+View(flights) # open the dataset in the RStudio viewer
+```
+You might notice that this data frame prints a little differently from other data frames you might have used in the past: it only shows the first few rows and all the columns that fit on one screen. (To see the whole dataset, you can run `View(flights)` which will open the dataset in the RStudio viewer). It prints differently because it’s a **tibble**. Tibbles are data frames, but slightly tweaked to work better in the tidyverse. 
+
+Another nice feature with a tibble is, that you can see also the types of the variables:
+
+
+* `int` stands for integers.
+* `dbl` stands for doubles, or real numbers.
+* `chr` stands for character vectors, or strings.
+* `dttm` stands for date-times (a date + a time).
+
+There are three other common types of variables that aren’t used in this dataset but you’ll encounter later in the book:
+
+* `lgl` stands for logical, vectors that contain only TRUE or FALSE.
+* `fctr` stands for factors, which R uses to represent categorical variables with fixed possible values.
+* `date` stands for dates.
+
+### dplyr basics
+`dplyr` has 6 main verbs and a pipe to chain the commands together
+
+* Pick observations (rows) by their values (`filter()`).
+* Reorder the rows (`arrange()`).
+* Pick variables (columns) by their names (`select()`).
+* Create new variables with functions of existing variables (`mutate()`/`transmute()`).
+* Collapse many values down to a single summary (`summarise()`).
+* Focus the scope of each function on  group (`group_by()`)
+* Chain commandos together `%>%`
+
+All verbs work similarly:
+
+1. The first argument is a data frame.
+2. The subsequent arguments describe what to do with the data frame, using the variable names (without quotes).
+3. The result is a new data frame.
+
+dplyr functions never modify their inputs, so if you want to save the result, you’ll need to use the assignment operator, `<-`.
+
+## Filter rows with `filter()`
+We can select all flights on January 1st:
+
+```{r}
+filter(flights, month == 1, day == 1)
+
+```
+```{r}
+jan1 <- filter(flights, month == 1, day == 1)
+```
+
+R either prints out the results, or saves them to a variable. If you want to do both, you can wrap the assignment in parentheses:
+```{r}
+(dec25 <- filter(flights, month == 12, day == 25))
+```
+
+### Comparison
+To use filtering effectively, you have to know how to select the observations that you want using the comparison operators. R provides the standard suite: `>`, `>=`, `<`, `<=`, `!=` (not equal), and `== (equal).
+
+When you’re starting out with R, the easiest mistake to make is to use `=` instead of `==` when testing for equality. There’s another common problem you might encounter when using `==`: floating point numbers. These results might surprise you!
+
+```{r label="problem-in-testing-for-equality-with-reals"}
+sqrt(2) ^ 2 == 2
+1/49 * 49 == 1
+```
+Computers use finite precision arithmetic (they obviously can’t store an infinite number of digits!) so remember that every number you see is an approximation. Instead of relying on `==`, use `near()`:
+```{r label="solution-in-testing-for-equality-with-reals"}
+near(sqrt(2) ^ 2, 2)
+near(1/49 * 49, 1)
+```
+### Logical operators
+
+There are the standard operators, but watch out some problems with logical operator:
+
+* The order of operations doesn’t work like English. You can't use a shortcut like `filter(flights, month == 11 | 12)`but you have to write `filter(flights, month == 11 | month == 12)`. Or you use the operator `x %in% y` as a shorthand like `filter(flights, month %in% c(11, 12))`.
+* Some complicated subsetting could simplified by De Morgan’s law: `!(x & y)` is the same as `!x | !y`, and `!(x | y)` is the same as `!x & !y`.
+* R has also && and ||. But don’t use them here!
+
+### Missing values
+One important feature of R that can make comparison tricky are missing values, or `NA`s (“not availables”). `NA` represents an unknown value so missing values are “contagious”: almost any operation involving an unknown value will also be unknown.
+
+If you want to determine if a value is missing, use `is.na().
+
+`filter()` only includes rows where the condition is `TRUE`; it excludes both `FALSE` and `NA values. If you want to preserve missing values, ask for them explicitly:
+```{r label="with-filter-you-must-ask-for-NAs-explicitly"}
+df <- tibble(x = c(1, NA, 3))
+filter(df, x > 1)
+
+filter(df, is.na(x) | x > 1)
+```
+### Exercises
+(1) Find all flights with the following conditions:
+
+* Had an arrival delay of two or more hours
+* Flew to Houston (IAH or HOU)
+* Were operated by United, American, or Delta
+* Departed in summer (July, August, and September)
+* Arrived more than two hours late, but didn’t leave late
+* Were delayed by at least an hour, but made up over 30 minutes in flight
+* Departed between midnight and 6am (inclusive)
+
+**My Solution:**
+```{r label="find-flights-with-above-conditions"}
+filter(flights, arr_delay >= 120) # arrival delay of two or more hours
+filter(flights, dest == "IAH" | dest == "HOU" ) # flew to Houston (IAH or HOU)
+filter(flights, carrier %in% c("UA", "AA", "DL")) # operated by United, American, or Delta
+filter(flights, month %in% c(7,8,9)) # departed in summer (July, August, and September)
+# arrived more than two hours late, but didn’t leave late
+filter(flights, arr_delay >= 120 & dep_delay <= 0)
+filter(flights, dep_time <= 600)
+
+```
+(2) Another useful dplyr filtering helper is `between()`. What does it do? Can you use it to simplify the code needed to answer the previous challenges?
+
+**My Solution:**
+```{r}
+filter(flights, between(dep_time, 0, 600))
+```
+
+(3) How many flights have a missing `dep_time`? What other variables are missing? What might these rows represent?
+
+**My Solution:** `r nrow(filter(flights, is.na(dep_time)))` flights have a missing `dep_time`.
+```{r}
+nrow(filter(flights, is.na(dep_time)))
+```
+What other variable in the data set are missing?
+```{r label="show-tibble-structure"}
+str(flights)
+```
+
+
+In SO I could find many different solutions:
+http://stackoverflow.com/questions/8317231/elegant-way-to-report-missing-values-in-a-data-frame?
+
+* sapply
+* apply
+* colSums
+* summary
+* aggr (requires VIM packages)
+
+A very elegant solution is:
+```{r}
+M <- sapply(flights, function(x) sum(is.na(x)))
+M[M > 0]
+
+```
+[To omit all rows with NAs use na.omit or complete.cases
+http://stackoverflow.com/questions/4862178/remove-rows-with-nas-missing-values-in-data-frame]
+
+But all these solutions use new commands I haven't learning yet in R4ds. There should be a solution with verbs from `dplyr`.
+
+The reason for NA's in dep_time, dep_delay, arr_time, arr_delay, and air_time could be cancelled flights. For tailnum: Some carrier do not use the standard tailnum.
+
+(4) 
+
+* Why is `NA ^ 0` not missing? (because every number ^ 0 is always 1)
+* Why is `NA | TRUE` not missing? (because it has TRUE in "or" expression)
+* Why is `FALSE & NA` not missing? (because it has FALSE in "and" expression)
+* Can you figure out the general rule? ??? 
+* `NA * 0 is a tricky counterexample!
+```{r}
+NA ^ 0
+NA | TRUE
+FALSE & NA
+NA * 0
+```
+
+## Arrange rows with `arrange()`
+`arrange()` works similarly to `filter()` except that instead of selecting rows, it changes their order. It takes a data frame and a set of column names (or more complicated expressions) to order by. If you provide more than one column name, each additional column will be used to break ties in the values of preceding columns:
+```{r}
+arrange(flights, year, month, day)
+```
+Use `desc()` to re-order by a column in descending order:
+```{r}
+arrange(flights, desc(arr_delay))
+```
+Missing values are always sorted at the end:
+
+```{r}
+df <- tibble(x = c(5, 2, NA))
+arrange(df, x)
+arrange(df, desc(x))
+```
+### Exercises
+(1) How could you use `arrange()` to sort all missing values to the start? (Hint: use is.na()).
+```{r}
+arrange(flights, desc(is.na(dep_delay)))
+```
+
+
+(2) Sort flights to find the most delayed flights. Find the flights that left earliest.
+```{r}
+arrange(flights, desc(arr_delay))
+arrange(flights, dep_delay)
+```
+
+
+(3) Sort flights to find the fastest flights.
+```{r}
+arrange(flights, (desc(distance / air_time)))
+```
+
+
+(4) Which flights travelled the longest? Which travelled the shortest?
+```{r}
+arrange(flights, desc(distance))
+arrange(flights, distance)
+
+```
+
+
+
+
+
+
+
+
