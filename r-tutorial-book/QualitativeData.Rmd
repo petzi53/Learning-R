@@ -1,0 +1,156 @@
+---
+title: "06 Qualitative Data"
+author: "Peter Baumgartner"
+date: "2017-03-02"
+output: 
+        github_document:
+                toc: true
+                toc_depth: 4
+        
+---
+***
+
+```{r label = "global-options", echo=FALSE, highlight=TRUE}
+knitr::opts_chunk$set(
+        message = F,
+        error = F,
+        warning = F,
+        comment = NA,
+        highlight = T,
+        prompt = T
+        )
+if (!require("tidyverse")) 
+        {install.packages("tidyverse", repos = 'http://cran.wu.ac.at/')
+        library(tidyverse)}
+if (!require("reshape2"))
+        {install.packages("reshape2", repos = 'http://cran.wu.ac.at/')
+        library(reshape2)}
+if (!require("pander"))
+        {install.packages("pander", repos = 'http://cran.wu.ac.at/')
+        library(pander)}
+
+```
+
+
+Yau, Chi. R Tutorial with Bayesian Statistics Using OpenBUGS (Kindle-Positionen524-525). Chi Yau. Kindle-Version. 
+
+# Load data set into memory
+```{r}
+library(MASS)
+head(painters)
+```
+
+# Frequency distribution
+
+The frequency distribution of a data variable is a summary of the data occurrence in a collection of non-overlapping categories.
+
+## Find the number of painters belonging to each school in the data set `painters`.
+
+We apply the `table` function to compute the frequency distribution of the School variable. `table` uses the cross-classifying factors to build a contingency table of the counts at each combination of factor levels.
+
+```{r frequency-distribution-1}
+school <- painters$School
+school.freq <- table(school)
+school.freq
+```
+
+We can apply the `cbind`function to print the result in column format.
+```{r result-in-table-format}
+cbind(school.freq)
+```
+## Find the frequency distribution of the composition scores in `painters`
+
+```{r frequency-distribution-2}
+comp <- painters$Composition
+comp.freq <- table(comp)
+cbind(comp.freq)
+```
+## Find programmatically the school which has the most painters
+
+```{r frequency-distribution-3-first-step}
+school <- painters$School
+school.freq <- table(school)
+school.freq.max <- max(school.freq)
+school.freq.max
+```
+```{r frequency-distribution-3-second-step}
+L <- school.freq == school.freq.max
+L
+x <- school.freq[L]
+x
+
+```
+An alternative way is to use the function `which`. Which returns the positions of all TRUE indices.
+```{r frequency-distribution-3-second-step-alternativ}
+y = which(school.freq == school.freq.max)
+y
+names(y)
+```
+
+Note that the obvious function which.max is insufficient. It only gives the first school that has the most painters, instead of _every_ school that has the most painters.
+
+```{r}
+which.max(school.freq)
+```
+
+# Relative frequencey distribution
+
+In the data set `painters`, the relative frequency distribution of the School variable is a summary of the proportion of painters in each school.
+
+## Find the proportion of painters distributed among the schools
+```{r}
+school <- painters$School
+school.freq <- table(school)
+school.freq.prop <- school.freq / nrow(painters)
+school.freq.prop
+```
+We can print with fewer digits and make it more readable by setting the digits option. The options() function allows the user to set and examine a variety of global options which affect the way in which R computes and displays its results. In the case of digits is the standard value 7
+
+```{r}
+opt = options(digits = 1) # "It is a suggestion only."
+school.freq.prop
+options(opt)
+```
+
+In addition, we can apply the cbind function to print the percentage of painters in each school in column format. > old = options(digits=3)
+
+```{r}
+opt <- options(digits = 3)
+cbind(school.freq.prop * 100)
+options(opt)
+```
+## Find the relative frequency distribution of the composition scores
+
+Find the relative frequency distribution of the composition scores in painters. 
+
+* **Step 1:** Define a new variable comp that holds the composition scores. 
+```{r}
+comp = painters$Composition
+```
+
+* **Step 2:** Find the frequency distribution using the table function and save the result in another variable comp.freq
+```{r}
+comp.freq = table(comp)
+```
+
+* **Step 3:** Find the relative frequency distribution by dividing comp.freq with the sample size. 
+```{r}
+comp.rel.prop = comp.freq / nrow(painters)
+comp.rel.prop
+```
+
+
+```{r}
+old = options(digits = 3)
+cbind(comp.rel.prop * 100)
+```
+
+# Bar Graph
+
+## Find the bar graph of the painter schools in the data set `painters
+```{r drawing-bar-graph}
+school <- painters$School
+school.freq <- table(school)
+barplot(school.freq)
+```
+

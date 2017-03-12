@@ -4,6 +4,8 @@ author: "Peter Baumgartner"
 date: "2017/02/10"
 output: oilabs::lab_report
 ---
+* * *
+
 # Loading packages and data
 
 I am using here the special template provided wiht `oilabs`. It has a non-hierarchical table of content including just first and second order.
@@ -48,9 +50,7 @@ library(tidyverse)
 ```
 
 
-
-* * *
-# [Dr. Arbuthnot's Baptism Records](https://github.com/petzi53/oiLabs-dplyr-ggplot/blob/master/01_intro_to_r/intro_to_r.Rmd#dr-arbuthnots-baptism-records)
+# Dr. Arbuthnot's Baptism Records
 
 Note: there is also a [longer lab text](https://www2.stat.duke.edu/courses/Fall14/sta112.01/app/app1.html), which includes two extra exercise about finding duplicates.
 
@@ -67,7 +67,7 @@ glimpse(arbuthnot)
 ```
 We can see that there are 82 observations and 3 variables in this dataset. The variable names are `year`, `boys`, and `girls`.
 
-# [Some Exploration](https://github.com/petzi53/oiLabs-dplyr-ggplot/blob/master/01_intro_to_r/intro_to_r.Rmd#some-exploration)
+# Some Exploration
 
 We can access the data in a single column of a data frame separately.
 
@@ -76,7 +76,7 @@ arbuthnot$boys
 ```
 This command will only show the number of boys baptized each year. The dollar sign basically says "go to the data frame that comes before me, and find the variable that comes after me".
 
-### Exercise 1: 
+## Exercise 1: 
 What command would you use to extract just the counts of girls baptized?
 
 ```{r display-girls-of-arbuthnots-data}
@@ -84,7 +84,7 @@ arbuthnot$girls
 ```
 Notice that the way R has printed these data is different. When we looked at the complete data frame, we saw 82 rows, one on each line of the display. These data are no longer structured in a table with other variables, so they are displayed one right after another. Objects that print out in this way are called vectors; they represent a set of numbers. R has added numbers in [brackets] along the left side of the printout to indicate locations within the vector. For example, 5218 follows [1], indicating that 5218 is the first entry in the vector. And if [43] starts a line, then that would mean the first number on that line would represent the 43rd entry in the vector.
 
-## [Data visualisation](https://github.com/petzi53/oiLabs-dplyr-ggplot/blob/master/01_intro_to_r/intro_to_r.Rmd#data-visualization)
+# Data visualisation
 R has some powerful functions for making graphics. We can create a simple plot of the number of girls baptized per year with `qplot`.
 
 ```{r graph-girls-baptized-per-year}
@@ -102,7 +102,7 @@ You might wonder how you are supposed to know that it was possible to add that f
 ```
 
 
-### Exercise 2:
+## Exercise 2:
 Is there an apparent trend in the number of girls baptized over the years? How would you describe it? (To ensure that your lab report is comprehensive, be sure to include the code needed to make the plot as well as your written interpretation.)
 
 ```{r girls-baptized-per-year}
@@ -110,7 +110,7 @@ qplot(x = year, y = girls, data = arbuthnot, geom = "line")
 ```
 After a twenty year decline (1640 - approx. 1660) the number of baptized girls generally is increasing.
 
-## [R as a big calulator](https://github.com/petzi53/oiLabs-dplyr-ggplot/blob/master/01_intro_to_r/intro_to_r.Rmd#r-as-a-big-calculator)
+# R as a big calulator
 
 Now, suppose we want to plot the total number of baptisms. To compute this, we could use the fact that R is really just a big calculator. We can type in mathematical expressions like
 
@@ -127,7 +127,7 @@ arbuthnot$boys + arbuthnot$girls
 
 What you will see are 82 numbers (in that packed display, because we aren’t looking at a data frame here), each one representing the sum we’re after. Take a look at a few of them and verify that they are right.
 
-## [Adding a new variable to the data frame](https://github.com/petzi53/oiLabs-dplyr-ggplot/blob/master/01_intro_to_r/intro_to_r.Rmd#adding-a-new-variable-to-the-data-frame)
+# Adding a new variable to the data frame
 
 We'll be using this new vector to generate some plots, so we'll want to save it as a permanent column in our data frame.
 ```{r add-new-variable-to-data-frame}
@@ -181,7 +181,7 @@ arbuthnot %>%
         ggtitle("Baptized children, born in London. Recorded by Dr. John Arbuthnot.")
 ```
 
-### Exercise 3:
+## Exercise 3:
 
 ```{r echo = FALSE}
 
@@ -196,7 +196,7 @@ arbuthnot <- arbuthnot %>%
 
 This command add a new variable to the arbuthnot dataframe containing the values of either `TRUE` if that year had more boys than girls, or `FALSE` if that year did not (the answer may surprise you). This variable contains a different kind of data than we have encountered so far. All other columns in the arbuthnot data frame have values that are numerical (the year, the number of boys and girls). Here, we've asked R to create logical data, data where the values are either `TRUE` or `FALSE`. In general, data analysis will involve many different kinds of data types, and one reason for using R is that it is able to represent and compute with many of them.
 
-# [More Practice](https://github.com/petzi53/oiLabs-dplyr-ggplot/blob/master/01_intro_to_r/intro_to_r.Rmd#more-practice)
+# More Practice
 
 
 
@@ -224,7 +224,7 @@ making, priority setting, program evaluation, and resource allocation.*
 
 For using the WONDER website one has to read the detailed description in the [Dataset Documentation](https://wonder.cdc.gov/wonder/help/Natality.html#).
 
-### Download and import from CDC
+## Download and import from CDC
 
 I downloaded one data file in zip format [April 1, 2010, July 1, 2010 - July 1, 2015](ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Datasets/NVSS/bridgepop/2015/pcen_v2015_y1015_txt.zip). It is a flat text files with a size of 307 MB. The description about the columns can be found in [Documentation for bridged-race postcensal Vintage 2015 population estimates for April 1, 2010 - July 1, 2015](https://www.cdc.gov/nchs/nvss/bridged_race/documentation_bridged_postcenv2015.pdf).  
 
@@ -253,7 +253,7 @@ birth_dataset <- read_fwf("data/pcen_v2015_y1015_txt.txt", fwf_widths(c(4, 2, 3,
 
 
 
-### Exercise 4:
+## Exercise 4:
 What years are included in this data set? What are the dimensions of the data frame? What are the variable (column) names?
 
 
@@ -268,7 +268,7 @@ names(present)
 * What are the dimensions of the data frame? 3 variable (columns)
 * What are the variable (column) names? `year`, `boys` and `girls`.
 
-### Exercise 5:
+## Exercise 5:
 How do these counts compare to Arbuthnot's? Are they of a similar magnitude?
 ```{r add-column-more-boys-than-girls-in-present-data}
 present <- present %>%
@@ -277,7 +277,7 @@ present <- present %>%
 The preset data set has a much higher magnitude. 
 
 
-### Exercise 6:
+## Exercise 6:
 Make a plot that displays the proportion of boys born over time. What do you see? Does Arbuthnot's observation about boys being born in greater proportion than girls hold up in the U.S.? Include the plot in your response. Hint: You should be able to reuse your code from Ex 3 above, just replace the dataframe name.
 
 ```{r boy-to-girl-ratio}
@@ -293,7 +293,7 @@ present %>%
 
 
 
-### Exercise 7:
+## Exercise 7:
 In what year did we see the most total number of births in the U.S.? Hint: First calculate the totals and save it as a new variable. Then, sort your dataset in descending order based on the total column. You can do this interactively in the data viewer by clicking on the arrows next to the variable names. To include the sorted result in your report you will need to use two new functions: arrange (for sorting). We can arrange the data in a descending order with another function: desc (for descending order). Sample code provided below.
 
 ```{r}
@@ -306,7 +306,7 @@ ggplot(present, aes(year, total)) +
         geom_line()
 ```
 
-# [Further resources](https://github.com/petzi53/oiLabs-dplyr-ggplot/blob/master/01_intro_to_r/intro_to_r.Rmd#resources-for-learning-r-and-working-in-rstudio)
+# Further resources
 
 That was a short introduction to R and RStudio, but we will provide you with more functions and a more complete sense of the language as the course progresses.
 

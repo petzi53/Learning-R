@@ -1,0 +1,469 @@
+---
+title: "Lab 6: Confidence intervals"
+author: "Peter Baumgartner"
+date: "2017-03-11"
+bibliography: "~/Documents/Meine\ Bibliographien/baumgartner.bib"
+output: oilabs::lab_report
+# output:
+#         html_document:
+#                 css: "~/Documents/_PB-Data/Programming/R/Learning-R/lab.css"
+#                 highlight: pygments
+#                 theme: cerulean
+#                 toc: true
+#                 toc_depth: 2
+
+---
+
+
+```{r label = "global-options", echo=FALSE, highlight=TRUE}
+knitr::opts_chunk$set(
+        message = F,
+        error = F,
+        warning = F,
+        comment = NA,
+        highlight = T,
+        prompt = T
+        )
+library(tidyverse)
+library(oilabs)
+
+my.wd <- "~/Documents/_PB-Data/Programming/R/Learning-R/openintro"
+setwd(my.wd)
+```
+
+* * *
+
+# Preliminary note
+
+>NOTE: Please keep in mind that this is a learning exercise and I do not know if my considerations and solutions for the exercises are correct. 
+
+This document follows the OpenIntro Statistics course which can be found at https://www.openintro.org/ and with some background material at https://github.com/OpenIntroOrg
+
+There are two lab documents to this chapter available:
+
+* [Confidence intervals at OpenIntro](http://htmlpreview.github.io/?https://github.com/andrewpbray/oiLabs-base-R/blob/master/confidence_intervals/confidence_intervals.html) 
+
+* [Confidence intervals at GitHub](http://htmlpreview.github.io/?https://github.com/andrewpbray/oiLabs-base-R/blob/master/confidence_intervals/confidence_intervals.html): 
+
+It seems to me that the second version is the newer one using `dplyr` and `ggplot`. But boh documents are helpful as you can even learn in comparing them.
+
+* https://github.com/andrewpbray/oiLabs-dplyr-ggplot This is a newer version of the OpenIntro Statistics lab,  using the packages `ggplot` and `dplyr`.
+
+# Getting started
+
+We consider real estate data from the city of Ames, Iowa. This is the same dataset used in the previous lab. The details of every real estate transaction in Ames is recorded by the City Assessor’s office. Our particular focus for this lab will be all residential home sales in Ames between 2006 and 2010. This collection represents our population of interest. In this lab we would like to learn about these home sales by taking smaller samples from the full population. Let’s load the data.
+
+
+The process of laoding data is made as easy as possible. The suggestion is to use the following program code:
+
+```{r sample-code-for-downloading-data}
+# download.file("http://www.openintro.org/stat/data/ames.RData",
+#               destfile = "ames.RData")
+# load("ames.RData")
+```
+
+The main focus of this tutorial is to get some statistical knowledge. But for real applications it is to get more into detail. The above code has two limitations:
+
+* The data is stored with `.RData` Format at the same level as this file. For bigger project one would need a more detailed and ordered file structure.
+* The downloaded file also loads two functions `contains()`and `plot_ci()` into the memory. I don't like this hidden addition as it destroys reproducibilty in bigger and real life projects.
+
+## Task 1: File structure with ProjectTemplate
+
+For the first question (file structure) exists with [ProjectTemplate](http://projecttemplate.net/getting_started.html) a public and free support for a sophisticated but at the same time standardised file structure. During the installation process it generates the following file structure automatically. 
+
+<p style="text-align:center;">![Directories installed by ProjectTemplate](data/directories.png)</br>
+Directories installed by ProjectTemplate</p>
+
+To install the package one could use `install.packages('ProjectTemplate')`, but I prefer `require('ProjectTemplate')` because it looks if the packages is already installed and attaches it at the same time, saving the `library(ProjectTemplate)` command. (At least that is my understanding of the difference between these two commands.)
+
+After you have loaded `ProjectTemplate` you need to call `create.project('<your-directory-name>')` to generate the above directory structure. Now you can change into this folder and inspect all the provided utilities. Every folder contains a `README.md` explaining the intended purpose of the folder. You have to do this as the very first step, even before you open a markdown file. It is best done from the console. 
+
+
+```{r sample-code-for-installing-ProjectTemplate}
+# require('ProjectTemplate')
+# create.project('OpenIntro')
+```
+
+Some of the folders have advanced purposes and generally the structure is intended for users who have already some experiences and work on bigger project. But it is good to know that a somewhat differentiated folder structure is helpful for the project organisation. As I am still not have advanced skills it is the best and easiest way to separate my reports, data and generated material (plots). Because I am using `git` respectively `GitHub` as a version control system the separation between my own work and files generated automatically during the analysis is helpful as the later should not BE pushed into the GitHub repo.
+
+So I use the recommended program code with some changes:
+
+* I (re)store the path to the working directory in order to get a standardises situation. I noticed already some problems with the path to the working directory, especially if I change change it via the console and then to recompile the script.
+
+* I check if the file is already there. I start the download only if the file is missing.
+
+* I store the file in my `data` folder, which I have created in an earlier occasion.
+
+```{r download-data}
+oldwd <- getwd()
+setwd(my.wd)
+if (!(file.exists("data/ames.RData"))) 
+        {
+        download.file("http://www.openintro.org/stat/data/ames.RData",
+              destfile = "data/ames.RData")
+        }
+load("data/ames.RData")
+setwd(oldwd)
+```
+
+## Task 2: Bibliography manager in RMarkdown
+
+Another problem I noticed is the usage of standardised bibliography for reports. The description for the `ames` data set is available at the website of the [American Stastical Association (ASA)](https://ww2.amstat.org/publications/jse/v19n3/decock/DataDocumentation.txt). The offical published reference is: De Cock D. 2011. Ames, Iowa: Alternative to the Boston Housing Data as an End of Semester Regression Project. Journal of Statistics Education; 19(3). You can also [download the full paper](http://ww2.amstat.org/publications/jse/v19n3/decock.pdf). BTW: To apply real data sets to learn statistics is one of the reasons I am very excited about the use of R. When I learned statistics at the university back in the 70ties, it was a very boring exercise with small and artificial data. Even today some modern books on statistics present their exercises without statistical software (e.g. [Statistics for Dummies](https://www.amazon.de/Statistics-Dummies-Deborah-J-Rumsey/dp/1119293529/ref=sr_1_1?ie=UTF8&qid=1489255953&sr=8-1&keywords=dummy+statistics)). More material with beautiful graphs can be found at [SemanticScolar](https://www.semanticscholar.org/paper/Ames-Iowa-Alternative-to-the-Boston-Housing-Data-Cock/2d7dbbe0e1a5606203a065175c1415a3dda9dcc4).
+
+To use citations and bibliographies in RMarkdown one has to apply certain rules published in [document by RStudio](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html). 
+
+I am generally using Zotero for my bibliographies. Unfortunately this is not supported by RMarkdown. For me the easiest installation is done with a .bib file. Especially as I have used for the preparation of my last books LyX and had therefore to install BibTeX respectively BibLaTeX. I am using  the platform independent bibliography manager JabRef but also BibDesk (just for mac OS).
+
+To cite an author one has to use the unique reference code from the bibliography manager. 
+
+> Citations go inside square brackets and are separated by semicolons. Each citation must have a key, composed of ‘@’ + the citation identifier from the database, and may optionally have a prefix, a locator, and a suffix.
+
+For instance I have referenced to my biblbiography database in the YAML metadata section with the following line:
+
+`bibliography: "~/Documents/Meine\ Bibliographien/baumgartner.bib"`
+
+Now I can for example cite my own article about taxonomies of electronic portfolios as `@Baumgartner_2009a` in square brackets [@Baumgartner_2009a]. RMarkdown adds the complete bibliography at the end of the document. The header "References" is added by me manually. And here is the reference to the ames dataset [@de_cock_ames_2011].
+
+# Finally: Starting the lab
+
+Finally we can now start the lab with a simple random sample of size 60 from the population. Specifically, this is a simple random sample of size 60. Note that the data set has information on `r ncol(ames)` housing variables, but for the first portion of the lab we’ll focus on the size of the house, represented by the variable `Gr.Liv.Area`.
+
+**Note:** For reproducibility in generating random data I have learned that one has always to use `set.seed`. So I will use it in the next program snippet. 
+
+There are two ways to generate the sample. The old variant with `sample()` taken from [this page](http://htmlpreview.github.io/?https://github.com/andrewpbray/oiLabs-base-R/blob/master/confidence_intervals/confidence_intervals.html) and another one with `sample_n` as explained on the [newer lab page](http://htmlpreview.github.io/?https://github.com/petzi53/oiLabs-dplyr-ggplot/blob/master/06_confidence_intervals/confidence_intervals.html).
+
+```{r generate-sample}
+# older, traditional method
+population <- ames$Gr.Liv.Area
+set.seed(12345)
+samp.old <- sample(population, 60)
+head(samp.old)
+
+# other (newer) method
+n <- 60
+set.seed(12345) # for each sample drawn one has to use the `set.seed` function
+samp.new.df <- sample_n(ames, n) # returns a data frame which has to be used for ggplot
+samp.new <- samp.new.df$Gr.Liv.Area # a vector of integers
+head(samp.new)
+```
+
+The function `sample()` takes a sample of the specified size from the elements of x (`population` in this case) using either with or without replacement. 
+
+> usage: `sample(x, size, replace = FALSE, prob = NULL)`
+
+The function `sample_n()` is a wrapper around the base `sample.int` to make it easy to select random rows from a table. It currently only works for local tbls.
+
+> usage: `sample_n(tbl, size, replace = FALSE, weight = NULL, .env = parent.frame())`
+
+## Task 3: Drawing a histogram
+
+For me I had first to clear up some basics about the [difference between histogram and barplot](http://stattrek.com/statistics/charts/histogram.aspx?Tutorial=AP).
+
+For a discription of the sample distribution which consists of quantitative data I have to plot a histogram. There are two ways to do it: The old one with `hist` or the new one with `qplot` or even better with `ggplot`. For the newer version there is a nice article [How to Make a Histogram with ggplot2](How to Make a Histogram with ggplot2) at R-Bloggers which not only explains how to use the basic commands but also how to refine the appearance of the histogram.
+
+
+```{r drawing-the-histogram}
+set.seed(12345)
+hist(samp.old, 
+     breaks = 15, 
+     main = "Histogram of my sample drawn with the `hist` function")
+qplot(samp.old, 
+      bins = 15, 
+      geom = "histogram",
+      main = "Histogram of my sample drawn with the `qplot` function")
+p <- ggplot(samp.new.df, aes(Gr.Liv.Area)) # samp.new as integer vector does not work, ggplot needs a data.frame 
+p <- p +  geom_histogram(bins = 15)
+p <- p + labs(title = "Histogram of my sample drawn with the `ggplot` function")
+p
+```
+
+You can see that the `ggplot` function is more complex but it has much more parameters to set. The nice thins is that you can add layer by layer. You can see the layers with the different lines of assignments to `p`. 
+
+`ggplot()` is used to construct the initial plot object, and is almost always followed by + to add component to the plot. There are three common ways to invoke ggplot:
+
+> 1. ggplot(df, aes(x, y, <other aesthetics>))
+
+> 2. ggplot(df)
+
+> 3. ggplot()
+
+* **The first method** is recommended if all layers use the same data and the same set of aesthetics, although this method can also be used to add a layer using data from another data frame. 
+
+* **The second method** specifies the default data frame to use for the plot, but no aesthetics are defined up front. This is useful when one data frame is used predominantly as layers are added, but the aesthetics may vary from one layer to another. 
+
+* **The third method** initializes a skeleton ggplot object which is fleshed out as layers are added. This method is useful when multiple data frames are used to produce different layers, as is often the case in complex graphics.
+
+
+## Exercise 1: Describing the distribution of the sample
+Describe the distribution of house area in your sample. What would you say is the "typical" size within your sample? Also state precisely what you interpreted "typical" to mean.
+
+**My Answer:** My distribution is somewaht left skewed and has some outliers at the high end. You will see later that my example is a little extrem as different samples (with other or no seeds) produce a more regular form of the distribution.
+
+
+## Exercise 2: Expectation of distributions
+Would you expect another student's distribution to be identical to yours? Would you expect it to be similar? Why or why not?
+
+**My Answer:** Not identical but similiar. In order to get exactly the same data to work with another student would have to use `set.seed` with the same value as I have used. 
+
+
+## Task 4: Plots with different samples
+Take away the seed and try to run the plot several times. You will see that the distribution changes it appearances. 
+
+Note: Very important for the appearance of the histogramm is also the number of bins. You have to exerpiment what number gives a nice histogramm. For comparisons you have to set it constant in all examples. In my case: `bins = 15`. 
+
+I will simulate the difference appearances of the distribution in the next program snippet using the same code for drawing the histogramm but with different seeds. 
+
+```{r samples-with-different-seeds}
+n <- 60
+set.seed(12345) # for each sample drawn one has to use the `set.seed` function
+samp1 <- sample_n(ames, n)
+p1 <- ggplot(samp1, aes(Gr.Liv.Area))
+p1 <- p1 +  geom_histogram(bins = 15)
+p1 <- p1 + labs(title = "Histogram: Version 1, already used above")
+p1
+
+set.seed(11111) # for each sample drawn one has to use the `set.seed` function
+samp2 <- sample_n(ames, n)
+p2 <- ggplot(samp2, aes(Gr.Liv.Area))
+p2 <- p2 +  geom_histogram(bins = 15)
+p2 <- p2 + labs(title = "Histogram: Version 2")
+p2
+
+set.seed(54321) # for each sample drawn one has to use the `set.seed` function
+samp3 <- sample_n(ames, n)
+p3 <- ggplot(samp3, aes(Gr.Liv.Area))
+p3 <- p3 +  geom_histogram(bins = 15)
+p3 <- p3 + labs(title = "Histogram: Version 3")
+p3
+
+```
+
+# Calulating the confidence intervals
+
+Lets return for a moment to the question that first motivated this lab: based on this sample, what can we infer about the population? Based only on this single sample, the best estimate of the average living area of houses sold in Ames would be the sample mean, usually denoted as $\bar{x}$ (here we're calling it `x_bar`). That serves as a good **point estimate** but it would be useful to also communicate how uncertain we are of that estimate. This uncertainty can be quantified using a **confidence interval**.
+
+A confidence interval for a population mean is of the following form
+
+> $\bar{x} + z^\star \frac{s}{\sqrt{n}}$ 
+
+## Task 5: Equations in RMarkdown
+Here is a little primer [how to write equations in RMarkdown](http://www.montana.edu/rotella/documents/502/MarkdownEqnExamples.Rmd).
+
+You should by now be comfortable with calculating the mean and standard deviation of a sample in R. And we know that the sample size is 60. So the only remaining building block is finding the appropriate critical value for a given confidence level. We can use the qnorm function for this task, which will give the critical value associated with a given percentile under the normal distribution. Remember that confidence levels and percentiles are not equivalent. For example, a 95% confidence level refers to the middle 95% of the distribution, and the critical value associated with this area will correspond to the 97.5th percentile.
+
+Again there are two methods here as illustrated in the two labs docoument mentioned above.
+
+## Confidence intervals calculated manually
+
+One of the most common ways to describe the typical or central value of a distribution is to use the mean. In this case we can calculate the mean of the sample using,
+
+We can calculate a 95% confidence interval for a sample mean by adding and subtracting 1.96 standard errors to the point estimate (See Section 4.2.3 if you are unfamiliar with this formula).
+
+```{r calculating-confidence-interval-older-method}
+sample_mean <- mean(samp.old)
+se <- sd(samp.old) / sqrt(60)
+lower <- sample_mean - 1.96 * se
+upper <- sample_mean + 1.96 * se
+c(lower, upper)
+```
+
+## Confidence intervals calculated with the `qnorm` function
+
+We can use the `qnorm` function for this task, which will give the critical value associated with a given percentile under the normal distribution. Remember that **confidence levels and percentiles are not equivalent**. For example, a 95% confidence level refers to the middle 95% of the distribution, and the critical value associated with this area will correspond to the 97.5th percentile.
+
+We can find the critical value for a 95% confidence interval using
+
+```{r calculate-z_star}
+z_star_95 <- qnorm(0.975)
+z_star_95
+```
+which is roughly equal to the value critical value 1.96 that I amn familiar with by now.
+
+Let’s finally calculate the confidence interval:
+
+```{r confidence-interval}
+samp.new.df %>%
+  summarise(lower = mean(samp.new) - z_star_95 * (sd(samp.new) / sqrt(n)),
+            upper = mean(samp.new) + z_star_95 * (sd(samp.new) / sqrt(n)))
+```
+
+You see that the result is the same in both variants.
+
+To recap: even though we don’t know what the full population looks like, we’re 95% confident that the true average size of houses in Ames lies between the values lower and upper. There are a few conditions that must be met for this interval to be valid.
+
+## Exercise 3: Conditions to be met
+For the confidence interval to be valid, the sample mean must be normally distributed and have standard error $s / \sqrt{n}$. What conditions must be met for this to be true?
+
+# Confidence levels
+
+## Exercise 4: Meaning of confidence interval
+What does “95% confidence” mean?
+
+
+In the case of our data set we have the rare luxury of knowing the true population mean since we have data on the entire population. Let’s calculate this value so that we can determine if our confidence intervals actually capture it. We’ll store it in a data frame called `params` (short for population parameters), and name it `mu`.
+
+## Exercise 5:
+Does my confidence interval capture the true average size of houses in Ames? 
+
+```{r captures-my-confidence-levels-mu}
+params <- ames %>%
+  summarise(mu = mean(Gr.Liv.Area))
+sprintf("mu = %f; sample mean = %f, lower = %f, upper = %f", params$mu, sample_mean, lower, upper)
+
+ci.result <- ifelse(lower < params$mu & upper > params$mu, "YES!", "NO!")
+sprintf("Does my confidence interval capture the true average size of houses in Ames? %s", ci.result )
+```
+
+YES!
+
+## Exercise 6:
+Each sample taken with a different `set.seed` should have gotten a slightly different confidence interval. What proportion of those intervals would you expect to capture the true population mean? Why?
+
+About 95% of the sample mean should be between the confidence interval.
+
+# Collecting many samples programmatically
+
+Using R, we’re going to collect many samples to learn more about how sample means and confidence intervals vary from one sample to another.
+
+Here is the rough outline:
+
+* Obtain a random sample.
+
+* Calculate the sample’s mean and standard deviation, and use these to calculate and store the lower and upper bounds of the confidence intervals.
+
+* Repeat these steps 50 times.
+
+We can accomplish this using the `rep_sample_n` function. (This is a function of `oilabs` package!) The following lines of code takes 50 random samples of size n from population (and remember we defined n=60 earlier), and computes the upper and lower bounds of the confidence intervals based on these samples.
+
+```{r collecting-samples-programmatically}
+ci <- ames %>%
+        rep_sample_n(size = n, reps = 50, replace = TRUE) %>%
+        summarise(lower = mean(Gr.Liv.Area) - z_star_95 * (sd(Gr.Liv.Area) / sqrt(n)),
+                  upper = mean(Gr.Liv.Area) + z_star_95 * (sd(Gr.Liv.Area) / sqrt(n)))
+```
+
+Let’s view the first five intervals:
+
+```{r show-first-intervals}
+ci %>%
+  slice(1:5)
+```
+
+
+Next we’ll create a plot similar to Figure 4.8 on page 175 of OpenIntro Statistics, 3rd Edition. First step will be to create a new variable in the `ci` data frame that indicates whether the interval does or does not capture the true population mean. Note that capturing this value would mean the lower bound of the confidence interval is below the value and upper bound of the confidence interval is above the value. Remember that we create new variables using the `mutate` function.
+
+```{r ci-captures-yes-or-no}
+ci <- ci %>%
+  mutate(capture_mu = ifelse(lower < params$mu & upper > params$mu, "yes", "no"))
+```
+
+The `ifelse` function is new. It takes three arguments: first is a logical statement, second is the value we want if the logical statement yields a true result, and the third is the value we want if the logical statement yields a false result.
+
+We now have all the information we need to create the plot, but we need to re-organize our data a bit for easy plotting. Specifically, we need to organize the data in a new data frame where each row represents one bound, as opposed to one interval. So this
+
+```{r show-ci}
+head(ci)
+```
+should like this
+
+
+```{r show-ci-data-after-transforming}
+ci_data <- data.frame(ci_id = c(1:50, 1:50),
+                      ci_bounds = c(ci$lower, ci$upper),
+                      capture_mu = c(ci$capture_mu, ci$capture_mu))
+head(ci_data)
+```
+
+The structure of `ci_data` is interesting. It has 100 rows because of adding with the combine function (`ci_id = c(1:50, 1:50)`. ci_id counts from 1 to 50 and then starts again. `ci_id` is the id of the sample which is drawn in the following plot as y-axis. This means that row 51 has the same y-value as the first row and therefore a straight horizontal line can be drawn - but only after the data are grouped by `ci_id`. 
+
+And finally we can create this pretty complicated plot using the following program code:
+
+```{r drawing-confidence-interval-plot}
+qplot(data = ci_data, x = ci_bounds, y = ci_id, 
+      group = ci_id, color = capture_mu) +
+  geom_point(size = 2) +  # add points at the ends, size = 2
+  geom_line() +           # connect with lines
+  geom_vline(xintercept = params$mu, color = "darkgray") # draw vertical line
+
+```
+```{r drawing-confidence-interval-plot-older-approach}
+
+ci.old <- ames %>%
+        rep_sample_n(size = n, reps = 50, replace = TRUE) %>%
+        summarise(x_bar = mean(Gr.Liv.Area), 
+                  se = sd(Gr.Liv.Area) / sqrt(n),
+                  me = z_star_95 * se,
+                  lower = x_bar - me,
+                  upper = x_bar + me)
+
+ci.old <- ci.old %>%
+  mutate(capture_mu.old = ifelse(lower < params$mu & upper > params$mu, "yes", "no"))
+
+qplot(data = ci.old, x = replicate, y = x_bar, color = ci.old$capture_mu.old) +
+  geom_errorbar(aes(ymin = lower, ymax = upper)) + 
+  geom_hline(data = params, aes(yintercept = mu), color = "darkgray") + # draw vertical line
+  coord_flip()
+```
+
+## Exercise 7:
+What proportion of your confidence intervals include the true population mean? Is this proportion exactly equal to the confidence level? If not, explain why. Make sure to include your plot in your answer.
+
+In the above graphs I can detect 3 respecitvly 2 cases out of 50 where the sample mean is not within the confidence interval. This is according to the 95% level.
+
+# More Practice
+
+The next exercises have still to be done.
+
+## Exercise 8:
+Pick a confidence level of your choosing, provided it is not 95%. What is the appropriate critical value?
+
+I will choose a 90% confidence level. e.g. it refers to the middle 90% of the distribution, and the critical value associated with this area will correspond to the 95th percentile.
+
+## Exercise 9:
+Calculate 50 confidence intervals at the confidence level you chose in the previous question, and plot all intervals on one plot, and calculate the proportion of intervals that include the true population mean. How does this percentage compare to the confidence level selected for the intervals? Make sure to include your plot in your answer.
+
+```{r}
+
+n <- 60
+set.seed(11111) # for each sample drawn one has to use the `set.seed` function
+samp.new.df <- sample_n(ames, n) # returns a data frame which has to be used for ggplot
+
+
+z_star_90 <- qnorm(0.95)
+
+samp.new.df %>%
+  summarise(lower.90 = mean(samp.new) - z_star_90 * (sd(samp.new) / sqrt(n)),
+            upper.90 = mean(samp.new) + z_star_90 * (sd(samp.new) / sqrt(n)))
+
+ci.90 <- ames %>%
+        rep_sample_n(size = n, reps = 50, replace = TRUE) %>%
+        summarise(lower.90 = mean(Gr.Liv.Area) - z_star_90 * (sd(Gr.Liv.Area) / sqrt(n)),
+                  upper.90 = mean(Gr.Liv.Area) + z_star_90 * (sd(Gr.Liv.Area) / sqrt(n)))
+
+ci.90 <- ci.90 %>%
+  mutate(capture_mu.90 = ifelse(lower.90 < params$mu & upper.90 > params$mu, "yes", "no"))
+
+
+ci_data.90 <- data.frame(ci_id = c(1:50, 1:50),
+                      ci_bounds.90 = c(ci.90$lower.90, ci.90$upper.90),
+                      capture_mu.90 = c(ci.90$capture_mu.90, ci.90$capture_mu.90))
+
+qplot(data = ci_data.90, x = ci_bounds.90, y = ci_id,
+      group = ci_id, color = capture_mu.90) +
+  geom_point(size = 2) +  # add points at the ends, size = 2
+  geom_line() +           # connect with lines
+  geom_vline(xintercept = params$mu, color = "darkgray") # draw vertical line
+
+```
+
+```{r}
+by.ci <- ci.90 %>% group_by(capture_mu.90)
+how.many <- by.ci %>% count(capture_mu.90) %>% mutate(prop = n / 50 * 100)
+how.many
+```
+
+The proportion of means outside of the confidence interval is `r how.many$prop[1]`% which is `r ifelse(how.many$prop[1] <= 10, "expected", "higher than expected")`. 
+
+# References
+
+
