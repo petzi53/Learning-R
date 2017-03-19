@@ -27,3 +27,4 @@ vignettes/*.pdf
 my_boxplot.pdf
 packrat/lib*/
 Learning-R.git
+tests
