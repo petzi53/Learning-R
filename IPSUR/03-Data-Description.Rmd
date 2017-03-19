@@ -1,0 +1,292 @@
+---
+title: "03 Data Description"
+author: Peter Baumgartner
+date: March 27, 2017
+output: 
+  html_notebook: 
+    pandoc_args: [ 
+      "--number-offset=2,0" 
+    ]
+    number_sections: yes
+    toc: yes
+---
+```{r label = "global-options", echo=FALSE, highlight=TRUE}
+knitr::opts_chunk$set(
+        message = F,
+        error = F,
+        warning = F,
+        comment = NA,
+        highlight = T,
+        prompt = T
+        )
+require(ggplot2)
+```
+# Data Description
+
+## Quantitative Data
+
+### Example: Annual Precipitation in US Cities 
+
+The vector `precip` contains average amount of rainfall (in inches) for each of 70 cities in the United States and Puerto Rico. Let us take a look at the data:
+
+```{r quantitative-data-precip}
+str(precip)
+precip[1:4]
+```
+The output shows that `precip` is a numeric vector which has been named, that is, each value has a name associated with it (which can be set with the `names` function). These are quantitative continuous data.
+
+### Example: Length of Major North American Rivers
+
+The U.S. Geological Survey recorded the lengths (in miles) of several rivers in North America. They are stored in the vector `rivers` in the `datasets package (which ships with base R). See `?rivers`.
+
+```{r quantitative-data-rivers}
+str(rivers)
+```
+
+The output says that `rivers` is a numeric vector of length 141, and the first few values are 735, 320, 325, etc. These data are definitely quantitative and it appears that the measurements have been rounded to the nearest mile. Thus, strictly speaking, these are discrete data. But we will find it convenient later to take data like these to be continuous for some of our statistical procedures.
+
+### Example: Yearly Numbers of Improtant Discoveries
+
+The vector `discoveries` contains numbers of “great” inventions/discoveries in each year from 1860 to 1959, as reported by the 1975 World Almanac.
+
+
+```{r quantitative-data-discoveries}
+str(discoveries)
+discoveries[1:4]
+```
+The output is telling us that `discoveries` is a time series of length 100. The entries are integers, and since they represent counts this is a good example of discrete quantitative data.
+
+## Displaying Quantitative Data
+
+### Dot plots in general
+
+A dot plot consists of a number line (x-axis) and dots (or points) positioned above the number line. Dot plots are a useful alternative to bar cart, see: http://www.b-eye-network.com/view/2468.
+
+#### Example: Sleeping hours 
+
+Students were asked how many hours sleep the had last night. Consider the following data: 5,5.5,6,6,6,6.5,6.5,6.5,6.5,7,7,8,8,9.
+
+```{r sleeping-hours, fig.height=2, fig.width=6}
+sleep.hours <- c(5,5.5,6,6,6,6.5,6.5,6.5,6.5,7,7,8,8,9)
+ggplot(data = data.frame(sleep.hours), 
+       mapping = aes(x = sleep.hours)) + 
+        geom_dotplot(binwidth = 0.5, dotsize = 0.3, color = "black", fill = "white") +
+        scale_y_continuous(name = "", breaks = NULL) +
+        labs(title = "Frequencey of Average Time (in Hours) Spent Sleeping per Night") +
+        labs(x = "Average Time (in Hours)") +
+        labs(caption = "based on data from \"Collaborative Statistics\"")
+```
+
+Dot plots can be used for discrete or continuous data, and usually look best when the data set is not too large. Along the horizontal axis is a numerical scale above which the data values are plotted.
+
+**Remark:** I think the main area of applications for dot plots are discrete data. For continuous data it is best to use histograms, with the exeception of just a few values (about 10 to 30), like in the above exampe 
+
+### Strip charts {graphics}
+
+We can do strip chars in R with a call to the `stripchart` function.
+
+There are three available methods:
+
+* __overplot__ plots ties covering each other. This method is good to display only the distinct values assumed by the data set.
+
+* __jitter__ adds some noise to the data in the y direction in which case the data values are not covered up by ties.
+
+* __stack__ plots repeated values stacked on top of one another. This method is best used for very granular data e.g. discrete data with a lot of ties; if there are no repeats then this method is identical to overplot.
+
+defunct name: dotplot.
+
+
+#### Example: Average annual precipitation in US Cities
+
+```{r stripchart-precip}
+stripchart(precip, 
+           main = "Stripchart (overplotting)", 
+           xlab = "Rainfall: Average annual precipitation in US Cities (in.)", 
+           method = "overplot")
+stripchart(precip, 
+           main = "Stripchart (jittering)",
+           xlab = "Rainfall: Average annual precipitation in US Cities (in.)", 
+           method = "jitter")
+stripchart(precip, 
+           main = "Stripchart (stacking)",
+           xlab = "Rainfall: Average annual precipitation in US Cities (in.)", 
+           method = "stack")
+```
+#### My remarks to the `precip` examples
+
+All of these graphs are not convincing as they do not take into account the speciality of `precip`, namely that it is a **named numeric vector**. A much better display would be to show all cities ordered by their amount of rainfall. 
+
+```{r dotchart-and-geom_point, fig.height=10}
+dotchart(precip[order(precip)], main = "Dotchart (graphics)")
+title(sub = "Average annual precipitation (in.)")
+
+## ggplot needs data frame
+df.precip <- cbind(tibble(precip), attributes(precip))
+ggplot(df.precip, aes(precip, reorder(names, precip))) + 
+        geom_point(color = "blue", size = 3) +
+        labs(title = "Annual Precipitation in US Cities") +
+        labs(x = "Rainfall (inch)", y = "City") +
+        labs(caption = "based on \"Statistical Abstracts of the United States, 1975.\"")
+```
+
+For drawing the above plot I had to watch out severval things: 
+
+1. `ggplot` needs a data frame, therefor I had to convert the named numeric vector.
+2. The names of the vector are attributes, you can't subset them directly with `precip[names]`, `precip$names` or just pass `names` to the `aes` function in `ggplot`.
+3. It is essential to use `reorder` and not `order` (as I have tried). `order` returns a permutation which rearranges its first argument into ascending or descending order, breaking ties by further arguments. `reorder` is a generic function where the "default" method treats its first argument as a categorical variable, and reorders its levels based on the values of a second variable, usually numeric.
+
+
+#### Example: Lengths of Major North American Rivers 
+
+```{r stripchart-rivers}
+stripchart(rivers, 
+           main = "Stripchart (overplotting)",
+           xlab = "Lengths of Major North American Rivers (miles)",
+           method = "overplot") 
+stripchart(rivers, 
+           main = "Stripchart (jittering)",
+           xlab = "Lengths of Major North American Rivers (miles)",
+           method = "jitter") 
+stripchart(rivers, 
+           main = "Stripchart (stacking)",
+           xlab = "Lengths of Major North American Rivers (miles)",
+           method = "stack") 
+```
+
+#### My remarks to the `rivers` examples
+
+The data set consists of continuous data has pretty much observations (`r length(rivers)`. Therefore it is not well suited for a strip chart or dot plot. A better display would be a histogram.
+
+Histograms and frequency polygons visualise the distribution of a single continuous variable by dividing the x axis into bins and counting the number of observations in each bin. Histograms (`geom_histogram`) display the count with bars; frequency polygons (`geom_freqpoly`), display the counts with lines. Frequency polygons are more suitable when you want to compare the distribution across a the levels of a categorical variable.
+
+By default, the underlying computation (`stat_bin) uses 30 bins - this is not a good default, but the idea is to get you experimenting with different binwidths. You may need to look at a few to uncover the full story behind your data.
+
+**The biggest weakness of histograms and frequency polygons:** 
+
+> The graph obtained strongly depends on the bins chosen. Choose another set of bins, and you will get a different histogram. Moreover, there are not any definitive criteria by which bins should be defined; the best choice for a given data set is the one which illuminates the data set’s underlying structure (if any).
+
+```{r}
+rivers.tbl <- tibble(rivers)
+ggplot(rivers.tbl, aes(rivers)) +
+        geom_histogram(binwidth = 100) +
+        labs(title = "Lengths of Major North American Rivers (ggplot)") +
+        labs(x = "Lenght (miles)", y = "Count") +
+        labs(caption = "based on \"World Almanac and Book of Facts\", 1975, page 406.")
+
+ggplot(rivers.tbl, aes(rivers)) +
+        geom_freqpoly(binwidth = 100) +
+        labs(title = "Lengths of Major North American Rivers (ggplot)") +
+        labs(x = "Lenght (miles)", y = "Count") +
+        labs(caption = "based on \"World Almanac and Book of Facts\", 1975, page 406.")
+```
+
+
+#### Example: Yearly Number of Important Discoveries
+
+```{r stripchart-discoveries}
+stripchart(discoveries, 
+           main = "Stripchart (overplotting)",
+           xlab = "Yearly Number of Important Discoveries (1860-1959)",
+           method = "overplot")
+stripchart(discoveries, 
+           main = "Stripchart (jittering)",
+           xlab = "Yearly Number of Important Discoveries (1860-1959)",
+           method = "jitter") 
+stripchart(discoveries, 
+           main = "Stripchart (stacking)",
+           xlab = "Yearly Number of Important Discoveries (1860-1959)",
+           method = "stack") 
+```
+
+
+#### My remarks to the `discoveries` examples
+
+I thin the best way for `discoveries` as a time series is to use an appropiate visualization for time series.
+
+```{r}
+plot(discoveries, 
+     ylab = "Number of Important Discoveries",
+     las = 1,
+     main = "Time series: Discoveries Data Set (plot)")
+
+discoveries.tbl <- cbind(tibble(discoveries), Year = 1860:1959)
+
+ggplot(discoveries.tbl, aes(Year, discoveries)) + 
+        geom_line() +
+        labs(title = "Yearly Numbers of Important Discoveries (ggplot)") +
+        labs(x = "Year", y = "Number of Important Discoveries") +
+        labs(caption = "based on \"World Almanac and Book of Facts\", 1975, pages 315–318.") +
+        scale_x_continuous(breaks = seq(1860, 1969, 10)) +
+        scale_y_discrete(limits = c(2,4,6,8,10,12))
+
+```
+
+
+#### Summaries of examples
+
+* The first group of three graphs are strip chart of the `precip` data. The graph shows tightly clustered values in the middle with some others falling balanced on either side, with perhaps slightly more falling to the left. Later we will call this a symmetric distribution. *My Evaluation*: It seems to me that the best visualization in these three charts gives the jitter-method.
+
+* The middle graph is of the `rivers` data, a vector of length 141. There are several repeated values in the rivers data, and if we were to use the overplot method we would loose some of them in the display. This plot shows a what we will later call a right-skewed shape with perhaps some extreme values on the far right of the display. *My Evaluation*: But even if we would loose some data in the overplotting method, it seems to me that this graph shows most clearly the concentration of the low end (right skewness) and extreme outliers at the same time.
+
+* The last graph strip charts `discoveries` data which are literally a textbook example of a right skewed distribution. *My Evaluation*: Here it is very clear that the stacking method gives the best visual display as counting years of a time series results in a discrete data set.
+
+### Dot Plot {ggplot2}
+
+But a newer and more modern method is using the `ggplot2` package. See also the example above, where I have already used ggplot in many cases as the second graph to show the alternative.
+
+
+```{r ggplot-geom_dotplot}
+p <- ggplot(data = data.frame(precip), mapping = aes(x = precip)) 
+p + geom_dotplot(method = "dotdensity", binwidth = 3, dotsize = 0.8) + 
+        scale_y_continuous(name = "", breaks = NULL)
+
+```
+
+In a dot plot, the width of a dot corresponds to the bin width (or maximum width, depending on the binning algorithm), and dots are stacked, with each dot representing one observation. With dot-density binning, the bin positions are determined by the data and binwidth, which is the maximum width of each bin.
+
+When binning along the x axis and stacking along the y axis, the numbers on y axis are not meaningful, due to technical limitations of ggplot2. You can hide the y axis (or manually scale it to match the number of dots?).
+
+The combination of binwidth and dotsize can be used to scale the graph.
+
+### Stem plots (Stem and Leaf plots)
+
+A stem-and-leaf plot of a quantitative variable is a textual graph that classifies data items according to their most significant numeric digits. In addition, we often merge each alternating row with its next row in order to simplify the graph for readability.
+
+Stemplots have two basic parts: *stems* and *leaves*. The final digit of the data values is taken to be a *leaf*, and the leading digit(s) is (are) taken to be *stems*. We draw a vertical line, and to the left of the line we list the stems. To the right of the line, we list the leaves beside their corresponding stem. There will typically be several leaves for each stem, in which case the leaves accumulate to the right. It is sometimes necessary to round the data values, especially for larger data sets.
+
+IPSUR suggest to downlaod the `aplpack` packages and to use the `steam.leaf` function. (The  `aplpack` packages = Another Plot PACKage provides stem.leaf, bagplot, faces, spin3R, plotsummary, plothulls, and some slider functions. It is a set of functions for drawing some special plots: 
+
+* *stem.leaf* plots a stem and leaf plot, 
+
+* *stem.leaf.backback* plots back-to-back versions of stem and leafs, 
+
+* *bagplot* plots a bagplot, 
+
+* *skyline.hist* plots several histgramm in one plot of a one dimensional data set, 
+
+* *plotsummary* plots a graphical summary of a data set with one or more variables, 
+
+* *plothulls* plots sequentially hulls of a bivariate data set, 
+
+* *faces* plots chernoff faces, 
+
+* *spin3R* is for an inspection of a 3-dim point cloud, and 
+
+* *slider* functions for interactive graphics
+
+But there is also a very similar `stem` function in the `graphics` package, which I will use in order to install and learn another package.
+
+#### Example: Road Casualties in Great Britain 1969–84
+
+```{r stemplot}
+stem(UKDriverDeaths)
+```
+
+Have a look at the the head of the ordered data set.
+
+```{r}
+head(UKDriverDeaths[order(UKDriverDeaths)])
+```
+You see two numbers under 1100, namely 1057 and 1076. The stem = 10 and the next figure (the first leaf) is rounded 6 from the the first number. The second is a rounded 8. The next line of the graph shows all numbers between 1100 to 1199. (Actually this is not correct, because of rounding the correct numbers are 1095 to 1194.) 
+
+I think there is no equivalent in ggplot.
