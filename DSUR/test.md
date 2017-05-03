@@ -4,7 +4,7 @@ Test with Umlaute
 -   [GitHub Documents](#github-documents)
 -   [Including Code](#including-code)
 -   [Including Plots](#including-plots)
--   [Datensätze](#datensätze)
+-   [Datensätzen](#datensatzen)
 
 GitHub Documents
 ----------------
@@ -44,7 +44,9 @@ cat(stringi::stri_escape_unicode(x))
 
     ## Datens\u00e4tze
 
-Datensätze
-----------
+Es gibt kein Problem innerhalb des Textes mit Datensätze. Wie ist es mit Links von [Datensätze](https://en.wikipedia.org/wiki/ISO_639-1) zu einer Website?
+
+Datensätzen
+-----------
 
 Here comes new text.
