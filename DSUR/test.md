@@ -4,7 +4,7 @@ Test with Umlaute
 -   [GitHub Documents](#github-documents)
 -   [Including Code](#including-code)
 -   [Including Plots](#including-plots)
--   [Datensätze](#datensatze)
+-   [Datensätze](#datensätze)
 
 GitHub Documents
 ----------------
@@ -36,6 +36,13 @@ You can also embed plots, for example:
 ![](test_files/figure-markdown_github/pressure-1.png)
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+``` r
+x <- "Datensätze"
+cat(stringi::stri_escape_unicode(x))
+```
+
+    ## Datens\u00e4tze
 
 Datensätze
 ----------
